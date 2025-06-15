@@ -2,8 +2,6 @@
 #define MINISHELL_H
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -32,5 +30,13 @@ typedef struct s_env
 } t_env;
 
 void env_to_list(t_env **env_list, char **env);
+
+void echo(t_cmd *cmd);
+void pwd(void);
+void cd(t_cmd *cmd, t_env *env_list);
+void exit_shell(t_cmd *cmd, t_env *env_list);
+void env_function(t_env *env_list);
+void export(t_cmd *cmd, t_env *env_list);
+void unset(t_cmd *cmd, t_env *env_list);
 
 #endif // MINISHELL_H
