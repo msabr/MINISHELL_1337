@@ -1,19 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   ft_strrev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/31 01:34:56 by msabr             #+#    #+#             */
-/*   Updated: 2024/11/18 18:23:47 by msabr            ###   ########.fr       */
+/*   Created: 2025/06/15 16:12:11 by msabr             #+#    #+#             */
+/*   Updated: 2025/06/15 16:12:29 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putendl_fd(char *s, int fd)
+char	*ft_strrev(char *str)
 {
-	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
+	int		start;
+	int		end;
+	char	temp;
+
+	if (!str)
+		return (NULL);
+	start = 0;
+	end = ft_strlen(str) - 1;
+	while (start < end)
+	{
+		temp = str[start];
+		str[start] = str[end];
+		str[end] = temp;
+		start++;
+		end--;
+	}
+	return (str);
 }
