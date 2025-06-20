@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 01:34:56 by msabr             #+#    #+#             */
-/*   Updated: 2024/11/18 18:23:47 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/20 17:06:55 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	ft_putendl_fd(char *s, int fd)
 {
-	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
+	if (!s || fd < 0)
+		return ;
+	write(fd, ft_strjoin(s, "\n"), ft_strlen(s) + 1);
 }

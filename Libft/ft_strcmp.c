@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 15:24:46 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/14 15:24:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/20 17:11:42 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
-    while (*s1 && *s2 && (*s1 == *s2))
-    {
-        s1++;
-        s2++;
-    }
-    return ((unsigned char)*s1 - (unsigned char)*s2);
+	if (!s1 || !s2)
+		return (0);
+	while (*s1 && *s2 && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
 }

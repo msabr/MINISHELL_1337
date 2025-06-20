@@ -6,33 +6,28 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:10:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/14 14:26:08 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/20 17:10:20 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int is_space(char c)
-{
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
-}
-
 static int	count_words(char const *str)
 {
-    int	i;
-    int	count;
+	int	i;
+	int	count;
 
-    if (!str)
-        return (0);
-    i = 0;
-    count = 0;
-    while (str[i])
-    {
-        if (!is_space(str[i]) && (i == 0 || is_space(str[i - 1])))
-            count++;
-        i++;
-    }
-    return (count);
+	if (!str)
+		return (0);
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (!is_space(str[i]) && (i == 0 || is_space(str[i - 1])))
+			count++;
+		i++;
+	}
+	return (count);
 }
 
 static int	fill_word(char *dest, const char *src, int start)
@@ -41,11 +36,11 @@ static int	fill_word(char *dest, const char *src, int start)
 
 	i = 0;
 	while (src[start] && !is_space(src[start]))
-    {
-        dest[i] = src[start];
-        i++;
-        start++;
-    }
+	{
+		dest[i] = src[start];
+		i++;
+		start++;
+	}
 	dest[i] = '\0';
 	return (start);
 }
@@ -85,5 +80,3 @@ char	**ft_split_space(char const *s)
 	pnt[count_words(s)] = NULL;
 	return (pnt);
 }
-
-
