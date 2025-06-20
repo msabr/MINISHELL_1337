@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:10:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/20 17:10:20 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/20 19:59:48 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	count_words(char const *str)
 	count = 0;
 	while (str[i])
 	{
-		if (!is_space(str[i]) && (i == 0 || is_space(str[i - 1])))
+		if (!ft_isspace(str[i]) && (i == 0 || ft_isspace(str[i - 1])))
 			count++;
 		i++;
 	}
@@ -35,7 +35,7 @@ static int	fill_word(char *dest, const char *src, int start)
 	int	i;
 
 	i = 0;
-	while (src[start] && !is_space(src[start]))
+	while (src[start] && !ft_isspace(src[start]))
 	{
 		dest[i] = src[start];
 		i++;
@@ -47,7 +47,7 @@ static int	fill_word(char *dest, const char *src, int start)
 
 static int	is_sep(char const *str, int start)
 {
-	while (str[start] && is_space(str[start]))
+	while (str[start] && ft_isspace(str[start]))
 		start++;
 	return (start);
 }
@@ -70,7 +70,7 @@ char	**ft_split_space(char const *s)
 	{
 		i = is_sep(s, i);
 		start = i;
-		while (s[i] && !is_space(s[i]))
+		while (s[i] && !ft_isspace(s[i]))
 			i++;
 		pnt[index] = (char *)malloc(sizeof(char) * (i - start + 1));
 		if (!pnt[index])
