@@ -1,0 +1,6 @@
+//pipe:
+exmple "minishell> ls | ls | ls -l"
+
+bghitha char* -> char* -> char* -> NULL : "ls" -> "ls" -> "ls -l" -> NULL 
+remove pipe
+--------------------------------------------------------------------------------------------------------------
