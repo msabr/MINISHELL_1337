@@ -1,0 +1,11 @@
+bash-3.2$ exit | exit
+bash-3.2$ 
+------------------------
+bash-3.2$ qwer
+bash: qwer: command not found
+bash-3.2$ exit
+exit
+➜  minishell git:(master) ✗ echo $?
+127
+-----------------------------------
+// handel buffering in echo

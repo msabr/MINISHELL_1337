@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:54:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/15 15:57:11 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/20 21:04:22 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,3 +102,14 @@ int check_env_variable(t_env *env_list, const char *key)
     }
     return 0; // Variable does not exist
 }
+
+//add_env_variabl
+// void add_env_variable(t_env **env_list, const char *key, const char *value, int is_exported)
+// {
+//     t_env *new_entry = malloc(sizeof(t_env));
+//     new_entry->key = ft_strdup(key);
+//     new_entry->value = value ? ft_strdup(value) : NULL;
+//     // new_entry->is_exported = is_exported;
+//     new_entry->next = *env_list;
+//     *env_list = new_entry;
+// }

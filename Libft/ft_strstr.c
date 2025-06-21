@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/14 14:52:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/15 19:56:23 by msabr            ###   ########.fr       */
+/*   Created: 2025/06/21 16:10:11 by msabr             #+#    #+#             */
+/*   Updated: 2025/06/21 16:11:28 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "libft.h"
 
-//unset with no options
-void unset(t_cmd *cmd, t_env *env_list)
+char	*ft_strstr(const char *haystack, const char *needle)
 {
-    if (!cmd->args || !cmd->args[0])
-    {
-        ft_putstr_fd("unset: not enough arguments\n", STDERR_FILENO);
-        return;
-    }
+	size_t	i;
+	size_t	j;
 
-    for (int i = 0; cmd->args[i]; i++)
-    {
-        if (check_env_variable(env_list, cmd->args[i]) == 0)
-        {
-            remove_env_variable(env_list, cmd->args[i]);
-        }
-    }
+	if (!*needle)
+		return ((char *)haystack);
+	i = 0;
+	while (haystack[i])
+	{
+		j = 0;
+		while (haystack[i + j] && needle[j] && haystack[i + j] == needle[j])
+			j++;
+		if (!needle[j])
+			return ((char *)(haystack + i));
+		i++;
+	}
+	return (NULL);
 }

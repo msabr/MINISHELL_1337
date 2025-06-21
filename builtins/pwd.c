@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/14 15:06:54 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/15 19:55:41 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,12 @@
 //pwd with no options
 void pwd(void)
 {
-    char cwd[PATH_MAX];
+    char *cwd;
 
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        ft_putstr_fd(cwd, STDOUT_FILENO);
-        ft_putchar_fd('\n', STDOUT_FILENO);
-    }
+    cwd = getcwd(NULL, 0);
+    if (cwd)
+        ft_putendl_fd(cwd, STDOUT_FILENO);
     else
-    {
         perror("pwd");
-    }
+    free(cwd);
 }
