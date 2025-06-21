@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 11:41:10 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/15 16:35:20 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/16 17:06:08 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,23 @@
 
 static void check_flags(t_cmd *cmd, int *i, int *newline)
 {
-	if (cmd->args && cmd->args[1] && cmd->args[1][0] == '-' && cmd->args[1][1] == 'n') 
+	while (true)
 	{
-		int j = 1;
-		while (cmd->args[1][j] == 'n')
-			j++;
-		if (cmd->args[1][j] == '\0')
+		if (cmd->args && cmd->args[*i] && cmd->args[*i][0] == '-' && cmd->args[*i][1] == 'n') 
 		{
-			*newline = 0;
-			*i = 2;
-		}
-	} 
-	else 
-	{
-		*i = 1;
+			int j = 1;
+			while (cmd->args[*i][j] == 'n')
+				j++;
+			if (cmd->args[*i][j] == '\0')
+			{
+				*newline = 0;
+				(*i)++;
+			}
+			else
+				break ;
+		} 
+		else 
+			break ;
 	}
 }
 
@@ -38,7 +41,7 @@ void echo(t_cmd *cmd)
 
 	check_flags(cmd, &i, &newline);
 	if (!cmd->args || !cmd->args[1])
-		return;
+		return (ft_putchar_fd('\n', STDOUT_FILENO));
 	while (cmd->args[i]) 
 	{
 		if (!cmd->args[i])
