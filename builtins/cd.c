@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/15 16:32:29 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/15 19:52:18 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void cd(t_cmd *cmd, t_env *env_list)
 
     // Update PWD and OLDPWD environment variables
     set_env_value(env_list, "OLDPWD", get_env_value(env_list, "PWD"));
-    char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
+    char *cwd;
+    cwd = getcwd(NULL, 0);
+    if (!cwd)
         set_env_value(env_list, "PWD", cwd);
 }
