@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:54:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/20 21:04:22 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/22 18:04:51 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void free_env_list(t_env *env_list)
 }
 
 //remove_env_variable
-int remove_env_variable(t_env *env_list, const char *key)
+int remove_env_variable(t_env **env_list, const char *key)
 {
-    t_env *current = env_list;
+    t_env *current = *env_list;
     t_env *prev = NULL;
 
     while (current)
@@ -78,7 +78,7 @@ int remove_env_variable(t_env *env_list, const char *key)
             if (prev)
                 prev->next = current->next;
             else
-                env_list = current->next; // Update head if removing first element
+                *env_list = current->next; // Remove head
             free(current->key);
             free(current->value);
             free(current);
@@ -87,29 +87,20 @@ int remove_env_variable(t_env *env_list, const char *key)
         prev = current;
         current = current->next;
     }
-    return -1; // Not found
+    return -1; // Variable not found
 }
 
-int check_env_variable(t_env *env_list, const char *key)
+int check_env_variable(t_env **env_list, const char *key)
 {
-    t_env *current = env_list;
+    t_env *current = *env_list;
 
     while (current)
     {
         if (ft_strcmp(current->key, key) == 0)
-            return 1; // Variable exists
+            return 0; // Variable exists
         current = current->next;
     }
-    return 0; // Variable does not exist
+    return -1; // Variable does not exist
 }
 
-//add_env_variabl
-// void add_env_variable(t_env **env_list, const char *key, const char *value, int is_exported)
-// {
-//     t_env *new_entry = malloc(sizeof(t_env));
-//     new_entry->key = ft_strdup(key);
-//     new_entry->value = value ? ft_strdup(value) : NULL;
-//     // new_entry->is_exported = is_exported;
-//     new_entry->next = *env_list;
-//     *env_list = new_entry;
-// }
+
