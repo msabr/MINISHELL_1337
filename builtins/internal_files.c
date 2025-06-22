@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   internal _files.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/22 23:02:24 by msabr            ###   ########.fr       */
+/*   Created: 2025/06/22 20:17:03 by msabr             #+#    #+#             */
+/*   Updated: 2025/06/22 20:30:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	pwd(void)
+bool	is_valid_key(char *key)
 {
-	char	*cwd;
-
-	cwd = getcwd(NULL, 0);
-	if (cwd)
-		ft_putendl_fd(cwd, STDOUT_FILENO);
-	else
-		perror("pwd");
-	free(cwd);
+	if (ft_isalpha(key[0]) || key[0] == UNDERSCORE)
+		return (true);
+	return (false);
 }

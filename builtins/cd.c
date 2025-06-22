@@ -6,11 +6,48 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/22 14:24:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/22 20:27:57 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+static char	*get_env_value(t_env *env_list, const char *key)
+{
+	t_env	*current;
+
+	current = env_list;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
+}
+
+static void	set_env_value(t_env *env_list, const char *key, const char *value)
+{
+	t_env	*current;
+	t_env	*new_entry;
+
+	current = env_list;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+		{
+			free(current->value);
+			current->value = ft_strdup(value);
+			return ;
+		}
+		current = current->next;
+	}
+	new_entry = malloc(sizeof(t_env));
+	new_entry->key = ft_strdup(key);
+	new_entry->value = ft_strdup(value);
+	new_entry->next = env_list;
+	env_list = new_entry;
+}
 
 void	cd(t_cmd *cmd, t_env *env_list)
 {
