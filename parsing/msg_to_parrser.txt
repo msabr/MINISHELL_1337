@@ -4,3 +4,7 @@ exmple "minishell> ls | ls | ls -l"
 bghitha char* -> char* -> char* -> NULL : "ls" -> "ls" -> "ls -l" -> NULL 
 remove pipe
 --------------------------------------------------------------------------------------------------------------
+bghit flags dyal pipe 3la wdit exit
+bool has_pipe;
+wach command fih pipe ola la
+NB: ila kan "cmd1 | cmd2" hada string mavhi pipe
