@@ -13,6 +13,42 @@
 #include <readline/history.h>
 
 #include "Libft/libft.h"
+// parser structures
+typedef struct s_token
+{
+	t_type			type;
+	char			*value;
+	int				quoted;
+	// hiden attribute like sofian say 
+	struct s_token	*next;
+	struct s_token	*prev;
+}			t_token;
+
+typedef enum e_type
+{
+	SQUOTE,
+	SPCE,
+	DQUOTE,
+	VAR,
+	WORD,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	HEREDOC,
+	APPEND,
+}	t_type;
+
+typedef struct s_data
+{
+	t_token		*token;
+	t_token		*last_token;
+	t_env		*env;
+	int			i;
+	int			error;
+	int			exit_status;
+}			t_data;
+
+// 
 
 typedef struct s_cmd
 {
@@ -39,4 +75,7 @@ void env_function(t_env *env_list);
 void export(t_cmd *cmd, t_env *env_list);
 void unset(t_cmd *cmd, t_env *env_list);
 
+
+// parsing functions
+int check_closedqt(const char *str)
 #endif // MINISHELL_H
