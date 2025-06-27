@@ -6,28 +6,29 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/23 18:09:19 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 17:23:33 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 // Function to handle output redirection using '>'
-void	handle_output_redirection(t_cmd *cmd)
+void	redirect_overwrite(t_cmd *cmd)
 {
-    if (cmd->output_file)
-    {
-        cmd->input_fd = open(cmd->output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (cmd->input_fd < 0)
-        {
-            perror("Error opening output file");
-            exit(EXIT_FAILURE);
-        }
-        if (dup2(cmd->input_fd, STDOUT_FILENO) < 0)
-        {
-            perror("Error redirecting output");
-            exit(EXIT_FAILURE);
-        }
-        close(cmd->input_fd);
-    }
+	if (cmd->output_file)
+	{
+		cmd->output_fd = open(cmd->output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->output_fd < 0)
+		{
+			perror("Error opening output file");
+			exit(EXIT_FAILURE);
+		}
+		if (dup2(cmd->output_fd, STDOUT_FILENO) < 0)
+		{
+			perror("Error redirecting output");
+			exit(EXIT_FAILURE);
+		}
+		close(cmd->output_fd);
+	}
 }
+

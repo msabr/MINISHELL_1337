@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:14:02 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 15:08:15 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 17:22:39 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_cmd
 	char	*input_file; // file for input redirection
 	char	*output_file; // file for output redirection
 	int		input_fd; // file descriptor for input redirection
+	int		output_fd; // file descriptor for output redirection
 	struct s_cmd *next; // pointer to the next command in the pipeline
 }	t_cmd;
 

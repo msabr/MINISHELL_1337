@@ -6,14 +6,14 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:08:43 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/23 18:08:54 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 17:25:37 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 // Function to handle input redirection using '<'
-void	handle_input_redirection(t_cmd *cmd)
+void	redirect_stdin(t_cmd *cmd)
 {
     if (cmd->input_file)
     {

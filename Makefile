@@ -6,7 +6,7 @@
 #    By: msabr <msabr@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/07 02:38:10 by msabr             #+#    #+#              #
-#    Updated: 2025/06/25 18:02:23 by msabr            ###   ########.fr        #
+#    Updated: 2025/06/27 17:27:25 by msabr            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,14 +27,9 @@ SRC_LIB =	Libft/ft_atoi.c Libft/ft_bzero.c Libft/ft_calloc.c Libft/ft_isalnum.c 
 			libft/ft_strstr.c Libft/ft_strnstr.c Libft/ft_strrchr.c Libft/ft_tolower.c Libft/ft_toupper.c Libft/ft_memchr.c \
 			Libft/ft_itoa.c Libft/ft_putchar_fd.c Libft/ft_putendl_fd.c Libft/ft_putnbr_fd.c Libft/ft_putstr_fd.c \
 			Libft/ft_strjoin.c Libft/ft_split.c Libft/ft_strmapi.c Libft/ft_strtrim.c Libft/ft_substr.c Libft/ft_striteri.c\
-			Libft/ft_lstsize.c Libft/ft_lstnew.c Libft/ft_lstlast.c Libft/ft_lstclear.c Libft/ft_lstadd_back.c \
 			Libft/ft_split_space.c Libft/ft_strcmp.c Libft/ft_strcpy.c Libft/ft_strrev.c
 
-SRC_ENV = environment/file3.c #environment/file2.c
-				
-SRC_REDIRECT = redirection/lless_than_sign.c redirection/greagreater_than_sign.c \
-				redirection/double_greater_than_sign.c redirection/double_less_than_sign.c \
-
+SRC_ENV = environment/file3.c #environment/file2.
 
 SRC_Builtins =	builtins/cd.c builtins/echo.c builtins/env.c \
 				builtins/export.c builtins/pwd.c builtins/unset.c \
