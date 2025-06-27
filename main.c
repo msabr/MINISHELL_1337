@@ -6,114 +6,183 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 02:39:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/21 18:32:01 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/26 15:24:57 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void tt(void)
-{
-	write(1, "\033[32m----------------------\033[0m\n\n", 32);
-}
+/*FOR COPILOT
+ALWAYSE USE WHILE LOOP NOT FOR LOOP
 
-char *get_path(char *cmd, t_env *env_list)
-{
-	char *path_env = NULL;
-	t_env *current = env_list;
+2. Execution Model
+There are two kinds of commands:
 
-	while (current)
-	{
-		if (ft_strncmp(current->key, "PATH", 4) == 0)
-		{
-			path_env = current->value;
-			break;
-		}
-		current = current->next;
-	}
+Built-in commands
 
-	if (!path_env)
-		return cmd; // If no PATH variable, return the command as is
+Run inside the current shell process (e.g. cd, export, unset, exit)
 
-	char **paths = ft_split(path_env, ':');
-	char *full_path = NULL;
-	if (ft_strchr(cmd, '/'))
-	{
-		if (access(cmd, X_OK) == 0)
-			return cmd; // If command is an absolute or relative path and executable
-		else
-			return NULL; // If not executable, return NULL
-	}
+External commands
 
-	for (int i = 0; paths[i]; i++)
-	{
-		full_path = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(full_path, cmd);
-		if (access(full_path, X_OK | F_OK) == 0)
-		{
-			free_split(paths);
-			return full_path; // Return the full path if executable
-		}
-		free(full_path);
-	}
-	free_split(paths);
-	return NULL; // Return the original command if not found
-}
- 
-int is_bultins(char *cmd)
-{
-	if (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "pwd") == 0 ||
-		ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "exit") == 0 ||
-		ft_strcmp(cmd, "env") == 0 || ft_strcmp(cmd, "export") == 0 ||
-		ft_strcmp(cmd, "unset") == 0)
-	{
-		return 1; // Command is a builtin
-	}
-	return 0; // Command is not a builtin
+Must use fork(), execve(), and waitpid()
 
-}
-void execve_builtin(char **args, t_env **env_list)
-{
-	t_cmd cmd;
-	cmd.args = args;
-	if(ft_strcmp(args[0], "echo") == 0)
-		echo(&cmd);
-	else if(ft_strcmp(args[0], "pwd") == 0)
-		pwd();
-	else if(ft_strcmp(args[0], "cd") == 0)
-		cd(&cmd, *env_list);
-	else if(ft_strcmp(args[0], "exit") == 0)
-		exit_shell(&cmd, *env_list);
-	else if(ft_strcmp(args[0], "env") == 0)
-		env_function(*env_list);
-	else if(ft_strcmp(args[0], "export") == 0)
-		export(&cmd, env_list);
-	else if(ft_strcmp(args[0], "unset") == 0)
-		unset(&cmd, *env_list);
-	else
-	{
-		ft_putstr_fd("Command not found: ", STDERR_FILENO);
-		ft_putstr_fd(args[0], STDERR_FILENO);
-		ft_putchar_fd('\n', STDERR_FILENO);
-	}
-}
+🔁 Pipelines
+Use pipe() to link commands
+
+Child processes are created for each segment
+
+Correctly duplicate file descriptors (dup2)
+
+Close all unused fds
+
+🔥 Redirections
+>: create/truncate
+
+>>: create/append
+
+<: open for reading
+
+<< (heredoc): simulate user input from inline data
+
+🔄 Execution Flow:
+Expand env vars
+
+Parse into commands
+
+For each command:
+
+Setup redirections
+
+If pipeline:
+
+Create pipe
+
+Fork child
+
+Setup stdin, stdout using dup2
+
+Execute built-in or external
+
+Parent waits with waitpid
+
+Restore stdio if needed
+
+🧰 3. Builtins (MUST BE IMPLEMENTED)
+Command	Run in shell	Notes
+cd	Yes	Modify PWD, OLDPWD
+echo	Yes	Support -n
+pwd	Yes	Just getcwd()
+export	Yes	Add/update env
+unset	Yes	Remove env
+env	Yes	Print env
+exit	Yes	Exit properly, with code
+
+➡️ Built-ins must work both with and without pipes (e.g. cd, exit won't work inside child).
+
+🛠 4. Env Handling
+Parse envp into a t_env list at startup
+
+Implement get_env_value, set_env_value, unset_env_value
+
+Use this list for expansions
+
+Rebuild envp (char **) before execve()
+
+⚠️ Execution Must Handle:
+✅ Pipes ls | wc
+
+✅ Multiple pipes cat | grep | sort
+
+✅ Redirections ls > file, cat < file
+
+✅ Heredocs cat << EOF
+
+✅ Environment vars echo $HOME, $?
+
+✅ Mixing all together cat < file | grep hi >> out
+
+✅ Signals: handle Ctrl+C, Ctrl+D
+
+✅ Exit status $? must be accurate
+
+🧹 Memory & File Descriptor Management
+Close fds when done
+
+Restore stdin/stdout after redirections
+
+Free all malloc’d memory on exit
+
+Free command structs after execution
+
+Avoid zombie processes → always waitpid
+
+🚨 SIGINT/SIGQUIT Handling
+Parent should catch SIGINT (Ctrl+C) and show prompt again
+
+Children should reset to default handlers
+
+Ctrl+D should exit cleanly
+
+Use signal() or sigaction() properly.
+
+🧪 Testing Plan
+Test	Example
+Redirection + pipe	`cat < file
+Builtin + external	cd .. && ls
+Heredoc edge	cat <<EOF with EOF in the middle
+Var expansion	echo "$HOME"
+$?	false; echo $?
+Syntax errors	`ls
+Signals	Ctrl+C during heredoc, prompt, or long process
+
+✅ Final Checklist Before Push
+Item	Status
+Command parsing	✅
+Built-in execution	✅
+Env handling	✅
+Pipes & redirs	✅
+Heredoc	✅
+Signals	✅
+$? tracking	✅
+No memory leaks (Valgrind)	✅
+Norminette compliant	✅
+Behavior matches Bash	✅
+
+🔚 Conclusion
+If the execution layer is wrong, nothing will work. Parsing is important, but execution is where most students fail:
+
+Wrong dup2 usage
+
+Forgetting to close pipes
+
+Built-ins not executed in the right process
+
+Wrong fork/exec logic
+
+Memory leaks from bad env management
+
+Get execution 100% solid and you win the project.*/
 
 
+
+void execuve_multypipe(t_cmd *cmds, t_env *env_list, char **envp);
+
+//withot parrsing
 int	main(int argc, char **argv, char **env)
 {
 	t_env *env_list;
+	// t_cmd *cmds;
 	
-	env_to_list(&env_list, env);
-	(void)argc;
-	(void)argv;
-	// if (argc > 1 || argv[1])
-	// {
-	// 	ft_putstr_fd("Usage: ./minishell\n", STDERR_FILENO);
-	// 	return (1);
-	// }
+	
+	configure_environment(&env_list, env);
+	if (argc > 1 || argv[1])
+	{
+		ft_putstr_fd("Usage: ./minishell\n", STDERR_FILENO);
+		return (1);
+	}
 	while (true)
 	{
-		char *input = readline(CYAN" minishell"RED"> "RESET);
+		char *input = readline(CYAN"minishell"RED"> "RESET);
 		if (!input)
 		{
 			ft_putstr_fd("exit\n", STDOUT_FILENO);

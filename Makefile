@@ -6,7 +6,7 @@
 #    By: msabr <msabr@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/07 02:38:10 by msabr             #+#    #+#              #
-#    Updated: 2025/06/21 16:12:49 by msabr            ###   ########.fr        #
+#    Updated: 2025/06/25 18:02:23 by msabr            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,13 +30,20 @@ SRC_LIB =	Libft/ft_atoi.c Libft/ft_bzero.c Libft/ft_calloc.c Libft/ft_isalnum.c 
 			Libft/ft_lstsize.c Libft/ft_lstnew.c Libft/ft_lstlast.c Libft/ft_lstclear.c Libft/ft_lstadd_back.c \
 			Libft/ft_split_space.c Libft/ft_strcmp.c Libft/ft_strcpy.c Libft/ft_strrev.c
 
+SRC_ENV = environment/file3.c #environment/file2.c
+				
+SRC_REDIRECT = redirection/lless_than_sign.c redirection/greagreater_than_sign.c \
+				redirection/double_greater_than_sign.c redirection/double_less_than_sign.c \
+
+
 SRC_Builtins =	builtins/cd.c builtins/echo.c builtins/env.c \
 				builtins/export.c builtins/pwd.c builtins/unset.c \
-				builtins/exit.c builtins/utils_builtins.c
+				builtins/exit.c builtins/external_files.c\
+				builtins/internal_files.c builtins/export_files.c builtins/export_files1.c\
 
-SRC_EXEcution = execution/environment.c
+SRC_EXECUTE = execution/environment.c execve.c 
 		
-SRCS = 	$(SRC_Builtins) $(SRC_EXEcution) \
+SRCS = 	$(SRC_Builtins) $(SRC_EXECUTE) $(SRC_REDIRECT) $(SRC_ENV) \
 		main.c \
 
 OBJS = $(SRCS:.c=.o)

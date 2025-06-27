@@ -9,3 +9,12 @@ exit
 127
 -----------------------------------
 // handel buffering in echo
+--------------------------------------
+ minishell> /
+execve: Permission denied
+--------------------------------------
+bash-3.2$ export a++="sdf"
+bash: export: `a++=sdf': not a valid identifier
+---------------------------------------
+nbedel f env ila dert cd
+----------------------------------------
