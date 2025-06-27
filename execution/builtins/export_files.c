@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 21:02:22 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,22 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 	add_env_value(env_list, new_key, value);
 }
 
-void	export_one_args(t_env **env_list)
+char	*set_key(const char *arg)
+{
+	char	*key;
+	size_t	len;
+
+	len = 0;
+	while (arg[len] && arg[len] != '=')
+		len++;
+	key = malloc(len + 1);
+	if (!key)
+		return (NULL);
+	ft_strlcpy(key, arg, len + 1);
+	return (key);
+}
+
+void	export_withot_args(t_env **env_list)
 {
 	t_env	*current;
 

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 21:12:47 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,7 @@ void	exit_shell(t_cmd *cmd, t_env *env_list)
 	exit_code = 0;
 	cmd->args++;
 	if (!cmd->is_pipe)
-	{
-		ft_putendl_fd("exit", STDOUT_FILENO);
-		return ;
-	}
+		return (ft_putendl_fd("exit", STDOUT_FILENO));
 	ft_putendl_fd("exit", STDERR_FILENO);
 	if (cmd->args[0])
 	{
@@ -53,10 +50,7 @@ void	exit_shell(t_cmd *cmd, t_env *env_list)
 			exit_code = ft_atoi(cmd->args[0]);
 	}
 	if (cmd->args[0] && cmd->args[1] && exit_code != 255)
-	{
-		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
-		return ;
-	}
+		return (ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO));
 	free_env_list(env_list);
 	exit(exit_code);
 }

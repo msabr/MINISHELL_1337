@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 02:39:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:28:13 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 20:48:06 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,10 @@ int	main(int argc, char **argv, char **env)
 			if (is_bultins(args[0]))
 			{
 				execve_builtin(args, &env_list);
+			}
+			else if(!ft_strcmp(args[0], "/"))
+			{
+				ft_putendl_fd("minishell: /: is a directory", STDERR_FILENO);
 			}
 			else
 			{

@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:13:27 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/25 20:29:10 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 20:40:19 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void execve_cmd(char **args, t_env **env_list, char **env)
 {

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 21:29:34 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:46:54 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 20:36:24 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,18 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
+# include <stdbool.h>
 
 long	ft_atoi(const char *str);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t n, size_t size);
-int		ft_is_number(const char *str);
-int		ft_isalnum(int c);
-int		ft_isalpha(int c);
-int		ft_isascii(int c);
-int		ft_isdigit(int c);
-int		ft_isprint(int c);
-int		ft_isspace(int c);
+bool	ft_is_number(const char *str);
+bool	ft_isalnum(int c);
+bool	ft_isalpha(int c);
+bool	ft_isascii(int c);
+bool	ft_isdigit(int c);
+bool	ft_isprint(int c);
+bool	ft_isspace(int c);
 char	*ft_itoa(int n);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);

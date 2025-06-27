@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:14:02 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:53:03 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 21:11:42 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
-	bool			declared_only;
+	bool			export_variable;
 	struct s_env	*next;
 }	t_env;
 
@@ -80,47 +80,40 @@ typedef struct s_garbage
 	int		size;
 }	t_garbage;
 
-void	env_to_list(t_env **env_list, char **env);
-void execve_cmd(char **args, t_env **env_list, char **env);
-char *get_path(char *cmd, t_env *env_list);
-
-bool	is_valid_key(char *key);
-void	sort_env_list(t_env **env_list);
-void	export_one_args(t_env **env_list);
-bool	is_append(const char *arg);
-void	append_env_value(t_env **env_list, char *key, char *value);
-void	add_env_value(t_env **env_list, char *key, char *value);
-void	export(t_cmd *cmd, t_env **env_list);
-
-void	sort_env_list(t_env **env_list);
-void	export_one_args(t_env **env_list);
-void	add_temporary_env_value(t_env **env_list, char *key);
-
-void	echo(t_cmd *cmd);
-char	*get_pwd(void);
-void	pwd(t_env **env_list);
-void	cd(t_cmd *cmd, t_env **env_list);
-void	exit_shell(t_cmd *cmd, t_env *env_list);
-void	env_function(t_env *env_list);
-void	export(t_cmd *cmd, t_env **env_list);
-void	unset(t_cmd *cmd, t_env **env_list);
+//built-in functions
 bool	is_bultins(char *cmd);
 void	execve_builtin(char **args, t_env **env_list);
+bool	is_valid_key(char *key);
+void	cd(t_cmd *cmd, t_env **env_list);
+void	echo(t_cmd *cmd);
+void	env_function(t_env *env_list);
+void	exit_shell(t_cmd *cmd, t_env *env_list);
+void	sort_env_list(t_env **env_list);
+void	append_env_value(t_env **env_list, char *key, char *value);
+char	*set_key(const char *arg);
+void	export_withot_args(t_env **env_list);
+void	export(t_cmd *cmd, t_env **env_list);
+char	*get_pwd(void);
+char	*get_pwd_from_env(t_env **env_list);
+void	pwd(t_env **env_list);
+void	unset(t_cmd *cmd, t_env **env_list);
 
+//environment functions
+void	env_to_list(t_env **env_list, char **env);
 t_env	*search_env_node(t_env *list_head, const char *search_key);
 void	configure_environment(t_env **env_list, char **env_array);
+char	*get_env_value(t_env **env_list, const char *key);
+void	add_env_value(t_env **env_list, char *key, char *value);
+void	add_temporary_env_value(t_env **env_list, char *key);
 
-
-bool is_redirection(char *cmd);
-void	handle_double_output_redirection(t_cmd *cmd);
-void	handle_double_input_redirection(t_cmd *cmd);
+//redirection functions
+bool	is_redirection(char *cmd);
+void	handle_redirection(t_cmd *cmd);
 void	handle_input_redirection(t_cmd *cmd);
 void	handle_output_redirection(t_cmd *cmd);
 
-char	*get_env_value(t_env **env_list, const char *key);
-void	add_temporary_env_value(t_env **env_list, char *key);
-
-
+void execve_cmd(char **args, t_env **env_list, char **env);
+char *get_path(char *cmd, t_env *env_list);
 void	tt(void);
 
 #endif // MINISHELL_H
