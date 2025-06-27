@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:06 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/22 22:57:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 16:17:43 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,14 @@ void	export(t_cmd *cmd, t_env **env_list)
 
 	i = 1;
 	if (!cmd->args || !cmd->args[i])
+	{
 		export_one_args(env_list);
-	if (!is_valid_key(cmd->args[i]))
-		return (print_error_export(cmd->args[i]));
+		return ;
+	}
 	while (cmd->args[i])
 	{
+		if (!is_valid_key(cmd->args[i]))
+			return (print_error_export(cmd->args[i]));
 		if (ft_strchr(cmd->args[i], '=') != NULL)
 		{
 			key = set_key(cmd->args[i]);

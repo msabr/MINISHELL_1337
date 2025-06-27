@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:50 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/22 16:56:20 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/26 11:27:36 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	env_function(t_env *env_list)
 	current = env_list;
 	while (current)
 	{
-		if (current->value && current->is_exported)
+		if (current->value && current->declared_only)
 		{
 			result = ft_strjoin(current->key, "=");
 			result = ft_strjoin(result, current->value);
 			ft_putendl_fd(result, STDOUT_FILENO);
 			free(result);
 		}
-		else if (current->is_exported)
+		else if (current->declared_only)
 		{
 			result = ft_strjoin(current->key, "=");
 			ft_putendl_fd(result, STDOUT_FILENO);

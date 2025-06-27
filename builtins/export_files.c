@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/22 23:00:59 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/26 11:16:28 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	sort_env_list(t_env **env_list)
 	}
 }
 
-void	append_env_value(t_env **env_list, const char *key, const char *value)
+void	append_env_value(t_env **env_list, char *key, char *value)
 {
 	t_env	*current;
 	char	*new_value;
@@ -69,7 +69,7 @@ void	append_env_value(t_env **env_list, const char *key, const char *value)
 	add_env_value(env_list, new_key, value);
 }
 
-void	add_env_value(t_env **env_list, const char *key, const char *value)
+void	add_env_value(t_env **env_list, char *key, char *value)
 {
 	t_env	*current;
 	t_env	*new_node;
@@ -88,12 +88,12 @@ void	add_env_value(t_env **env_list, const char *key, const char *value)
 	new_node = malloc(sizeof(t_env));
 	new_node->key = ft_strdup(key);
 	new_node->value = ft_strdup(value);
-	new_node->is_exported = true;
+	new_node->declared_only = true;
 	new_node->next = *env_list;
 	*env_list = new_node;
 }
 
-void	add_temporary_env_value(t_env **env_list, const char *key)
+void	add_temporary_env_value(t_env **env_list, char *key)
 {
 	t_env	*current;
 	t_env	*new_node;
@@ -108,7 +108,7 @@ void	add_temporary_env_value(t_env **env_list, const char *key)
 	new_node = malloc(sizeof(t_env));
 	new_node->key = ft_strdup(key);
 	new_node->value = NULL;
-	new_node->is_exported = false;
+	new_node->declared_only = false;
 	new_node->next = *env_list;
 	*env_list = new_node;
 }

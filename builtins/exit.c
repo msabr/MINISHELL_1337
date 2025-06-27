@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/22 20:57:43 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 16:04:42 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ void	exit_shell(t_cmd *cmd, t_env *env_list)
 
 	exit_code = 0;
 	cmd->args++;
+	if (!cmd->is_pipe)
+	{
+		ft_putendl_fd("exit", STDOUT_FILENO);
+		return ;
+	}
 	ft_putendl_fd("exit", STDERR_FILENO);
 	if (cmd->args[0])
 	{
