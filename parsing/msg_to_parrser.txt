@@ -8,3 +8,9 @@ bghit flags dyal pipe 3la wdit exit
 bool has_pipe;
 wach command fih pipe ola la
 NB: ila kan "cmd1 | cmd2" hada string mavhi pipe
+---------------------------------------------------------------------------
+for export
+par exmple minishell> export a="ls -l"
+export f arg[0] hadi bayna
+a="ls -l" khass kamla tkon f arg wa7ed matsplitich b espace
+
