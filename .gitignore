@@ -1,0 +1,6 @@
+*.o
+minishell
+Trash/
+.DS_Store
+*/*.o
+.vscode/
