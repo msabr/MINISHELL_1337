@@ -6,7 +6,7 @@
 #    By: msabr <msabr@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 16:26:22 by msabr             #+#    #+#              #
-#    Updated: 2025/06/21 16:12:21 by msabr            ###   ########.fr        #
+#    Updated: 2025/06/27 17:04:15 by msabr            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,6 @@ SRC = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 		ft_strstr.c ft_strnstr.c ft_strrchr.c ft_tolower.c ft_toupper.c \
 		ft_itoa.c ft_putchar_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_putstr_fd.c \
 		ft_strjoin.c ft_split.c ft_strmapi.c ft_strtrim.c ft_substr.c ft_striteri.c\
-		ft_lstsize.c ft_lstnew.c ft_lstlast.c ft_lstclear.c ft_lstadd_back.c \
 		ft_split_space.c ft_strcmp.c ft_strcpy.c ft_strrev.c
 
 OBJS =  ${SRC:.c=.o}

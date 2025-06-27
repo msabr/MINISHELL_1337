@@ -1,28 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize.c                                       :+:      :+:    :+:   */
+/*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/26 16:40:20 by msabr             #+#    #+#             */
-/*   Updated: 2025/03/03 16:17:07 by msabr            ###   ########.fr       */
+/*   Created: 2025/06/23 13:32:16 by msabr             #+#    #+#             */
+/*   Updated: 2025/06/23 13:35:07 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdlib.h>
 
-int	ft_lstsize(t_list *lst)
+char	*ft_strtok(char *str, const char *delim)
 {
-	int	size;
+	static char	*next;
+	char		*start;
+	int			i;
 
-	if (!lst)
-		return (0);
-	size = 0;
-	while (lst)
+	i = 0;
+	if (str)
+		next = str;
+	if (!next || *next == '\0')
+		return (NULL);
+	while (*next && strchr(delim, *next))
+		next++;
+	if (*next == '\0')
+		return (NULL);
+	start = next;
+	while (*next && !strchr(delim, *next))
+		next++ ;
+	if (*next)
 	{
-		size ++;
-		lst = lst->next;
+		*next = '\0';
+		next++ ;
 	}
-	return (size);
+	else
+		next = NULL;
+	return (start);
 }

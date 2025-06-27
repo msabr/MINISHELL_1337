@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 21:29:34 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/21 16:11:48 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 17:04:33 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,10 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_strrchr(const char *str, int c);
 char	*ft_strrev(char *str);
 char	*ft_strstr(const char *haystack, const char *needle);
+char	*ft_strtok(char *str, const char *delim);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
-
-typedef struct s_list
-{
-	int				data;
-	int				index;
-	struct s_list	*next;
-}	t_list;
-
-int		ft_lstsize(t_list *lst);
-t_list	*ft_lstnew(int content);
-t_list	*ft_lstlast(t_list *lst);
-void	ft_lstclear(t_list **lst);
-void	ft_lstadd_back(t_list **lst, t_list *new);
 
 #endif
