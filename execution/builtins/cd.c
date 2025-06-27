@@ -6,25 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 15:57:22 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
-
-static char	*get_env_value(t_env **env_list, const char *key)
-{
-	t_env	*current;
-
-	current = *env_list;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-			return (current->value);
-		current = current->next;
-	}
-	return (NULL);
-}
+#include "../../minishell.h"
 
 void	cd(t_cmd *cmd, t_env **env_list)
 {

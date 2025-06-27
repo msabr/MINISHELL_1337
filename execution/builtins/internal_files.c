@@ -1,21 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirection_files.c                                :+:      :+:    :+:   */
+/*   internal_files.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 17:20:31 by msabr            ###   ########.fr       */
+/*   Created: 2025/06/22 20:17:03 by msabr             #+#    #+#             */
+/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
-bool is_redirection(char *cmd)
+bool	is_valid_key(char *key)
 {
-    return (strchr(cmd, LLESS_THAN_SIGNESS) || strchr(cmd, GREAGREATER_THAN_SIGN) ||
-            strstr(cmd, DOUBLE_GREATER_THAN_SIGN) || strstr(cmd, DOUBLE_LESS_THAN_SIGN));
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(key[0]) && key[0] != UNDERSCORE)
+		return (false);
+	while (key[i] && key[i] != '=')
+	{
+		if (key[i] == '+' && key[i + 1] != '=')
+			return (false);
+		if (!ft_isalnum(key[i]) && key[i] != UNDERSCORE && key[i] != '+')
+			return (false);
+		i++;
+	}
+	return (true);
 }
-
-

@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:06 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 16:17:43 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../minishell.h"
 
 bool	is_append(const char *arg)
 {

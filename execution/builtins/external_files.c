@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 20:17:16 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 15:08:26 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../minishell.h"
 
 void	execve_builtin(char **args, t_env **env_list)
 {

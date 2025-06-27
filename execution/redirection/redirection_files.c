@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   environment.h                                      :+:      :+:    :+:   */
+/*   redirection_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/25 16:53:39 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/25 20:28:44 by msabr            ###   ########.fr       */
+/*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
+/*   Updated: 2025/06/27 18:43:32 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENVIRONMENT_H
-# define ENVIRONMENT_H      
+#include "../../minishell.h"
 
-# include "../Libft/libft.h"
-typedef struct s_env   t_env;
+bool is_redirection(char *cmd)
+{
+    return (strchr(cmd, LLESS_THAN_SIGNESS) || strchr(cmd, GREAGREATER_THAN_SIGN) ||
+            strstr(cmd, DOUBLE_GREATER_THAN_SIGN) || strstr(cmd, DOUBLE_LESS_THAN_SIGN));
+}
 
-t_env	*locate_env_node(t_env *list_head, const char *search_key);
 
-void	configure_environment(t_env **env, char **env_array);
-
-#endif

@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/26 11:16:28 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../minishell.h"
 
 static void	swap_env_nodes(t_env *a, t_env *b)
 {
@@ -69,46 +69,31 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 	add_env_value(env_list, new_key, value);
 }
 
-void	add_env_value(t_env **env_list, char *key, char *value)
+void	export_one_args(t_env **env_list)
 {
 	t_env	*current;
-	t_env	*new_node;
 
+	sort_env_list(env_list);
 	current = *env_list;
 	while (current)
 	{
-		if (ft_strcmp(current->key, key) == 0)
+		if (ft_strcmp(current->key, "_"))
 		{
-			free(current->value);
-			current->value = ft_strdup(value);
-			return ;
+			if (current->value)
+			{
+				ft_putstr_fd("declare -x ", STDOUT_FILENO);
+				ft_putstr_fd(current->key, STDOUT_FILENO);
+				ft_putstr_fd("=\"", STDOUT_FILENO);
+				ft_putstr_fd(current->value, STDOUT_FILENO);
+				ft_putstr_fd("\"\n", STDOUT_FILENO);
+			}
+			else
+			{
+				ft_putstr_fd("declare -x ", STDOUT_FILENO);
+				ft_putstr_fd(current->key, STDOUT_FILENO);
+				ft_putstr_fd("\n", STDOUT_FILENO);
+			}
 		}
 		current = current->next;
 	}
-	new_node = malloc(sizeof(t_env));
-	new_node->key = ft_strdup(key);
-	new_node->value = ft_strdup(value);
-	new_node->declared_only = true;
-	new_node->next = *env_list;
-	*env_list = new_node;
-}
-
-void	add_temporary_env_value(t_env **env_list, char *key)
-{
-	t_env	*current;
-	t_env	*new_node;
-
-	current = *env_list;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-			return ;
-		current = current->next;
-	}
-	new_node = malloc(sizeof(t_env));
-	new_node->key = ft_strdup(key);
-	new_node->value = NULL;
-	new_node->declared_only = false;
-	new_node->next = *env_list;
-	*env_list = new_node;
 }

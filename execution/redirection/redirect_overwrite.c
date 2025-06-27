@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   greagreater_than_sign.c                            :+:      :+:    :+:   */
+/*   redirect_overwrite.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 17:23:33 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 18:43:25 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 // Function to handle output redirection using '>'
 void	redirect_overwrite(t_cmd *cmd)

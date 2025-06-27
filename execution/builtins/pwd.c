@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 17:09:36 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 18:47:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../minishell.h"
 
 char	*get_pwd(void)
 {
@@ -29,7 +29,7 @@ char	*get_pwd_from_env(t_env **env_list)
 {
 	t_env	*pwd_node;
 
-	pwd_node = locate_env_node(*env_list, "PWD");
+	pwd_node = search_env_node(*env_list, "PWD");
 	if (pwd_node && pwd_node->value)
 	{
 		return (ft_strdup(pwd_node->value));

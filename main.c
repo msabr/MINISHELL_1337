@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 02:39:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/26 15:24:57 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 18:28:13 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,13 +173,9 @@ int	main(int argc, char **argv, char **env)
 	t_env *env_list;
 	// t_cmd *cmds;
 	
-	
+	(void)argc;
+	(void)argv;
 	configure_environment(&env_list, env);
-	if (argc > 1 || argv[1])
-	{
-		ft_putstr_fd("Usage: ./minishell\n", STDERR_FILENO);
-		return (1);
-	}
 	while (true)
 	{
 		char *input = readline(CYAN"minishell"RED"> "RESET);

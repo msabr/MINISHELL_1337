@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 17:25:02 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 18:43:22 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 // Function to handle output redirection using '>>'
 void	redirect_append(t_cmd *cmd)

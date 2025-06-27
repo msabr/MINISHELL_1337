@@ -6,7 +6,7 @@
 #    By: msabr <msabr@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/07 02:38:10 by msabr             #+#    #+#              #
-#    Updated: 2025/06/27 17:27:25 by msabr            ###   ########.fr        #
+#    Updated: 2025/06/27 18:57:43 by msabr            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,21 +29,23 @@ SRC_LIB =	Libft/ft_atoi.c Libft/ft_bzero.c Libft/ft_calloc.c Libft/ft_isalnum.c 
 			Libft/ft_strjoin.c Libft/ft_split.c Libft/ft_strmapi.c Libft/ft_strtrim.c Libft/ft_substr.c Libft/ft_striteri.c\
 			Libft/ft_split_space.c Libft/ft_strcmp.c Libft/ft_strcpy.c Libft/ft_strrev.c
 
-SRC_ENV = environment/file3.c #environment/file2.
+SRC_Builtins =	execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c \
+				execution/builtins/export.c execution/builtins/pwd.c execution/builtins/unset.c \
+				execution/builtins/exit.c execution/builtins/external_files.c\
+				execution/builtins/internal_files.c execution/builtins/export_files.c
 
-SRC_Builtins =	builtins/cd.c builtins/echo.c builtins/env.c \
-				builtins/export.c builtins/pwd.c builtins/unset.c \
-				builtins/exit.c builtins/external_files.c\
-				builtins/internal_files.c builtins/export_files.c builtins/export_files1.c\
+SRC_ENV =	execution/environment/file1.c execution/environment/file2.c 
 
-SRC_EXECUTE = execution/environment.c execve.c 
+
+SRC_REDIRECT =	execution/redirection/heredoc.c execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
+				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c 
 		
-SRCS = 	$(SRC_Builtins) $(SRC_EXECUTE) $(SRC_REDIRECT) $(SRC_ENV) \
+SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) execution/execve.c\
 		main.c \
 
 OBJS = $(SRCS:.c=.o)
 
-HEADERS = Libft/libft.h minishell.h builtins/builtins.h 
+HEADERS = Libft/libft.h minishell.h
 
 
 all: $(NAME)
