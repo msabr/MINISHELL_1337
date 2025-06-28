@@ -34,6 +34,8 @@ SRCS = 	main.c env.c\
 		builtins/cd.c builtins/echo.c builtins/env.c \
 		builtins/export.c builtins/pwd.c builtins/unset.c \
 		builtins/exit.c builtins/utils_builtins.c \
+		parcing/detect_type.c parcing/helper_lexer.c \
+		 parcing/simple_lexer.c parcing/token_utils.c \
 
 
 

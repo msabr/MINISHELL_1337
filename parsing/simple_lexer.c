@@ -200,3 +200,7 @@ int test_lexer_main(int argc, char **argv)
     
     return (0);
 }
+int main(int ac, char **av)
+{
+    return(test_lexer_main(ac,av));
+}

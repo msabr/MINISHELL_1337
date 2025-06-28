@@ -132,10 +132,3 @@ t_type get_operator_category(const char *op)
     return (WORD);
 }
 
-int main(int ac, char **av)
-{
-    if (ac == 1)
-        return(0);
-    for(int i = 0; av[i] != NULL;i++ )
-        printf("%d",classify_token_content(av[i]));
-}
