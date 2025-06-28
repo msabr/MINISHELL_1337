@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 10:37:14 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/06/28 10:37:32 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/06/28 22:29:32 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 // Pointeur statique vers la tête de la liste t_gc
 static t_gc **ft_env_gc(void)
 {

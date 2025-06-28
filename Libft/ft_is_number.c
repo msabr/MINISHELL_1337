@@ -6,13 +6,13 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 19:36:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/20 17:08:42 by msabr            ###   ########.fr       */
+/*   Updated: 2025/06/27 20:37:03 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_is_number(const char *str)
+bool	ft_is_number(const char *str)
 {
 	int	i;
 
