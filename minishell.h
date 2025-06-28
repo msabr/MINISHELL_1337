@@ -16,13 +16,11 @@
 // parser structures
 typedef struct s_token
 {
-	t_type			type;
 	char			*value;
-	int				quoted;
-	// hiden attribute like sofian say 
+	t_type				type;
+	int				a_sp;
 	struct s_token	*next;
-	struct s_token	*prev;
-}			t_token;
+}					t_token;
 
 typedef enum e_type
 {
@@ -77,5 +75,20 @@ void unset(t_cmd *cmd, t_env *env_list);
 
 
 // parsing functions
-int check_closedqt(const char *str)
+
+// token type detection functions
+int     is_shell_operator(const char *str);
+int     is_shell_variable(const char *str);
+int     has_single_quotes(const char *str);
+int     has_double_quotes(const char *str);
+int     is_only_whitespace(const char *str);
+t_type  classify_token_content(const char *value);
+t_type  get_operator_category(const char *op);
+
+// token list functions
+t_token *ft_lstnew_token(char *value, t_type type, int a_sp);
+void    ft_lstadd_back_token(t_token **lst, t_token *new);
+t_token *ft_last_token(t_token **lst);
+void    ft_free_tokens(t_token *tokens);
+
 #endif // MINISHELL_H
