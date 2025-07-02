@@ -158,7 +158,7 @@ char *ft_strndup(const char *s, size_t n);
 
 //
 t_token *lexer(const char *input);
-size_t skip_whitespace(const char *input, size_t i);
+void skip_whitespace(const char *input, size_t *i);
 size_t parse_word(const char *input, size_t i, t_token **head);
 size_t parse_quote(const char *input, size_t i, t_token **head);
 size_t parse_operator(const char *input, size_t i, t_token **head);

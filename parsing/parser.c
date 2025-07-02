@@ -205,11 +205,8 @@ t_cmd	*parse_tokens_to_cmds(t_token *tok)
 			add_command(&cmds, current);
 		}
 		if (is_arg_token(tok))
-		{
-			arg = merge_argument(&tok);
-			add_argument(&current->args, arg);
-			continue ;
-		}
+		(1) &&
+		(arg = merge_argument(&tok),add_argument(&current->args, arg),continue )
 		if (tok->type == TOKEN_REDIR_IN || tok->type == TOKEN_REDIR_OUT
 			|| tok->type == TOKEN_REDIR_APPEND || tok->type == TOKEN_HEREDOC)
 			handle_redir(current, &tok);
