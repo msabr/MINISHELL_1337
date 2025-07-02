@@ -189,24 +189,25 @@ void	handle_redir(t_cmd *cmd, t_token **tok)
 	*tok = target;
 }
 
-t_cmd	*parse_tokens_to_cmds(t_token *tok)
+static void	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 {
-	t_cmd	*cmds;
 	t_cmd	*current;
 	char	*arg;
 
-	cmds = NULL;
 	current = NULL;
 	while (tok && tok->type != TOKEN_EOF)
 	{
 		if (!current)
 		{
 			current = new_command();
-			add_command(&cmds, current);
+			add_command(cmds, current);
 		}
 		if (is_arg_token(tok))
-		(1) &&
-		(arg = merge_argument(&tok),add_argument(&current->args, arg),continue )
+		{
+			arg = merge_argument(&tok);
+			add_argument(&current->args, arg);
+			continue ;
+		}
 		if (tok->type == TOKEN_REDIR_IN || tok->type == TOKEN_REDIR_OUT
 			|| tok->type == TOKEN_REDIR_APPEND || tok->type == TOKEN_HEREDOC)
 			handle_redir(current, &tok);
@@ -214,5 +215,13 @@ t_cmd	*parse_tokens_to_cmds(t_token *tok)
 			current = NULL;
 		tok = tok->next;
 	}
+}
+
+t_cmd	*parse_tokens_to_cmds(t_token *tok)
+{
+	t_cmd	*cmds;
+
+	cmds = NULL;
+	parse_tokens_loop(tok, &cmds);
 	return (cmds);
 }
