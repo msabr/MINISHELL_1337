@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:24:49 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/02 14:36:24 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 15:52:56 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 static t_gc	**ft_env_gc(void)
 {
-	static t_gc	*gc;
+	static t_gc *gc = NULL;
 
-	*gc = NULL
-		return (&gc);
+	return (&gc);
 }
 
 void	*ft_malloc(size_t size)

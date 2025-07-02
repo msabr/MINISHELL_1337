@@ -1,184 +1,221 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/30 06:17:21 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/01 17:16:20 by msabr            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
-
-/* ---------- Utils for args ---------- */
-static int	ft_tablen(char **tab)
+int	is_arg_token(t_token *tok)
 {
-	int i = 0;
-	if (!tab)
-		return 0;
-	while (tab[i])
-		i++;
-	return i;
+	if (!tok)
+		return (0);
+	return (tok->type == TOKEN_WORD || tok->type == TOKEN_VARIABLE
+		|| tok->type == TOKEN_DQUOTE || tok->type == TOKEN_SQUOTE);
 }
 
-static char	**ft_tabadd(char **tab, const char *word)
+size_t	arg_total_len(t_token *tok)
 {
-	int		len = ft_tablen(tab);
-	char	**res = malloc(sizeof(char *) * (len + 2));
-	int		i = 0;
+	size_t	len;
 
-	if (!res)
-		return NULL;
-	while (i < len)
+	len = 0;
+	while (is_arg_token(tok) && !tok->space_after)
 	{
-		res[i] = tab[i];
-		i++;
+		len += ft_strlen(tok->value);
+		tok = tok->next;
 	}
-	res[i++] = ft_strdup(word);
-	res[i] = NULL;
-	free(tab);
-	return res;
+	if (is_arg_token(tok))
+		len += ft_strlen(tok->value);
+	return (len);
 }
 
-/* ---------- Redirection List ---------- */
-static t_redir	*redir_new(t_token_type type, const char *filename)
+char	*merge_argument(t_token **ptok)
 {
-	t_redir *r = malloc(sizeof(t_redir));
-	if (!r)
-		return NULL;
-	r->type = type;
-	r->filename = ft_strdup(filename);
-	r->next = NULL;
-	return r;
-}
+	size_t	len;
+	char	*arg;
+	t_token	*tok;
 
-static void	redir_addback(t_redir **lst, t_redir *new)
-{
-	t_redir *cur = *lst;
-	if (!*lst)
+	len = arg_total_len(*ptok);
+	arg = malloc(len + 1);
+	if (!arg)
+		return (NULL);
+	arg[0] = 0;
+	tok = *ptok;
+	while (is_arg_token(tok))
 	{
-		*lst = new;
-		return;
-	}
-	while (cur->next)
-		cur = cur->next;
-	cur->next = new;
-}
-
-/* ---------- Heredoc List ---------- */
-static t_heredoc *heredoc_new(const char *delimiter)
-{
-	t_heredoc *h = malloc(sizeof(t_heredoc));
-	if (!h)
-		return NULL;
-	h->delimiter = ft_strdup(delimiter);
-	h->content = NULL;
-	h->next = NULL;
-	return h;
-}
-
-static void	heredoc_addback(t_heredoc **lst, t_heredoc *new)
-{
-	t_heredoc *cur = *lst;
-	if (!*lst)
-	{
-		*lst = new;
-		return;
-	}
-	while (cur->next)
-		cur = cur->next;
-	cur->next = new;
-}
-
-/* ---------- Command List ---------- */
-static t_cmd	*cmd_new(void)
-{
-	t_cmd *cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return NULL;
-	cmd->args = NULL;
-	cmd->redirs = NULL;
-	cmd->heredocs = NULL;
-	cmd->next = NULL;
-	return cmd;
-}
-
-static void	cmd_addback(t_cmd **lst, t_cmd *new)
-{
-	t_cmd *cur = *lst;
-	if (!*lst)
-	{
-		*lst = new;
-		return;
-	}
-	while (cur->next)
-		cur = cur->next;
-	cur->next = new;
-}
-
-/* ---------- Is redirection type ---------- */
-static bool	is_redir_type(t_token_type type)
-{
-	return (type == TOKEN_REDIR_IN
-		|| type == TOKEN_REDIR_OUT
-		|| type == TOKEN_REDIR_APPEND
-		|| type == TOKEN_HEREDOC);
-}
-
-/* ---------- Parser main function ---------- */
-t_cmd	*parse_tokens_to_cmds(t_token *tokens)
-{
-	t_cmd	*cmds = NULL;
-	t_cmd	*current = NULL;
-	t_token	*tok = tokens;
-
-	while (tok && tok->type != TOKEN_EOF)
-	{
-		// Create new command at the start or after a PIPE
-		if (!current)
+		ft_strlcat(arg, tok->value, len + 1);
+		if (tok->space_after)
 		{
-			current = cmd_new();
-			if (!current)
-				return NULL;
-			cmd_addback(&cmds, current);
-		}
-		// Arguments (WORD or VARIABLE)
-		if (tok->type == TOKEN_WORD || tok->type == TOKEN_VARIABLE)
-		{
-			current->args = ft_tabadd(current->args, tok->value);
-		}
-		// Redirections
-		else if (is_redir_type(tok->type))
-		{
-			if (tok->next && (tok->next->type == TOKEN_WORD || tok->next->type == TOKEN_VARIABLE))
-			{
-				if (tok->type == TOKEN_HEREDOC)
-				{
-					heredoc_addback(&(current->heredocs), heredoc_new(tok->next->value));
-					redir_addback(&(current->redirs), redir_new(tok->type, tok->next->value));
-				}
-				else
-				{
-					redir_addback(&(current->redirs), redir_new(tok->type, tok->next->value));
-				}
-				tok = tok->next; // skip target/filename/delimiter
-			}
-			else
-			{
-				// Syntax error: redirection sans cible
-				// (Tu peux ajouter un gestionnaire d'erreur ici)
-				return NULL;
-			}
-		}
-		// Pipe
-		else if (tok->type == TOKEN_PIPE)
-		{
-			current = NULL;
+			*ptok = tok->next;
+			return (arg);
 		}
 		tok = tok->next;
 	}
-	return cmds;
+	*ptok = tok;
+	return (arg);
+}
+
+int	count_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	if (!args)
+		return (0);
+	while (args[i])
+		i++;
+	return (i);
+}
+
+void	add_argument(char ***args, char *new_arg)
+{
+	int	argc;
+	char	**new_args;
+	int	i;
+
+	argc = count_args(*args);
+	new_args = malloc(sizeof(char *) * (argc + 2));
+	if (!new_args)
+		return ;
+	i = 0;
+	while (i < argc)
+	{
+		new_args[i] = (*args)[i];
+		i++;
+	}
+	new_args[argc] = new_arg;
+	new_args[argc + 1] = NULL;
+	free(*args);
+	*args = new_args;
+}
+
+t_redir	*new_redir(t_token_type type, char *filename)
+{
+	t_redir	*new;
+
+	new = malloc(sizeof(t_redir));
+	if (!new)
+		return (NULL);
+	new->type = type;
+	new->filename = filename;
+	new->next = NULL;
+	return (new);
+}
+
+void	add_redirection(t_redir **redir, t_token_type type, char *filename)
+{
+	t_redir	*new;
+	t_redir	*tmp;
+
+	new = new_redir(type, filename);
+	if (!new)
+		return ;
+	if (!*redir)
+		*redir = new;
+	else
+	{
+		tmp = *redir;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+}
+
+t_heredoc	*new_heredoc(char *delim)
+{
+	t_heredoc	*hd;
+
+	hd = malloc(sizeof(t_heredoc));
+	if (!hd)
+		return (NULL);
+	hd->delimiter = delim;
+	hd->content = NULL;
+	hd->next = NULL;
+	return (hd);
+}
+
+void	add_heredoc(t_heredoc **hd, char *delim)
+{
+	t_heredoc	*new;
+	t_heredoc	*tmp;
+
+	new = new_heredoc(delim);
+	if (!new)
+		return ;
+	if (!*hd)
+		*hd = new;
+	else
+	{
+		tmp = *hd;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+}
+
+t_cmd	*new_command(void)
+{
+	t_cmd	*new;
+
+	new = ft_calloc(1, sizeof(t_cmd));
+	return (new);
+}
+
+void	add_command(t_cmd **cmds, t_cmd *new)
+{
+	t_cmd	*tmp;
+
+	if (!*cmds)
+		*cmds = new;
+	else
+	{
+		tmp = *cmds;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+}
+
+void	handle_redir(t_cmd *cmd, t_token **tok)
+{
+	t_token	*target;
+	char	*filename;
+
+	target = (*tok)->next;
+	if (!target || !is_arg_token(target))
+	{
+		write(2, "minishell: syntax error: missing redir target\n", 47);
+		return ;
+	}
+	filename = merge_argument(&target);
+	if ((*tok)->type == TOKEN_HEREDOC)
+		add_heredoc(&cmd->heredocs, filename);
+	else
+		add_redirection(&cmd->redirs, (*tok)->type, filename);
+	*tok = target;
+}
+
+t_cmd	*parse_tokens_to_cmds(t_token *tok)
+{
+	t_cmd	*cmds;
+	t_cmd	*current;
+	char	*arg;
+
+	cmds = NULL;
+	current = NULL;
+	while (tok && tok->type != TOKEN_EOF)
+	{
+		if (!current)
+		{
+			current = new_command();
+			add_command(&cmds, current);
+		}
+		if (is_arg_token(tok))
+		{
+			arg = merge_argument(&tok);
+			add_argument(&current->args, arg);
+			continue ;
+		}
+		if (tok->type == TOKEN_REDIR_IN || tok->type == TOKEN_REDIR_OUT
+			|| tok->type == TOKEN_REDIR_APPEND || tok->type == TOKEN_HEREDOC)
+			handle_redir(current, &tok);
+		else if (tok->type == TOKEN_PIPE)
+			current = NULL;
+		tok = tok->next;
+	}
+	return (cmds);
 }

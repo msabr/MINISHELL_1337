@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 14:14:02 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/02 14:20:15 by msabr            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -186,7 +174,8 @@ int		ft_s_ret(int set);
 char	*ft_strncpy(char *dest, const char *src, size_t n);
 
 t_cmd *parse_tokens_to_cmds(t_token *tokens);
-// void	print_cmds(t_cmd *cmds);
+void print_cmds(t_cmd *cmds);
+
 // ---------------------------------------
 
 //built-in functions

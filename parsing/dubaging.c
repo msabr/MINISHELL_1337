@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dubaging.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:10:54 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/01 17:29:37 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 15:59:23 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,47 +42,52 @@ void print_token_list(t_token *list) {
     }
     printf("=== END OF LIST ===\n");
 }
+static void print_redirs(t_redir *r)
+{
+    while (r)
+    {
+        if (r->type == TOKEN_REDIR_IN)
+            printf("  [redir]   <  %s\n", r->filename);
+        else if (r->type == TOKEN_REDIR_OUT)
+            printf("  [redir]   >  %s\n", r->filename);
+        else if (r->type == TOKEN_REDIR_APPEND)
+            printf("  [redir]  >>  %s\n", r->filename);
+        else if (r->type == TOKEN_HEREDOC)
+            printf("  [redir]  <<  %s\n", r->filename);
+        r = r->next;
+    }
+}
 
-// static void	print_redirs(t_redir *r)
-// {
-// 	while (r)
-// 	{
-// 		printf("  [redir] type: %d, file: %s\n", r->type, r->filename);
-// 		r = r->next;
-// 	}
-// }
+static void print_heredocs(t_heredoc *h)
+{
+    while (h)
+    {
+        printf("  [heredoc] delimiter: %s\n", h->delimiter);
+        if (h->content)
+            printf("    content: %s\n", h->content);
+        h = h->next;
+    }
+}
 
-// static void	print_heredocs(t_heredoc *h)
-// {
-// 	while (h)
-// 	{
-// 		printf("  [heredoc] delimiter: %s\n", h->delimiter);
-// 		// Affichage du contenu optionnel
-// 		if (h->content)
-// 			printf("    content: %s\n", h->content);
-// 		h = h->next;
-// 	}
-// }
-
-// void	print_cmds(t_cmd *cmds)
-// {
-// 	int i = 1;
-// 	while (cmds)
-// 	{
-// 		printf("=== Command %d ===\n", i);
-// 		printf("args:");
-// 		if (cmds->args)
-// 		{
-// 			for (int j = 0; cmds->args[j]; j++)
-// 				printf(" [%s]", cmds->args[j]);
-// 		}
-// 		printf("\n");
-// 		print_redirs(cmds->redirs);
-// 		print_heredocs(cmds->heredocs);
-// 		if (cmds->next)
-// 			printf("|\n");
-// 		cmds = cmds->next;
-// 		i++;
-// 	}
-// 	printf("=== End pipeline ===\n");
-// }
+void print_cmds(t_cmd *cmds)
+{
+    int i = 1;
+    while (cmds)
+    {
+        printf("=== Command %d ===\n", i);
+        printf("argv:");
+        if (cmds->args)
+        {
+            for (int j = 0; cmds->args[j]; j++)
+                printf(" [%s]", cmds->args[j]);
+        }
+        printf("\n");
+        print_redirs(cmds->redirs);
+        print_heredocs(cmds->heredocs);
+        if (cmds->next)
+            printf("|\n");
+        cmds = cmds->next;
+        i++;
+    }
+    printf("=== End pipeline ===\n");
+}

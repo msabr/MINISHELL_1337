@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 02:39:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/02 14:21:39 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 15:45:58 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,7 @@ void main_loop(t_env **env_list)
 				continue;
 			}
 			cmds = parse_tokens_to_cmds(tokens);
+			print_cmds(cmds);
 			if (is_bultins(cmds->args[0]))
 			{
 				execve_builtin(&cmds->args[0], env_list);
