@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:13:27 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 17:36:12 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 17:34:21 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,4 +146,46 @@ char *get_path(char *cmd, t_env *env_list)
 		}
 	}
 	return NULL;
+}
+
+
+void execuve_multypipe(t_cmd *cmds, t_env *env_list)
+{
+	pid_t	pid;
+	int		fd[2];
+	int		prev_fd = -1;
+
+	while (cmds)
+	{
+		if (pipe(fd) == -1)
+		{
+			perror("pipe");
+			return;
+		}
+		pid = fork();
+		if (pid < 0)
+		{
+			perror("fork");
+			return;
+		}
+		else if (pid == 0)
+		{
+			if (prev_fd != -1)
+				dup2(prev_fd, STDIN_FILENO);
+			if (cmds->next)
+				dup2(fd[1], STDOUT_FILENO);
+			close(fd[0]);
+			execve_simple_cmd(*cmds, &env_list);
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			close(fd[1]);
+			if (prev_fd != -1)
+				close(prev_fd);
+			prev_fd = fd[0];
+			waitpid(pid, NULL, 0);
+			cmds = cmds->next;
+		}
+	}
 }

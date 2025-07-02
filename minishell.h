@@ -136,10 +136,7 @@ typedef struct s_cmd
 // token type detection functions
 
 // ---------------------------------------
-// memory
-void *ft_malloc(size_t size);
-void ft_free(void);
-void *ft_malloc_env(size_t size);
+
 
 // token utils
 t_token *lst_new_token(const char *value, t_token_type type, bool space_after);
@@ -150,11 +147,6 @@ t_token_type get_operator_type(const char *s);
 void free_token_list(t_token *head);
 void print_token_list(t_token *list) ;
 
-//utlis
-int ft_strncmp(const char *s1, const char *s2, size_t n);
-size_t ft_strlen(const char *str);
-char *ft_strdup(const char *s) ;
-char *ft_strndup(const char *s, size_t n);
 
 //
 t_token *lexer(const char *input);
@@ -206,11 +198,8 @@ void	add_temporary_env_value(t_env **env_list, char *key);
 char **list_to_env(t_env *env_list);
 
 //redirection functions
-bool	is_redirection(char *cmd);
-void	handle_redirection(t_cmd *cmd);
-void	handle_input_redirection(t_cmd *cmd);
-void	handle_output_redirection(t_cmd *cmd);
 
+void execuve_multypipe(t_cmd *cmds, t_env *env_list);
 void execve_cmd(char **args, t_env **env_list);
 char *get_path(char *cmd, t_env *env_list);
 void	tt(void);
@@ -220,4 +209,11 @@ void	sig_ctl_c(int sig);
 void	ft_handler_signal(void);
 void	ignore_sig(void);
 void	restore_sig(void);
+
+void redirect_stdin(t_cmd *cmd);
+void redirect_overwrite(t_cmd *cmd);
+void redirect_append(t_cmd *cmd);
+
+void handle_redirections(t_cmd *cmds);
+
 #endif // MINISHELL_H
