@@ -195,6 +195,11 @@ void main_loop(t_env **env_list)
 			}
 			cmds = parse_tokens_to_cmds(tokens);
 			print_cmds(cmds);
+			if (cmds == NULL) 
+            {
+                free_token_list(tokens);
+                continue;
+            }
 			if (is_bultins(cmds->args[0]))
 			{
 				execve_builtin(&cmds->args[0], env_list);

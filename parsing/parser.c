@@ -222,6 +222,8 @@ t_cmd	*parse_tokens_to_cmds(t_token *tok)
 	t_cmd	*cmds;
 
 	cmds = NULL;
+	if (!tok || (tok->type == TOKEN_EOF && !tok->next))
+		return (NULL);
 	parse_tokens_loop(tok, &cmds);
 	return (cmds);
 }
