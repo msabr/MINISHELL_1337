@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 21:04:15 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 18:07:23 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	pwd(t_env **env_list)
 	if (current_directory)
 	{
 		ft_putendl_fd(current_directory, STDOUT_FILENO);
-		free(current_directory);
 	}
 	else
 	{

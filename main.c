@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 02:39:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 20:48:06 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 14:21:39 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,10 +163,9 @@ Memory leaks from bad env management
 
 Get execution 100% solid and you win the project.*/
 
-
-
+g_status = 0;
 void execuve_multypipe(t_cmd *cmds, t_env *env_list, char **envp);
-
+void main_loop(t_env **env_list);
 //withot parrsing
 int	main(int argc, char **argv, char **env)
 {
@@ -176,38 +175,56 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	configure_environment(&env_list, env);
+	ft_handler_signal();
+	main_loop(&env_list);
+	
+	return (0);
+}
+
+void main_loop(t_env **env_list)
+{
+	char *input;
+	t_token *tokens;
+	t_cmd *cmds;
+
 	while (true)
 	{
-		char *input = readline(CYAN"minishell"RED"> "RESET);
+		input = readline(CYAN"minishell"RED"> "RESET);
 		if (!input)
 		{
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			ft_putstr_fd("exit\n", STDERR_FILENO);
 			break;
 		}
 		if (input[0] != '\0')
 		{
 			add_history(input);
-			char **args = ft_split_space(input);
-			if (is_bultins(args[0]))
+			tokens = lexer2(input);
+			print_token_list(tokens);
+			if (check_syntax_errors(tokens, input))
 			{
-				execve_builtin(args, &env_list);
+				free_token_list(tokens);
+				continue;
 			}
-			else if(!ft_strcmp(args[0], "/"))
+			cmds = parse_tokens_to_cmds(tokens);
+			if (is_bultins(cmds->args[0]))
+			{
+				execve_builtin(&cmds->args[0], env_list);
+			}
+			else if (!ft_strcmp(cmds->args[0], "/"))
 			{
 				ft_putendl_fd("minishell: /: is a directory", STDERR_FILENO);
 			}
 			else
 			{
-				char *path = get_path(args[0], env_list);
+				char *path = get_path(cmds->args[0], *env_list);
 				if (!path)
 				{
 					ft_putstr_fd("Command not found: ", STDERR_FILENO);
-					ft_putstr_fd(args[0], STDERR_FILENO);
+					ft_putstr_fd(cmds->args[0], STDERR_FILENO);
 					ft_putchar_fd('\n', STDERR_FILENO);
-					free_split(args);
-					free(input);
 					continue;
 				}
+				signal(SIGINT, SIG_IGN);
 				pid_t pid = fork();
 				if (pid < 0)
 				{
@@ -215,7 +232,9 @@ int	main(int argc, char **argv, char **env)
 				}
 				else if (pid == 0)
 				{
-					execve(path, args, env);
+					signal(SIGINT, SIG_DFL);
+					signal(SIGQUIT, SIG_DFL);
+					execve(path, cmds->args, list_to_env(*env_list));
 					perror("execve");
 					exit(EXIT_FAILURE);
 				}
@@ -223,10 +242,21 @@ int	main(int argc, char **argv, char **env)
 				{
 					int status;
 					waitpid(pid, &status, 0);
+					if (WIFEXITED(status))
+					{
+						g_status = WEXITSTATUS(status);
+					}
+					else if (WIFSIGNALED(status))
+					{
+						g_status = WTERMSIG(status);
+						if (g_status == SIGINT)
+							ft_putstr_fd("\n", STDERR_FILENO);
+						else if (g_status == SIGQUIT)
+							ft_putstr_fd("Quit: 3\n", STDERR_FILENO);
+					}		
 				}
 			}
-			free_split(args);
-		}	
+			
+		}
 	}
-	return (0);
 }

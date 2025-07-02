@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 20:17:16 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 19:08:01 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	execve_builtin(char **args, t_env **env_list)
 	else if (ft_strcmp(args[0], "cd") == 0)
 		cd(&cmd, env_list);
 	else if (ft_strcmp(args[0], "exit") == 0)
-		exit_shell(&cmd, *env_list);
+		exit_shell(&cmd);
 	else if (ft_strcmp(args[0], "env") == 0)
 		env_function(*env_list);
 	else if (ft_strcmp(args[0], "export") == 0)

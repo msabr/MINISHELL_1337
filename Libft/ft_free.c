@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/27 21:10:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:04:43 by msabr            ###   ########.fr       */
+/*   Created: 2025/07/01 17:27:51 by msabr             #+#    #+#             */
+/*   Updated: 2025/07/02 14:33:06 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *s)
+static t_gc	**ft_env_gc(void)
 {
-	size_t	i;
-	size_t	len;
-	char	*dup;
+	static t_gc	*gc;
 
-	len = ft_strlen(s);
-	dup = (char *)ft_malloc((len + 1) * sizeof(char));
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (s && s[i])
+	*gc = NULL
+		return (&gc);
+}
+
+void	ft_free(void)
+{
+	t_gc	*current;
+	t_gc	*tmp;
+
+	current = *ft_env_gc();
+	while (current)
 	{
-		dup[i] = s[i];
-		i++;
+		tmp = current;
+		current = current->next;
+		free(tmp->ptr);
+		free(tmp);
 	}
-	dup[i] = '\0';
-	return (dup);
+	*ft_env_gc() = NULL;
 }

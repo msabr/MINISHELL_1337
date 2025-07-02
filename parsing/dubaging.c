@@ -1,0 +1,88 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dubaging.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/28 19:10:54 by kabouelf          #+#    #+#             */
+/*   Updated: 2025/07/01 17:29:37 by msabr            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+static const char *token_type_name(t_token_type type) {
+    switch (type) {
+        case TOKEN_WORD:         return "WORD";
+        case TOKEN_PIPE:         return "PIPE";
+        case TOKEN_REDIR_IN:     return "REDIR_IN";
+        case TOKEN_REDIR_OUT:    return "REDIR_OUT";
+        case TOKEN_REDIR_APPEND: return "REDIR_APPEND";
+        case TOKEN_HEREDOC:      return "HEREDOC";
+        case TOKEN_SQUOTE:       return "SQUOTE";
+        case TOKEN_DQUOTE:       return "DQUOTE";
+        case TOKEN_VARIABLE:     return "VARIABLE";
+        case TOKEN_EOF:          return "EOF";
+        default:                 return "UNKNOWN";
+    }
+}
+
+void print_token_list(t_token *list) {
+    int i = 0;
+    printf("=== TOKEN LIST ===\n");
+    while (list) {
+        printf("[%d] type: %-12s | value: \"%s\" | space_after: %d\n",
+            i++,
+            token_type_name(list->type),
+            list->value ? list->value : "(null)",
+            list->space_after
+        );
+        list = list->next;
+    }
+    printf("=== END OF LIST ===\n");
+}
+
+// static void	print_redirs(t_redir *r)
+// {
+// 	while (r)
+// 	{
+// 		printf("  [redir] type: %d, file: %s\n", r->type, r->filename);
+// 		r = r->next;
+// 	}
+// }
+
+// static void	print_heredocs(t_heredoc *h)
+// {
+// 	while (h)
+// 	{
+// 		printf("  [heredoc] delimiter: %s\n", h->delimiter);
+// 		// Affichage du contenu optionnel
+// 		if (h->content)
+// 			printf("    content: %s\n", h->content);
+// 		h = h->next;
+// 	}
+// }
+
+// void	print_cmds(t_cmd *cmds)
+// {
+// 	int i = 1;
+// 	while (cmds)
+// 	{
+// 		printf("=== Command %d ===\n", i);
+// 		printf("args:");
+// 		if (cmds->args)
+// 		{
+// 			for (int j = 0; cmds->args[j]; j++)
+// 				printf(" [%s]", cmds->args[j]);
+// 		}
+// 		printf("\n");
+// 		print_redirs(cmds->redirs);
+// 		print_heredocs(cmds->heredocs);
+// 		if (cmds->next)
+// 			printf("|\n");
+// 		cmds = cmds->next;
+// 		i++;
+// 	}
+// 	printf("=== End pipeline ===\n");
+// }

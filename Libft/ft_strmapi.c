@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 13:09:49 by msabr             #+#    #+#             */
-/*   Updated: 2024/11/18 19:58:02 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 18:04:58 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 
 	if (!s || !f)
 		return (NULL);
-	new = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	new = ft_malloc(sizeof(char) * (ft_strlen(s) + 1));
 	if (!new)
 		return (NULL);
 	i = 0;

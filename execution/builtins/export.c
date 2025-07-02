@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:06 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 21:02:22 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 18:07:15 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	export(t_cmd *cmd, t_env **env_list)
 				append_env_value(env_list, key, value);
 			else
 				add_env_value(env_list, key, value);
-			free(key);
 		}
 		else
 			add_temporary_env_value(env_list, cmd->args[i]);

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:10:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/20 19:59:48 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 18:04:27 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	**ft_split_space(char const *s)
 
 	if (!s)
 		return (NULL);
-	pnt = (char **)malloc(sizeof(char *) * (count_words(s) + 1));
+	pnt = (char **)ft_malloc(sizeof(char *) * (count_words(s) + 1));
 	if (!pnt)
 		return (NULL);
 	i = 0;
@@ -72,9 +72,9 @@ char	**ft_split_space(char const *s)
 		start = i;
 		while (s[i] && !ft_isspace(s[i]))
 			i++;
-		pnt[index] = (char *)malloc(sizeof(char) * (i - start + 1));
+		pnt[index] = (char *)ft_malloc(sizeof(char) * (i - start + 1));
 		if (!pnt[index])
-			return (free_split(pnt));
+			return (NULL);
 		fill_word(pnt[index++], s, start);
 	}
 	pnt[count_words(s)] = NULL;

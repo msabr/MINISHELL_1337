@@ -6,13 +6,13 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 01:36:47 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/15 19:15:40 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 17:31:18 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(const char *s, int fd)
 {
 	if (!s || fd < 0)
 		return ;

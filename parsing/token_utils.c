@@ -3,76 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khalid <khalid@student.42.fr>              +#+  +:+       +#+        */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/28 00:00:00 by khalid            #+#    #+#             */
-/*   Updated: 2025/06/28 00:00:00 by khalid           ###   ########.fr       */
+/*   Created: 2025/06/28 17:32:51 by kabouelf          #+#    #+#             */
+/*   Updated: 2025/07/01 17:02:56 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_token *ft_lstnew_token(char *value, t_type type, int a_sp)
+t_token *lst_new_token(const char *value, t_token_type type, bool space_after)
 {
-    t_token *new_token;
-
-    new_token = malloc(sizeof(t_token));
-    if (!new_token)
-        return (NULL);
-    
-    new_token->value = value;
-    new_token->type = type;
-    new_token->a_sp = a_sp;
-    new_token->next = NULL;
-    
-    return (new_token);
+    t_token *tok = ft_malloc(sizeof(t_token));
+    if (!tok) return NULL;
+    tok->value = ft_strdup(value);
+    tok->type = type;
+    tok->space_after = space_after;
+    tok->next = NULL;
+    tok->prev = NULL;
+    return tok;
 }
-
-
-void ft_lstadd_back_token(t_token **lst, t_token *new)
+void lst_add_back(t_token **list, t_token *new)
 {
-    t_token *last;
-
-    if (!lst || !new)
-        return;
-    
-    if (!*lst)
+    t_token *tmp;
+    if (!*list)
     {
-        *lst = new;
+        *list = new;
         return;
     }
-    
-    last = ft_last_token(lst);
-    last->next = new;
+    tmp = *list; 
+    while (tmp->next)
+        tmp = tmp->next;
+    tmp->next = new;
+    new->prev = tmp;
+}
+bool is_operator(char c) {
+    return (c == '|' || c == '<' || c == '>');
 }
 
-
-t_token *ft_last_token(t_token **lst)
-{
-    t_token *current;
-
-    if (!lst || !*lst)
-        return (NULL);
-    
-    current = *lst;
-    while (current->next)
-        current = current->next;
-    
-    return (current);
+bool is_double_operator(const char *s) {
+    return (!ft_strncmp(s, ">>", 2) || !ft_strncmp(s, "<<", 2));
 }
 
-void ft_free_tokens(t_token *tokens)
-{
-    t_token *current;
-    t_token *next;
+t_token_type get_operator_type(const char *s) {
+    if (!ft_strncmp(s, "|", 1)) return TOKEN_PIPE;
+    if (!ft_strncmp(s, ">>", 2)) return TOKEN_REDIR_APPEND;
+    if (!ft_strncmp(s, "<<", 2)) return TOKEN_HEREDOC;
+    if (!ft_strncmp(s, "<", 1)) return TOKEN_REDIR_IN;
+    if (!ft_strncmp(s, ">", 1)) return TOKEN_REDIR_OUT;
+    return TOKEN_WORD;
+}
 
-    current = tokens;
-    while (current)
-    {
-        next = current->next;
-        if (current->value)
-            free(current->value);
-        free(current);
-        current = next;
+void free_token_list(t_token *head) {
+    t_token *tmp;
+    while (head) {
+        tmp = head->next;
+        if (head->value)
+            free(head->value);
+        free(head);
+        head = tmp;
     }
 }

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:08:43 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:55:44 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 17:19:16 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,27 @@
 // Function to handle input redirection using '<'
 void	redirect_stdin(t_cmd *cmd)
 {
-    if (cmd->input_file)
+    int fd;
+
+    if (cmd->redirs->filename)
     {
-        cmd->input_fd = open(cmd->input_file, O_RDONLY);
-        if (cmd->input_fd < 0)
+        fd = open(cmd->redirs->filename, O_RDONLY);
+        if (fd < 0)
         {
-            perror("Error opening input file");
+            perror("open");
             exit(EXIT_FAILURE);
         }
-        if (dup2(cmd->input_fd, STDIN_FILENO) < 0)
+        if (dup2(fd, STDIN_FILENO) < 0)
         {
-            perror("Error redirecting input");
+            perror("dup2");
+            close(fd);
             exit(EXIT_FAILURE);
         }
-        close(cmd->input_fd);
+        close(fd);
+    }
+    else
+    {
+        ft_putstr_fd("No input file specified for redirection\n", STDERR_FILENO);
+        exit(EXIT_FAILURE);
     }
 }

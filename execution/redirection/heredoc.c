@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:58 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:42:47 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 18:07:39 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,10 @@ void	heredoc(t_cmd *cmd)
     while (true)
     {
         line = readline("heredoc> ");
-        if (!line || ft_strcmp(line, cmd->input_file) == 0)
-        {
-            free(line);
+        if (!line || ft_strcmp(line, cmd->redirs->filename) == 0)
             break;
-        }
         write(pipe_fd[1], line, ft_strlen(line));
         write(pipe_fd[1], "\n", 1);
-        free(line);
     }
     close(pipe_fd[1]);
     dup2(pipe_fd[0], STDIN_FILENO);

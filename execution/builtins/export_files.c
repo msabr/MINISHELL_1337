@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 21:02:22 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/01 18:07:13 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 	char	*new_value;
 	char	*new_key;
 
-	new_key = malloc(ft_strlen(key));
+	new_key = ft_malloc(ft_strlen(key));
 	ft_strlcpy(new_key, key, ft_strlen(key));
 	current = *env_list;
 	while (current)
@@ -60,7 +60,6 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 		if (ft_strcmp(current->key, new_key) == 0)
 		{
 			new_value = ft_strjoin(current->value, value);
-			free(current->value);
 			current->value = new_value;
 			return ;
 		}
@@ -77,7 +76,7 @@ char	*set_key(const char *arg)
 	len = 0;
 	while (arg[len] && arg[len] != '=')
 		len++;
-	key = malloc(len + 1);
+	key = ft_malloc(len + 1);
 	if (!key)
 		return (NULL);
 	ft_strlcpy(key, arg, len + 1);
