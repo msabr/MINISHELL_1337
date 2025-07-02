@@ -158,12 +158,11 @@ size_t parse_variable(const char *input, size_t i, t_token **head) ;
 
 t_token	*lexer2(const char *input);
 size_t	parse_quote(const char *input, size_t i, t_token **head); 
-int	ft_strcmp(const char *s1, const char *s2);
 int		check_syntax_errors(t_token *tokens, const char *input);
 void	syntax_error(const char *msg);
 void	ft_set_status(int status);
 int		ft_s_ret(int set);
-char	*ft_strncpy(char *dest, const char *src, size_t n);
+// char	*ft_strncpy(char *dest, const char *src, size_t n);
 
 t_cmd *parse_tokens_to_cmds(t_token *tokens);
 void print_cmds(t_cmd *cmds);

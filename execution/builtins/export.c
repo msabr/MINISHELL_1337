@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:06 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:07:15 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 18:13:50 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	export(t_cmd *cmd, t_env **env_list)
 		{
 			key = set_key(cmd->args[i]);
 			value = ft_strchr(cmd->args[i], '=') + 1;
-			if (!ft_strstr(cmd->args[i], "+="))
+			if (ft_strstr(cmd->args[i], "+="))
 				append_env_value(env_list, key, value);
 			else
 				add_env_value(env_list, key, value);

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:07:13 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 18:10:01 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,17 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 char	*set_key(const char *arg)
 {
 	char	*key;
-	size_t	len;
+	size_t	i;
 
-	len = 0;
-	while (arg[len] && arg[len] != '=')
-		len++;
-	key = ft_malloc(len + 1);
+	i = 0;
+	while (arg[i] && arg[i] != '=')
+		i++;
+	key = ft_malloc(i + 1);
 	if (!key)
 		return (NULL);
-	ft_strlcpy(key, arg, len + 1);
+	ft_strlcpy(key, arg, i + 1);
+	if (!is_valid_key(key))
+		return (NULL);
 	return (key);
 }
 

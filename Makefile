@@ -36,7 +36,8 @@ SRC_ENV =	execution/environment/file1.c execution/environment/file2.c
 SRC_REDIRECT =	execution/redirection/heredoc.c execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c 
 		
-SRC_PAR = parsing/token_utils.c parsing/utils.c parsing/lexer2.c parsing/dubaging.c parsing/syntax_error.c parsing/parser.c
+SRC_PAR = parsing/dubaging.c parsing/expainding.c parsing/lexer2.c parsing/parser.c\
+		parsing/syntax_error.c parsing/token_utils.c parsing/utils.c
 
 SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) execution/execve.c\
 		main.c signals.c

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 04:38:52 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/01 18:07:50 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 17:51:02 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void append_str(char **dst, const char *src, size_t n)
     tmp[oldlen + n] = '\0';
     *dst = tmp;
 }
-}
+
 
 // Helper for tilde expansion at start of word
 static bool is_tilde_expand(const char *s, size_t pos)
