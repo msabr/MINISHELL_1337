@@ -10,7 +10,7 @@ void	syntax_error(const char *token)
 	else
 		ft_putstr_fd("newline", STDERR_FILENO);
 	ft_putstr_fd("'\n", STDERR_FILENO);
-	ft_set_status(258);
+	ft_set_status(2);
 }
 
 int	check_quotes(const char *input)
@@ -64,6 +64,11 @@ int	check_syntax_errors(t_token *tokens, const char *input)
 	t_token	*curr = tokens;
 	if (!check_quotes(input))
 		return (syntax_error("newline"), 1);
+	
+	// Check for pipe at the beginning of input
+	if (curr && curr->type == TOKEN_PIPE)
+		return (syntax_error("|"), 1);
+		
 	if (is_redir(curr->type) && curr->next && is_redir(curr->next->type))
     	return (syntax_error(token_repr(curr->next)), 1);
 	while (curr && curr->type != TOKEN_EOF)
@@ -73,6 +78,15 @@ int	check_syntax_errors(t_token *tokens, const char *input)
 		if (curr->type == TOKEN_WORD && curr->value && curr->value[0] == '&'
 			&& curr->value[1] == '&')
 			return (syntax_error("&&"), 1);
+
+		// Check for semicolon patterns ;;
+		if (curr->type == TOKEN_WORD && curr->value && ft_strstr(curr->value, ";;"))
+			return (syntax_error(";;"), 1);
+			
+		// Check for parentheses () which are not supported
+		if (curr->type == TOKEN_WORD && curr->value && 
+			(ft_strchr(curr->value, '(') || ft_strchr(curr->value, ')')))
+			return (syntax_error(ft_strchr(curr->value, '(') ? "(" : ")"), 1);
 
 		if (is_redir(curr->type) && curr->next && is_redir(curr->next->type))
 			return (syntax_error(token_repr(curr->next)), 1);
