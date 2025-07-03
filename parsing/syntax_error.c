@@ -65,16 +65,18 @@ int	check_syntax_errors(t_token *tokens, const char *input)
 	if (!check_quotes(input))
 		return (syntax_error("newline"), 1);
 	
-	// Check for pipe at the beginning of input
-	if (curr && curr->type == TOKEN_PIPE)
-		return (syntax_error("|"), 1);
-		
 	if (is_redir(curr->type) && curr->next && is_redir(curr->next->type))
     	return (syntax_error(token_repr(curr->next)), 1);
 	while (curr && curr->type != TOKEN_EOF)
 	{
+		// Check for consecutive pipes first (|| vs single |)
 		if (curr->type == TOKEN_PIPE && curr->next && curr->next->type == TOKEN_PIPE)
 			return (syntax_error("||"), 1);
+			
+		// Check for pipe at the beginning or lone pipe
+		if (curr->type == TOKEN_PIPE && curr == tokens)
+			return (syntax_error("|"), 1);
+			
 		if (curr->type == TOKEN_WORD && curr->value && curr->value[0] == '&'
 			&& curr->value[1] == '&')
 			return (syntax_error("&&"), 1);
