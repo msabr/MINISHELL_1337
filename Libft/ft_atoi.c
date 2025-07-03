@@ -43,8 +43,8 @@ long	ft_atoi(const char	*str)
 	{
 		temp = result;
 		result = result * 10 + (str[i++] - '0');
-		if (result > -INT_MIN && sign == -1)
-			return (-INT_MIN);
+		if (result > (long)INT_MAX + 1 && sign == -1)
+			return (INT_MIN);
 		if ((result / 10) != temp && sign == 1)
 			return (-1);
 		else if ((result / 10) != temp && sign == -1)
