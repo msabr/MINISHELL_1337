@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:03:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:09:00 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/02 20:37:21 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ void	add_env_value(t_env **env_list, char *key, char *value)
 	{
 		if (ft_strcmp(current->key, key) == 0)
 		{
-			current->value = ft_strdup(value);
+			if (current->value)
+				current->value = ft_strdup(value);
+			else
+				current->value = ft_strdup("");
 			return ;
 		}
 		current = current->next;

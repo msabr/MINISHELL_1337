@@ -4,7 +4,7 @@ RM = rm -f
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=address,undefined
+CFLAGS = -Wall -Wextra -Werror  #-g -fsanitize=address,undefined
 
 LIBFT = Libft/libft.a
 
@@ -50,7 +50,7 @@ all: check-readline $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) $(READLINE_COMPILE) $(OBJS) $(LIBFT) -o $(NAME) $(READLINE_LINK)
-	make clean
+	
 
 %.o: %.c $(HEADERS) $(SRC_LIB)
 	$(CC) $(CFLAGS) $(READLINE_COMPILE) -c $< -o $@

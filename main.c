@@ -152,26 +152,7 @@ Memory leaks from bad env management
 Get execution 100% solid and you win the project.*/
 
 int g_status = 0;
-void main_loop(t_env **env_list);
-
-void	handle_exit_status(pid_t pid)
-{
-	int	status;
-	
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-	{
-		g_status = WEXITSTATUS(status);
-	}
-	else if (WIFSIGNALED(status))
-	{
-		g_status = WTERMSIG(status);
-		if (g_status == SIGINT)
-			ft_putstr_fd("\n", STDERR_FILENO);
-		else if (g_status == SIGQUIT)
-			ft_putstr_fd("Quit: 3\n", STDERR_FILENO);
-	}
-}
+void main_loop(t_env **env_list, struct termios *saved_termios);
 
 char *ft_readline(const char *prompt)
 {
@@ -188,53 +169,83 @@ char *ft_readline(const char *prompt)
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env_list;
+	struct termios	saved_termios;
 
 	(void)argc;
 	(void)argv;
-	env_list = env_to_list(envp);
+	tcgetattr(STDIN_FILENO, &saved_termios);
+	// {
+	// 	perror("tcgetattr");
+	// 	return (EXIT_FAILURE);
+	// }
 	configure_environment(&env_list, envp);
 	ft_handler_signal();
-	main_loop(&env_list);
+	main_loop(&env_list, &saved_termios);
 	return (0);
 }
 
-void main_loop(t_env **env_list)
+void main_loop(t_env **env_list, struct termios *saved_termios)
 {
 	char	*input;
 	t_token	*tokens;
 	t_cmd	*cmds;
+	int		status;
 
+	status = 0;
 	while (true)
 	{
-		input = ft_readline(CYAN"minishell"RED"> "RESET);
+		input = ft_readline("minishell> ");
+		if (g_status == SIGINT)
+		{
+			status = 1;
+			g_status = 0;
+		}
 		if (!input)
-			continue;
+			return (ft_putstr_fd("exit\n", STDERR_FILENO));
 		if (input[0] != '\0')
 		{
 			tokens = lexer2(input);
 			if (check_syntax_errors(tokens, input))
 			{
+				status = 258;
 				free_token_list(tokens);
+				printf("Exit status: %d\n", status);
 				continue;
 			}
 			cmds = parse_tokens_to_cmds(tokens);
-			print_cmds(cmds);
-			if (cmds == NULL) 
-            {
-                free_token_list(tokens);
-                continue;
-            }
-			if (is_bultins(cmds->args[0]))
+			// print_cmds(cmds);
+			if (is_redirection(cmds))
 			{
-				execve_builtin(&cmds->args[0], env_list);
+				int saved_stdin, saved_stdout;
+				saved_stdin = dup(STDIN_FILENO);
+				saved_stdout = dup(STDOUT_FILENO);
+				if (!handle_redirections(cmds))
+				{
+					printf("Exit status: %d\n", 1);
+					continue;
+				}
+				dup2(saved_stdin, STDIN_FILENO);
+				dup2(saved_stdout, STDOUT_FILENO);
+				close(saved_stdin);
+				close(saved_stdout);
+
+			}
+			if (cmds->next)
+			{
+				int in_fd, out_fd;
+				in_fd = dup(STDIN_FILENO);
+				out_fd = dup(STDOUT_FILENO);
+				status = exec_multiple_pipes(cmds, env_list);
+				dup2(in_fd, STDIN_FILENO);
+				dup2(out_fd, STDOUT_FILENO);
+				status = handle_exit_status(status);
 			}
 			else
-			{
-				execuve_multypipe(cmds, *env_list);
-			}
-			free_token_list(tokens);
+				status = execve_simple_cmd(cmds, env_list);
+			signal(SIGINT, sig_ctl_c);
 		}
-		free(input);
+		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
+		printf("Exit status: %d\n", status);
 	}
 }
 //withot parrsing
@@ -266,7 +277,7 @@ void main_loop(t_env **env_list)
 // 			}
 // 			cmds = parse_tokens_to_cmds(tokens);
 // 			print_cmds(cmds);
-// 			if (is_bultins(cmds->args[0]))
+// 			if (is_builtin(cmds->args[0]))
 // 			{
 // 				execve_builtin(&cmds->args[0], env_list);
 // 			}

@@ -6,47 +6,52 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/02 17:31:37 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 00:17:08 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-bool is_redirection(char *cmd)
-{
-    return (strchr(cmd, LLESS_THAN_SIGNESS) || strchr(cmd, GREAGREATER_THAN_SIGN) ||
-            strstr(cmd, DOUBLE_GREATER_THAN_SIGN) || strstr(cmd, DOUBLE_LESS_THAN_SIGN));
-}
-
-void handle_redirections(t_cmd *cmds)
+bool is_redirection(t_cmd *cmds)
 {
     t_redir *current = cmds->redirs;
     while (current)
     {
-        // if (current->type == TOKEN_HEREDOC)
-        // {
-        //     heredoc(cmds); // Handle heredoc redirection
-        // }
-        if (current->type == TOKEN_REDIR_OUT)
+        if (current->type == TOKEN_REDIR_OUT || current->type == TOKEN_REDIR_APPEND ||
+            current->type == TOKEN_REDIR_IN || current->type == TOKEN_HEREDOC)
         {
-            redirect_overwrite(cmds); // Handle overwrite redirection
-        }
-        else if (current->type == TOKEN_REDIR_APPEND)
-        {
-            redirect_append(cmds); // Handle append redirection
-        }
-        else if (current->type == TOKEN_REDIR_IN)
-        {
-            redirect_stdin(cmds); // Handle input redirection
-        }
-        else
-        {
-            ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
-            ft_putstr_fd(current->filename, STDERR_FILENO);
-            ft_putstr_fd("'\n", STDERR_FILENO);
+            return true;
         }
         current = current->next;
     }
+    return false;
+}
+
+bool handle_redirections(t_cmd *cmds)
+{
+    t_cmd *current = cmds;
+    
+    while (current)
+    {
+        if (current->redirs)
+        {
+            t_redir *redir = current->redirs;
+            while (redir)
+            {
+                if (redir->type == TOKEN_REDIR_OUT)
+                    redirect_overwrite(current);
+                else if (redir->type == TOKEN_REDIR_APPEND)
+                    redirect_append(current);
+                else if (redir->type == TOKEN_REDIR_IN)
+                    redirect_stdin(current);
+                // else if (redir->type == TOKEN_HEREDOC)
+                //     handle_heredoc(redir);
+                redir = redir->next;
+            }
+        }
+        current = current->next;
+    }
+    return true;
 }
 
 

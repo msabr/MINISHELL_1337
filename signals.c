@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 08:43:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/29 14:44:26 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/03 22:40:44 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 
 void	sig_ctl_c(int sig)
 {
-	rl_catch_signals = 0;
+	//minishell in minishell
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		g_status = 1;
+		g_status = SIGINT;
 	}
 }
+
 void	ft_handler_signal(void)
 {
 	rl_catch_signals = 0;
@@ -31,14 +32,23 @@ void	ft_handler_signal(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	ignore_sig(void)
+int	handle_exit_status(pid_t pid)
 {
+	int	status;
+	
 	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	restore_sig(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		g_status = WTERMSIG(status);
+		if (g_status == SIGINT)
+			ft_putstr_fd("\n", STDERR_FILENO);
+		else if (g_status == SIGQUIT)
+			ft_putstr_fd("Quit: 3\n", STDERR_FILENO);
+		status = 128 + g_status;
+	}
+	g_status = 0;
+	return (status);
 }

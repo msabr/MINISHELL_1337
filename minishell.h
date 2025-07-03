@@ -53,26 +53,26 @@ extern int  g_status;
 // parser structures
 typedef enum e_token_type
 {
-    TOKEN_WORD,         // generic word (command or argument)
-    TOKEN_PIPE,         // |
-    TOKEN_REDIR_IN,     // <
-    TOKEN_REDIR_OUT,    // >
-    TOKEN_REDIR_APPEND, // >>
-    TOKEN_HEREDOC,      // <<
-    TOKEN_SQUOTE,       // '
-    TOKEN_DQUOTE,       // "
-    TOKEN_VARIABLE,     // $VAR
-    TOKEN_EOF           // end of input
+	TOKEN_WORD,         // generic word (command or argument)
+	TOKEN_PIPE,         // |
+	TOKEN_REDIR_IN,     // <
+	TOKEN_REDIR_OUT,    // >
+	TOKEN_REDIR_APPEND, // >>
+	TOKEN_HEREDOC,      // <<
+	TOKEN_SQUOTE,       // '
+	TOKEN_DQUOTE,       // "
+	TOKEN_VARIABLE,     // $VAR
+	TOKEN_EOF           // end of input
 }   t_token_type;
 
 
 typedef struct s_token
 {
-    char            *value;        // content of the token
-    t_token_type    type;          // type of token
-    bool            space_after;   // true if space after (useful for expansion/merging)
-    struct s_token  *next;         // next token in list
-    struct s_token  *prev;         // previous token (optional, for easier parsing)
+	char            *value;        // content of the token
+	t_token_type    type;          // type of token
+	bool            space_after;   // true if space after (useful for expansion/merging)
+	struct s_token  *next;         // next token in list
+	struct s_token  *prev;         // previous token (optional, for easier parsing)
 }   t_token;
 
 
@@ -97,39 +97,29 @@ typedef struct s_data
 
 typedef struct s_redir
 {
-    t_token_type       type;
-    char              *filename;
-    struct s_redir    *next;
+	t_token_type       type;
+	char              *filename;
+	int			   fd;
+	int			   fd2;
+	struct s_redir    *next;
 } t_redir;
 
 typedef struct s_heredoc
 {
-    char            *delimiter;     // Le délimiteur du heredoc
-    char            *content;       // Le contenu lu (ou NULL si pas encore lu)
-    struct s_heredoc *next;
+	char            *delimiter; 
+	char            *content;
+	struct s_heredoc *next;
 } t_heredoc;
 
 typedef struct s_cmd
 {
-    char        **args;        // Tableau d'arguments pour execve (args[0]=commande, NULL-terminated)
-    t_redir     *redirs;       // Liste chainée de redirections (<, >, >>, <<)
-    t_heredoc   *heredocs;     // Liste chainée de heredocs (optionnel, ou NULL si géré via redirs)
-    struct s_cmd *next;        // Prochaine commande (pour pipeline)
+	char            **args; 
+	t_redir         *redirs; 
+	t_heredoc       *heredocs;
+	int             exit_status;
+	struct s_cmd    *next;
 }   t_cmd;
 
-
-// typedef struct s_cmd
-// {
-// 	char	**args;
-// 	bool	is_builtin;
-// 	bool	is_redirect;
-// 	bool	is_pipe;
-// 	char	*input_file;
-// 	char	*output_file;
-// 	int		input_fd;
-// 	int		output_fd;
-// 	struct s_cmd *next;
-// }	t_cmd;
 
 // Lexer helper functions
 
@@ -170,7 +160,7 @@ void print_cmds(t_cmd *cmds);
 // ---------------------------------------
 
 //built-in functions
-bool	is_bultins(char *cmd);
+bool	is_builtin(char *cmd);
 void	execve_builtin(char **args, t_env **env_list);
 bool	is_valid_key(char *key);
 void	cd(t_cmd *cmd, t_env **env_list);
@@ -198,21 +188,21 @@ char **list_to_env(t_env *env_list);
 
 //redirection functions
 
-void execuve_multypipe(t_cmd *cmds, t_env *env_list);
-void execve_cmd(char **args, t_env **env_list);
+int exec_multiple_pipes(t_cmd *cmds, t_env **env_list);
+int execve_simple_cmd(t_cmd *cmds, t_env **env_list);
 char *get_path(char *cmd, t_env *env_list);
 void	tt(void);
 
 //signals functions
+int 	handle_exit_status(pid_t pid);
 void	sig_ctl_c(int sig);
 void	ft_handler_signal(void);
-void	ignore_sig(void);
-void	restore_sig(void);
 
+bool is_redirection(t_cmd *cmds);
 void redirect_stdin(t_cmd *cmd);
 void redirect_overwrite(t_cmd *cmd);
 void redirect_append(t_cmd *cmd);
 
-void handle_redirections(t_cmd *cmds);
+bool handle_redirections(t_cmd *cmds);
 
 #endif // MINISHELL_H

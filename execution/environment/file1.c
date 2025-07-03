@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:56:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/02 14:41:05 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/03 16:29:17 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,6 @@ void	configure_environment(t_env **env_list, char **env_array)
 	t_env	*found_node;
 
 	*env_list = env_to_list(env_array);
-	found_node = search_env_node(*env_list, "_");
-	if (!found_node)
-		add_env_value(env_list, "_", "/usr/bin/env");
 	found_node = search_env_node(*env_list, "SHLVL");
 	if (!found_node)
 		add_env_value(env_list, "SHLVL", "1");
