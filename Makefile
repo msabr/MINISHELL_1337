@@ -31,7 +31,10 @@ SRC_Builtins =	execution/builtins/cd.c execution/builtins/echo.c execution/built
 				execution/builtins/exit.c execution/builtins/external_files.c\
 				execution/builtins/internal_files.c execution/builtins/export_files.c
 
-SRC_ENV =	execution/environment/file1.c execution/environment/file2.c 
+SRC_ENV =	execution/environment/file1.c execution/environment/file2.c\
+			execution/environment/file3.c
+
+SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c execution/pipe/handel_pipe3.c\
 
 SRC_REDIRECT =	execution/redirection/heredoc.c execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c 
@@ -39,12 +42,12 @@ SRC_REDIRECT =	execution/redirection/heredoc.c execution/redirection/redirect_ap
 SRC_PAR = parsing/dubaging.c parsing/expainding.c parsing/lexer2.c parsing/parser.c\
 		parsing/syntax_error.c parsing/token_utils.c parsing/utils.c
 
-SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) execution/execve.c\
-		main.c signals.c
+SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) $(SRC_PIPE)\
+		execution/path_functions.c main.c signals.c execution/simple_cmd.c
 
 OBJS = $(SRCS:.c=.o)
 
-HEADERS = Libft/libft.h minishell.h
+HEADERS = Libft/libft.h minishell.h execution/pipe/pipe.h
 
 all: check-readline $(NAME)
 

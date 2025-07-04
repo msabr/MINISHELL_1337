@@ -1,0 +1,5 @@
+ < Makefile LS
+[1]    9793 segmentation fault  ./minishell
+---------------------------------------------
+ > dfgh
+[1]    10838 segmentation fault  ./minishell

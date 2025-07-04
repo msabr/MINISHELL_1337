@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:08:43 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 00:28:25 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 17:14:02 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ void redirect_stdin(t_cmd *cmd)
 
     while (redir)
     {
-        if (redir->type == TOKEN_REDIR_IN) // Replace with the correct value for '<'
+        if (redir->type == TOKEN_REDIR_IN)
         {
-            // Close previous fd if there are multiple input redirections
             if (fd >= 0)
                 close(fd);
 
@@ -63,7 +62,6 @@ void redirect_stdin(t_cmd *cmd)
         }
         redir = redir->next;
     }
-    // Only redirect if we found an input redirection
     if (fd >= 0)
     {
         if (dup2(fd, STDIN_FILENO) < 0)

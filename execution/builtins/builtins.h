@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   internal_files.c                                   :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 20:17:03 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:22:10 by msabr            ###   ########.fr       */
+/*   Created: 2025/07/04 17:18:31 by msabr             #+#    #+#             */
+/*   Updated: 2025/07/04 17:22:35 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-bool	is_valid_key(char *key)
-{
-	int	i;
+# include "../../minishell.h"
 
-	i = 0;
-	if (!ft_isalpha(key[0]) && key[0] != UNDERSCORE)
-		return (false);
-	while (key[i] && key[i] != '=')
-	{
-		if (key[i] == '+' && key[i + 1] != '=')
-			return (false);
-		if (!ft_isalnum(key[i]) && key[i] != UNDERSCORE && key[i] != '+')
-			return (false);
-		i++;
-	}
-	return (true);
-}
+bool	is_valid_key(char *key);
+void	sort_env_list(t_env **env_list);
+void	append_env_value(t_env **env_list, char *key, char *value);
+void	export_withot_args(t_env **env_list);
+char	*get_pwd_from_env(t_env **env_list);
+
+#endif // BUILTINS_H

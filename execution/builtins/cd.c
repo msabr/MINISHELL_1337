@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/06/27 18:45:10 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 17:21:36 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "builtins.h"
 
 void	cd(t_cmd *cmd, t_env **env_list)
 {
