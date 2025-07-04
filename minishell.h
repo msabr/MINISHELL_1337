@@ -120,8 +120,9 @@ typedef struct s_cmd
 	struct s_cmd    *next;
 }   t_cmd;
 
+// Struct to pass execution arguments
 
-// Lexer helper functions
+
 
 // token type detection functions
 
@@ -187,7 +188,7 @@ void	add_temporary_env_value(t_env **env_list, char *key);
 char **list_to_env(t_env *env_list);
 
 //redirection functions
-
+bool	ft_is_dir(const char *path);
 int exec_multiple_pipes(t_cmd *cmds, t_env **env_list);
 int execve_simple_cmd(t_cmd *cmds, t_env **env_list);
 char *get_path(char *cmd, t_env *env_list);

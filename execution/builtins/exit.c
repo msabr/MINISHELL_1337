@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/03 23:15:11 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 14:55:12 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	exit_shell(t_cmd *cmd)
 {
-	int status = 0;
+	int	status;
 
+	status = 0;
 	if (isatty(STDIN_FILENO))
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
@@ -29,14 +30,13 @@ void	exit_shell(t_cmd *cmd)
 			ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 			ft_putstr_fd(cmd->args[1], STDERR_FILENO);
 			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-			status = 255; // Exit with error status
+			exit(255);
 		}
 	}
-	else if (cmd->args[1] && cmd->args[2])
+	if (cmd->args[1] && cmd->args[2])
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
-		return;
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		return ;
 	}
 	exit(status);
 }
-
