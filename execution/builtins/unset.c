@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:07:29 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 17:22:21 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "builtins.h"
 
 static int	remove_env_variable(t_env **env_list, const char *key)
 {

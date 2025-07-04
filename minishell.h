@@ -163,18 +163,13 @@ void print_cmds(t_cmd *cmds);
 //built-in functions
 bool	is_builtin(char *cmd);
 void	execve_builtin(char **args, t_env **env_list);
-bool	is_valid_key(char *key);
 void	cd(t_cmd *cmd, t_env **env_list);
 void	echo(t_cmd *cmd);
 void	env_function(t_env *env_list);
 void	exit_shell(t_cmd *cmd);
-void	sort_env_list(t_env **env_list);
-void	append_env_value(t_env **env_list, char *key, char *value);
 char	*set_key(const char *arg);
-void	export_withot_args(t_env **env_list);
 void	export(t_cmd *cmd, t_env **env_list);
 char	*get_pwd(void);
-char	*get_pwd_from_env(t_env **env_list);
 void	pwd(t_env **env_list);
 void	unset(t_cmd *cmd, t_env **env_list);
 
