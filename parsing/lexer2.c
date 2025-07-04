@@ -6,7 +6,7 @@
 /*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 01:44:29 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/02 16:47:18 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:58:26 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	handle_word(const char *input, size_t *i, t_token **head)
 
 void	handle_quote_error(void)
 {
-	write(2, "minishell: syntax error: unclosed quote\n", 39);
+	ft_putstr_fd("minishell: syntax error: unclosed quote\n", STDERR_FILENO);;
 }
 
 bool	is_quote_closed(const char *input, size_t i, char quote)
