@@ -1,5 +1,17 @@
- < Makefile LS
-[1]    9793 segmentation fault  ./minishell
----------------------------------------------
- > dfgh
-[1]    10838 segmentation fault  ./minishell
+minishell> ls > a > ls
+ls: ls: No such file or directory
+===========================================
+minishell>  > s < r
+Command not found: r
+bash-3.2$ > s < r
+bash-3.2$ 
+===========================================
+minishell> ls | < ls
+minishell: syntax error near unexpected token `<'
+bash-3.2$ ls | < a
+bash-3.2$ 
+===========================================
+===========================================
+===========================================
+===========================================
+===========================================

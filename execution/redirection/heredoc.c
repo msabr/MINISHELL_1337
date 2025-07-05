@@ -6,33 +6,36 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:58 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:07:39 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 22:14:10 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// Function to handle input redirection using '<<'
-void	heredoc(t_cmd *cmd)
+void	handle_heredoc(t_cmd *cmd)
 {
-    char *line;
-    int pipe_fd[2];
+	int			pipe_fd[2];
+	char		*line;
+	t_heredoc	*current;
 
-    if (pipe(pipe_fd) == -1)
-    {
-        perror("pipe");
-        exit(EXIT_FAILURE);
-    }
-
-    while (true)
-    {
-        line = readline("heredoc> ");
-        if (!line || ft_strcmp(line, cmd->redirs->filename) == 0)
-            break;
-        write(pipe_fd[1], line, ft_strlen(line));
-        write(pipe_fd[1], "\n", 1);
-    }
-    close(pipe_fd[1]);
-    dup2(pipe_fd[0], STDIN_FILENO);
-    close(pipe_fd[0]);
+	line = NULL;
+	current = cmd->heredocs;
+	if (pipe(pipe_fd) == -1)
+		return (perror("pipe"));
+	while (current)
+	{
+		while (true)
+		{
+			line = readline("heredoc> ");
+			if (!line || !strcmp(line, current->delimiter))
+				break ;
+			ft_putendl_fd(line, pipe_fd[1]);
+			free(line);
+		}
+		free(line);
+		current = current->next;
+	}
+	close(pipe_fd[1]);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close(pipe_fd[0]);
 }

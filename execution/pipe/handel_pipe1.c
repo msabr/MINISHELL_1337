@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:31:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 16:38:41 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/05 00:24:48 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ int	**create_pipes(int n)
 	int	i;
 
 	i = 0;
-	pipes = malloc(sizeof(int *) * (n - 1));
+	pipes = ft_malloc(sizeof(int *) * (n - 1));
 	if (!pipes)
 		return (perror("malloc"), NULL);
 	while (i < n - 1)
 	{
-		pipes[i] = malloc(sizeof(int) * 2);
+		pipes[i] = ft_malloc(sizeof(int) * 2);
 		if (!pipes[i])
 			return (perror("malloc"), NULL);
 		if (pipe(pipes[i]) == -1)

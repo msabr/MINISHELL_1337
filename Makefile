@@ -4,7 +4,7 @@ RM = rm -f
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror  #-g -fsanitize=address,undefined
+CFLAGS = -Wall -Wextra -Werror  -g -fsanitize=address,undefined
 
 LIBFT = Libft/libft.a
 
@@ -47,7 +47,7 @@ SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) $(SRC_PIPE)\
 
 OBJS = $(SRCS:.c=.o)
 
-HEADERS = Libft/libft.h minishell.h execution/pipe/pipe.h
+HEADERS = Libft/libft.h minishell.h execution/pipe/pipe.h execution/builtins/builtins.h
 
 all: check-readline $(NAME)
 

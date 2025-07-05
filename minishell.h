@@ -15,40 +15,9 @@
 # include <readline/history.h>
 
 # include <signal.h>
-#include <termios.h>
+# include <termios.h>
 
-extern int  g_status;
-// extern int  g_status;
-
-# define RESET		"\033[0m"
-# define RED		"\033[31m"
-# define GREEN  	"\033[32m"
-# define YELLOW 	"\033[33m"
-# define CYAN		"\033[36m"
-# define MAGENTA	"\033[35m"
-
-# define PLUPLUS_SIGNS '+'
-# define UNDERSCORE '_'
-# define EQEQUALS_SIGNUAL '='
-
-# define PIVERTICAL_BARPE '|'
-# define DOLLAR_SIGN '$'
-# define DOUBLE_QUOTES '"'
-# define SINGLE_QUOTES '\''
-# define BACKSLASH '\\'
-# define SPACE ' '
-# define TAB '\t'
-# define NEWLINE '\n'
-# define SEMICOLON ';'
-# define AMPERSAND '&'
-# define QUESTION_MARK '?'
-# define EXCLAMATION_MARK '!'
-
-
-# define LLESS_THAN_SIGNESS '<'//lless_than_sign
-# define GREAGREATER_THAN_SIGN '>'  //greagreater_than_sign
-# define DOUBLE_GREATER_THAN_SIGN ">>" //double_greater_than_sign
-# define DOUBLE_LESS_THAN_SIGN "<<" //double_less_than_sign
+extern int	g_status;
 
 // parser structures
 typedef enum e_token_type
@@ -120,14 +89,6 @@ typedef struct s_cmd
 	struct s_cmd    *next;
 }   t_cmd;
 
-// Struct to pass execution arguments
-
-
-
-// token type detection functions
-
-// ---------------------------------------
-
 
 // token utils
 t_token *lst_new_token(const char *value, t_token_type type, bool space_after);
@@ -137,7 +98,6 @@ bool is_double_operator(const char *s);
 t_token_type get_operator_type(const char *s);
 void free_token_list(t_token *head);
 void print_token_list(t_token *list) ;
-
 
 //
 t_token *lexer(const char *input);
@@ -175,30 +135,34 @@ void	unset(t_cmd *cmd, t_env **env_list);
 
 //environment functions
 t_env	*env_to_list(char **env);
-t_env	*search_env_node(t_env *list_head, const char *search_key);
+t_env	*find_env_node(char *search_key, t_env *list_head);
 void	configure_environment(t_env **env_list, char **env_array);
 char	*get_env_value(t_env **env_list, const char *key);
 void	add_env_value(t_env **env_list, char *key, char *value);
 void	add_temporary_env_value(t_env **env_list, char *key);
-char **list_to_env(t_env *env_list);
+char	**list_to_env(t_env *env_list);
 
-//redirection functions
+// execution functions
 bool	ft_is_dir(const char *path);
-int exec_multiple_pipes(t_cmd *cmds, t_env **env_list);
-int execve_simple_cmd(t_cmd *cmds, t_env **env_list);
-char *get_path(char *cmd, t_env *env_list);
-void	tt(void);
+int		exec_multiple_pipes(t_cmd *cmds, t_env **env_list);
+int		execve_simple_cmd(t_cmd *cmds, t_env **env_list);
+char	*get_path(char *cmd, t_env *env_list);
 
 //signals functions
+void	tt(void);
 int 	handle_exit_status(pid_t pid);
 void	sig_ctl_c(int sig);
 void	ft_handler_signal(void);
 
-bool is_redirection(t_cmd *cmds);
-void redirect_stdin(t_cmd *cmd);
-void redirect_overwrite(t_cmd *cmd);
-void redirect_append(t_cmd *cmd);
+//redirection functions
+bool	is_redirection(t_cmd *cmds);
+void	handle_heredoc(t_cmd *cmd);
+int		redirect_stdin(char *file_name);
+int		redirect_overwrite(char *file_name);
+int		redirect_append(char *file_name);
+bool	handle_redirections(t_cmd *cmds);
 
-bool handle_redirections(t_cmd *cmds);
+//main functions
+void main_loop(t_env **env_list, struct termios *saved_termios);
 
-#endif // MINISHELL_H
+#endif

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:16:36 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 15:17:39 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 23:57:36 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,19 @@ void	configure_environment(t_env **env_list, char **env_array)
 	t_env	*found_node;
 
 	*env_list = env_to_list(env_array);
-	found_node = search_env_node(*env_list, "SHLVL");
+	found_node = find_env_node("SHLVL", *env_list);
 	if (!found_node)
 		add_env_value(env_list, "SHLVL", "1");
 	else
 		handle_shlvl(found_node, &env_list);
-	found_node = search_env_node(*env_list, "PWD");
+	found_node = find_env_node("PWD", *env_list);
 	if (!found_node)
 		add_env_value(env_list, "PWD", get_pwd());
-	found_node = search_env_node(*env_list, "PATH");
+	found_node = find_env_node("PATH", *env_list);
 	if (!found_node)
 		add_env_value(env_list, "PATH",
 			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
-	found_node = search_env_node(*env_list, "OLDPWD");
+	found_node = find_env_node("OLDPWD", *env_list);
 	if (!found_node)
 		add_temporary_env_value(env_list, "OLDPWD");
 }

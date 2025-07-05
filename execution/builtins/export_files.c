@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:21:59 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/05 18:20:15 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	swap_env_nodes(t_env *a, t_env *b)
 	b->key = temp->key;
 	b->value = temp->value;
 	b->export_variable = temp->export_variable;
-	free(temp);
+	// free(temp);
 }
 
 void	sort_env_list(t_env **env_list)
@@ -56,7 +56,7 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 	char	*new_value;
 	char	*new_key;
 
-	new_key = ft_malloc(ft_strlen(key));
+	new_key = malloc(ft_strlen(key));
 	ft_strlcpy(new_key, key, ft_strlen(key));
 	current = *env_list;
 	while (current)
@@ -65,11 +65,13 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 		{
 			new_value = ft_strjoin(current->value, value);
 			current->value = new_value;
+			// free(|);
 			return ;
 		}
 		current = current->next;
 	}
 	add_env_value(env_list, new_key, value);
+	// free(new_key);
 }
 
 char	*set_key(const char *arg)

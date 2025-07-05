@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 08:43:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:09:17 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 23:20:06 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	sig_ctl_c(int sig)
 {
-	//minishell in minishell
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
@@ -35,7 +34,7 @@ void	ft_handler_signal(void)
 int	handle_exit_status(pid_t pid)
 {
 	int	status;
-	
+
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))

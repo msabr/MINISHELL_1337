@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:18:31 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:22:35 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 23:17:21 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,4 @@ void	append_env_value(t_env **env_list, char *key, char *value);
 void	export_withot_args(t_env **env_list);
 char	*get_pwd_from_env(t_env **env_list);
 
-#endif // BUILTINS_H
+#endif

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 20:17:16 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:22:06 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 20:17:36 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	execve_builtin(char **args, t_env **env_list)
 
 bool	is_builtin(char *cmd)
 {
+	if (!cmd || cmd[0] == '\0')
+		return (false);
 	if (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "pwd") == 0
 		|| ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "exit") == 0
 		|| ft_strcmp(cmd, "env") == 0 || ft_strcmp(cmd, "export") == 0

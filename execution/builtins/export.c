@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:06 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:22:03 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/05 20:07:11 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,20 @@ void	export(t_cmd *cmd, t_env **env_list)
 			key = set_key(cmd->args[i]);
 			value = ft_strchr(cmd->args[i], '=') + 1;
 			if (ft_strstr(cmd->args[i], "+="))
+			{
+				printf("append env: %s+=%s\n", key, value);
 				append_env_value(env_list, key, value);
-			else
+			}
+			else{
+				// printf("export env: %s=%s\n", key, value);
+				printf("exporting env: %s=%s\n", key, value);
 				add_env_value(env_list, key, value);
+			}
 		}
-		else
+		else{
+			printf("temporary env: %s\n", cmd->args[i]);
 			add_temporary_env_value(env_list, cmd->args[i]);
+		}
 		i++;
 	}
 }

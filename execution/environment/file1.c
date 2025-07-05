@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:56:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 15:17:52 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/05 15:18:37 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_env	*env_to_list(char **env)
 	i = -1;
 	while (env[++i])
 	{
-		new_node = malloc(sizeof(t_env));
+		new_node = ft_malloc(sizeof(t_env));
 		if (!new_node)
 			return (NULL);
 		new_node->key = ft_strdup(set_key(env[i]));
@@ -37,6 +37,7 @@ t_env	*env_to_list(char **env)
 			new_node->export_variable = false;
 		new_node->next = env_list;
 		env_list = new_node;
+		// free(new_node);
 	}
 	return (env_list);
 }
@@ -66,7 +67,7 @@ char	**list_to_env(t_env *env_list)
 		count++;
 		traverser = traverser->next;
 	}
-	env_array = malloc(sizeof(char *) * (count + 1));
+	env_array =ft_malloc(sizeof(char *) * (count + 1));
 	if (!env_array)
 		return (NULL);
 	count = 0;
@@ -81,7 +82,7 @@ char	**list_to_env(t_env *env_list)
 	return (env_array);
 }
 
-t_env	*search_env_node(t_env *list_head, const char *search_key)
+t_env	*find_env_node(char *search_key, t_env *list_head)
 {
 	t_env	*traverser;
 

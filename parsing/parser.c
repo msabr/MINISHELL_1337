@@ -30,7 +30,7 @@ char	*merge_argument(t_token **ptok)
 	t_token	*tok;
 
 	len = arg_total_len(*ptok);
-	arg = malloc(len + 1);
+	arg = ft_malloc(len + 1);
 	if (!arg)
 		return (NULL);
 	arg[0] = 0;
@@ -68,7 +68,7 @@ void	add_argument(char ***args, char *new_arg)
 	int	i;
 
 	argc = count_args(*args);
-	new_args = malloc(sizeof(char *) * (argc + 2));
+	new_args = ft_malloc(sizeof(char *) * (argc + 2));
 	if (!new_args)
 		return ;
 	i = 0;
@@ -87,7 +87,7 @@ t_redir	*new_redir(t_token_type type, char *filename)
 {
 	t_redir	*new;
 
-	new = malloc(sizeof(t_redir));
+	new = ft_malloc(sizeof(t_redir));
 	if (!new)
 		return (NULL);
 	new->type = type;
@@ -119,7 +119,7 @@ t_heredoc	*new_heredoc(char *delim)
 {
 	t_heredoc	*hd;
 
-	hd = malloc(sizeof(t_heredoc));
+	hd = ft_malloc(sizeof(t_heredoc));
 	if (!hd)
 		return (NULL);
 	hd->delimiter = delim;

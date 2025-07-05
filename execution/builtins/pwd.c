@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:22:14 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/04 23:58:05 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*get_pwd_from_env(t_env **env_list)
 {
 	t_env	*pwd_node;
 
-	pwd_node = search_env_node(*env_list, "PWD");
+	pwd_node = find_env_node("PWD", *env_list);
 	if (pwd_node && pwd_node->value)
 	{
 		return (ft_strdup(pwd_node->value));
