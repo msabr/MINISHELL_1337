@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 18:20:15 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/05 22:05:36 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,48 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 	add_env_value(env_list, new_key, value);
 	// free(new_key);
 }
+t_env *copy_env(t_env *env_list)
+{
+	t_env	*new_env;
+	t_env	*current;
+	t_env	*new_node;
+
+	new_env = NULL;
+	current = env_list;
+	while (current)
+	{
+		new_node = malloc(sizeof(t_env));
+		if (!new_node)
+			return (NULL);
+		new_node->key = ft_strdup(current->key);
+		if (current->value)
+			new_node->value = ft_strdup(current->value);
+		else
+			new_node->value = NULL;
+		new_node->export_variable = current->export_variable;
+		new_node->next = new_env;
+		new_env = new_node;
+		current = current->next;
+	}
+	return (new_env);
+}
+
+void free_env_list(t_env *env_list)
+{
+	t_env	*current;
+	t_env	*next;
+
+	current = env_list;
+	while (current)
+	{
+		next = current->next;
+		free(current->key);
+		if (current->value)
+			free(current->value);
+		free(current);
+		current = next;
+	}
+}
 
 char	*set_key(const char *arg)
 {
@@ -89,12 +131,14 @@ char	*set_key(const char *arg)
 	return (key);
 }
 
-void	export_withot_args(t_env **env_list)
+
+
+void	export_withot_args(t_env *env_list)
 {
 	t_env	*current;
 
-	sort_env_list(env_list);
-	current = *env_list;
+	current = copy_env(env_list);
+	sort_env_list(&current);
 	while (current)
 	{
 		if (ft_strcmp(current->key, "_"))
@@ -116,4 +160,5 @@ void	export_withot_args(t_env **env_list)
 		}
 		current = current->next;
 	}
+	free_env_list(current);
 }

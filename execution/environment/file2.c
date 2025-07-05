@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:03:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 20:13:22 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/05 22:07:51 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,5 @@ void	add_temporary_env_value(t_env **env_list, char *key)
 	new_node->export_variable = false;
 	new_node->next = *env_list;
 	*env_list = new_node;
-	// free(new_node);
+	
 }
