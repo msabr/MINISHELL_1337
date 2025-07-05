@@ -210,9 +210,16 @@ static void	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 		}
 		if (tok->type == TOKEN_REDIR_IN || tok->type == TOKEN_REDIR_OUT
 			|| tok->type == TOKEN_REDIR_APPEND || tok->type == TOKEN_HEREDOC)
+		{
 			handle_redir(current, &tok);
-		else if (tok->type == TOKEN_PIPE)
+			continue ;
+		}
+		if (tok->type == TOKEN_PIPE)
+		{
 			current = NULL;
+			tok = tok->next;
+			continue;
+		}
 		tok = tok->next;
 	}
 }

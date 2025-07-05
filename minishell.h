@@ -117,7 +117,9 @@ int		ft_s_ret(int set);
 
 t_cmd *parse_tokens_to_cmds(t_token *tokens);
 void print_cmds(t_cmd *cmds);
-
+void expand_token_list(t_token *tokens, t_env **env, int last_status);
+bool    is_assignment(const char *str);
+void    set_env_value(t_env **env_list, const char *key, const char *value);
 // ---------------------------------------
 
 //built-in functions

@@ -1,170 +1,123 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expainding.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 04:38:52 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/02 17:51:02 by msabr            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
-static char *get_env_var(const char *name, char **envp)
-{
-    size_t len = ft_strlen(name);
-    for (int i = 0; envp[i]; i++) {
-        if (!ft_strncmp(envp[i], name, len) && envp[i][len] == '=')
-            return envp[i] + len + 1;
+
+void set_env_value(t_env **env_list, const char *key, const char *value) {
+    t_env *current = *env_list;
+    while (current) {
+        if (ft_strcmp(current->key, key) == 0) {
+            free(current->value);
+            current->value = ft_strdup(value);
+            return;
+        }
+        current = current->next;
     }
-    return NULL;
+    // Si non trouvée, ajoute à la fin
+    t_env *new = malloc(sizeof(t_env));
+    new->key = ft_strdup(key);
+    new->value = ft_strdup(value);
+    new->export_variable = false;
+    new->next = *env_list;
+    *env_list = new;
 }
 
-// Helper to append a string, reallocating as needed
-static void append_str(char **dst, const char *src, size_t n)
-{
-    size_t oldlen = 0;
-
-    if (src == NULL) 
-        return;
-    if (n == 0) 
-        return;
-    if (*dst) 
-        oldlen = strlen(*dst);
-    char *tmp = realloc(*dst, oldlen + n + 1);
-    if (tmp == NULL) 
-        exit(1);
-    ft_memcpy(tmp + oldlen, src, n);
-    tmp[oldlen + n] = '\0';
-    *dst = tmp;
-}
-
-
-// Helper for tilde expansion at start of word
-static bool is_tilde_expand(const char *s, size_t pos)
-{
-    // Only expand ~ if at pos 0, and followed by \0, /, or space
-    return pos == 0 && s[0] == '~' &&
-        (s[1] == '/' || s[1] == '\0');
-}
-
-// Core expansion function: input=raw token, returns malloc'd expanded string
-char *expand_string(const char *input, char **envp, int last_status)
-{
-    char *out = NULL;
-    size_t i = 0;
-    size_t len = strlen(input);
-    char quote = 0; // 0=none, ' or "
-    bool escape = false;
-
-    while (i < len) {
-        char c = input[i];
-
-        // 1. Handle quote context
-        if (!escape && (c == '\'' || c == '"')) {
-            // Toggle quote, or close if matching
-            if (!quote) quote = c;
-            else if (quote == c) quote = 0;
-            i++;
-            continue;
-        }
-
-        // 2. Handle escapes (backslash)
-        if (!escape && c == '\\') {
-            if (quote == '\'') { // In single quotes, backslash is literal
-                append_str(&out, &c, 1);
-                i++;
-                continue;
-            }
-            escape = true; 
-            i++ ;
-            continue;
-        }
-
-        // 3. Handle tilde expansion at beginning (if not quoted)
-        if (!quote && is_tilde_expand(input, i)) {
-            char *home = get_env_var("HOME", envp);
-            if (home) append_str(&out, home, strlen(home));
-            else append_str(&out, "~", 1);
-            i++;
-            continue;
-        }
-
-        // 4. Handle variable expansion
-        if (!escape && c == '$') {
-            if (quote == '\'') { // No expansion in simple quotes
-                append_str(&out, &c, 1);
-                i++;
-                continue;
-            }
-            i++;
-            // Case: $?
-            if (input[i] == '?') {
-                char status[16];
-                snprintf(status, sizeof(status), "%d", last_status);
-                append_str(&out, status, strlen(status));
-                i++;
-                continue;
-            }
-            // Case: ${VAR}
-            if (input[i] == '{') {
-                i++;
-                size_t var_start = i;
-                while (input[i] && input[i] != '}')
-                    i++;
-                if (input[i] == '}') {
-                    size_t vlen = i - var_start;
-                    char varname[256] = {0};
-                    strncpy(varname, input + var_start, vlen);
-                    char *val = get_env_var(varname, envp);
-                    if (val) append_str(&out, val, strlen(val));
-                    i++; // skip }
-                }
-                continue;
-            }
-            // Case: $VAR or $1
-            if (isalpha(input[i]) || input[i] == '_') {
-                size_t var_start = i;
-                while (isalnum(input[i]) || input[i] == '_')
-                    i++;
-                size_t vlen = i - var_start;
-                char varname[256] = {0};
-                strncpy(varname, input + var_start, vlen);
-                char *val = get_env_var(varname, envp);
-                if (val) append_str(&out, val, strlen(val));
-                continue;
-            }
-            // Case: $1 etc.
-            if (isdigit(input[i])) {
-                char varname[3] = {input[i], 0};
-                char *val = get_env_var(varname, envp);
-                if (val) append_str(&out, val, strlen(val));
-                i++;
-                continue;
-            }
-            // Else: $ followed by other char, copy as is
-            append_str(&out, "$", 1);
-            continue;
-        }
-
-        // 5. Normal character or escaped
-        append_str(&out, &c, 1);
+/**
+ * Vérifie si la chaîne est de la forme VAR=val (affectation shell)
+ */
+bool is_assignment(const char *str) {
+    int i = 0;
+    if (!str || !(ft_isalpha(str[0]) || str[0] == '_'))
+        return false;
+    while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
         i++;
-        escape = false;
-    }
-    return out ? out : strdup("");
+    return (str[i] == '=' && i > 0);
 }
 
-// Example: expand all tokens in a list (except in SQUOTE)
-void expand_token_list(t_token *head, char **envp, int last_status)
-{
-    for (t_token *tok = head; tok; tok = tok->next)
-    {
-        if (tok->type == TOKEN_SQUOTE)
-            continue; // No expansion in simple quotes
-        char *expanded = expand_string(tok->value, envp, last_status);
-        tok->value = expanded;
+/**
+ * Expansion d'un mot (prend en compte quotes, $?, $VAR)
+ */
+char *expand_word(const char *word, t_env **env_list, int last_status) {
+    char buf[4096];
+    int i = 0, r = 0;
+    while (word[i]) {
+        if (word[i] == '\'') {
+            buf[r++] = word[i++];
+            while (word[i] && word[i] != '\'')
+                buf[r++] = word[i++];
+            if (word[i]) buf[r++] = word[i++];
+        }
+        else if (word[i] == '"') {
+            buf[r++] = word[i++];
+            while (word[i] && word[i] != '"') {
+                if (word[i] == '$') {
+                    if (word[i+1] == '?') {
+                        r += sprintf(buf + r, "%d", last_status);
+                        i += 2;
+                    } else {
+                        char var[256] = {0};
+                        int j = 0;
+                        int start = i+1;
+                        if (ft_isalpha(word[start]) || word[start] == '_') {
+                            while (word[start + j] && (ft_isalnum(word[start + j]) || word[start + j] == '_')) {
+                                var[j] = word[start + j];
+                                j++;
+                            }
+                        }
+                        var[j] = '\0';
+                        if (j > 0) {
+                            char *val = get_env_value(env_list, var);
+                            if (val) r += sprintf(buf + r, "%s", val);
+                            i += 1 + j;
+                        } else {
+                            buf[r++] = word[i++];
+                        }
+                    }
+                } else {
+                    buf[r++] = word[i++];
+                }
+            }
+            if (word[i]) buf[r++] = word[i++];
+        }
+        else if (word[i] == '$') {
+            if (word[i+1] == '?') {
+                r += sprintf(buf + r, "%d", last_status);
+                i += 2;
+            } else {
+                char var[256] = {0};
+                int j = 0;
+                int start = i+1;
+                if (ft_isalpha(word[start]) || word[start] == '_') {
+                    while (word[start + j] && (ft_isalnum(word[start + j]) || word[start + j] == '_')) {
+                        var[j] = word[start + j];
+                        j++;
+                    }
+                }
+                var[j] = '\0';
+                if (j > 0) {
+                    char *val = get_env_value(env_list, var);
+                    if (val) r += sprintf(buf + r, "%s", val);
+                    i += 1 + j;
+                } else {
+                    buf[r++] = word[i++];
+                }
+            }
+        }
+        else {
+            buf[r++] = word[i++];
+        }
+    }
+    buf[r] = '\0';
+    return ft_strdup(buf);
+}
+
+/**
+ * Expansion sur toute la liste de tokens (TOKEN_WORD, TOKEN_VARIABLE)
+ */
+void expand_token_list(t_token *tokens, t_env **env, int last_status) {
+    for (t_token *curr = tokens; curr; curr = curr->next) {
+        if (curr->type == TOKEN_WORD || curr->type == TOKEN_VARIABLE) {
+            char *new_val = expand_word(curr->value, env, last_status);
+            free(curr->value);
+            curr->value = new_val;
+        }
     }
 }
