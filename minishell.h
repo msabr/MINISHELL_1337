@@ -91,33 +91,33 @@ typedef struct s_cmd
 
 
 // token utils
-t_token *lst_new_token(const char *value, t_token_type type, bool space_after);
-void lst_add_back(t_token **list, t_token *new);
-bool is_operator(char c);
-bool is_double_operator(const char *s);
-t_token_type get_operator_type(const char *s);
-void free_token_list(t_token *head);
-void print_token_list(t_token *list) ;
+t_token*		lst_new_token(const char *value, t_token_type type, bool space_after);
+void			lst_add_back(t_token **list, t_token *new);
+bool			is_operator(char c);
+bool			is_double_operator(const char *s);
+t_token_type	get_operator_type(const char *s);
+void			free_token_list(t_token *head);
+void			print_token_list(t_token *list) ;
 
 //
-t_token *lexer(const char *input);
-void skip_whitespace(const char *input, size_t *i);
-size_t parse_word(const char *input, size_t i, t_token **head);
-size_t parse_quote(const char *input, size_t i, t_token **head);
-size_t parse_operator(const char *input, size_t i, t_token **head);
-size_t parse_variable(const char *input, size_t i, t_token **head) ;
+t_token*	lexer(const char *input);
+void		skip_whitespace(const char *input, size_t *i);
+size_t		parse_word(const char *input, size_t i, t_token **head);
+size_t		parse_quote(const char *input, size_t i, t_token **head);
+size_t		parse_operator(const char *input, size_t i, t_token **head);
+size_t		parse_variable(const char *input, size_t i, t_token **head) ;
 
-t_token	*lexer2(const char *input);
-size_t	parse_quote(const char *input, size_t i, t_token **head); 
-int		check_syntax_errors(t_token *tokens, const char *input);
-void	syntax_error(const char *msg);
-void	ft_set_status(int status);
-int		ft_s_ret(int set);
+t_token		*lexer2(const char *input);
+size_t		parse_quote(const char *input, size_t i, t_token **head); 
+int			check_syntax_errors(t_token *tokens, const char *input);
+void		syntax_error(const char *msg);
+void		ft_set_status(int status);
+int			ft_s_ret(int set);
 // char	*ft_strncpy(char *dest, const char *src, size_t n);
 
 t_cmd *parse_tokens_to_cmds(t_token *tokens);
 void print_cmds(t_cmd *cmds);
-void expand_token_list(t_token *tokens, t_env **env, int last_status);
+void	expand_token_list(t_token *tokens, t_env **env, int last_status, int heredoc_mode);
 bool    is_assignment(const char *str);
 void    set_env_value(t_env **env_list, const char *key, const char *value);
 // ---------------------------------------

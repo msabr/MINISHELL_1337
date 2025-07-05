@@ -1,0 +1,15 @@
+Libft
+Makefile
+a
+a1
+a2
+b
+execution
+main.c
+main.o
+minishell
+minishell.h
+parsing
+signals.c
+signals.o
+todo
