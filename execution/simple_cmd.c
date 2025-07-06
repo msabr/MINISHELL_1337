@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 01:17:28 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 01:32:33 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 		}
 	}
 	if (is_builtin(cmds->args[0]))
-		execve_builtin(cmds->args, env_list);
+		execve_builtin(cmds, env_list);
 	else
 		execve(path, cmds->args, list_to_env(*env_list));
 	if (!path || !*path)
@@ -88,7 +88,7 @@ static int	handle_redir_and_builtin(t_cmd *cmds, t_env **env_list)
 	}
 	else if (is_builtin(cmds->args[0]))
 	{
-		execve_builtin(cmds->args, env_list);
+		execve_builtin(cmds, env_list);
 		return (0);
 	}
 	return (-1);

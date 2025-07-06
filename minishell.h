@@ -85,6 +85,7 @@ typedef struct s_cmd
 	char            **args; 
 	t_redir         *redirs; 
 	t_heredoc       *heredocs;
+	bool			in_pipe; 
 	int             exit_status;
 	struct s_cmd    *next;
 }   t_cmd;
@@ -124,7 +125,7 @@ void    set_env_value(t_env **env_list, const char *key, const char *value);
 
 //built-in functions
 bool	is_builtin(char *cmd);
-void	execve_builtin(char **args, t_env **env_list);
+void	execve_builtin(t_cmd *cmd, t_env **env_list);
 void	cd(t_cmd *cmd, t_env **env_list);
 void	echo(t_cmd *cmd);
 void	env_function(t_env *env_list);

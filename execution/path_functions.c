@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   path_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:13:27 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:10:00 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 01:39:12 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,6 @@ static char	*get_fill_path(char *cmd, char *path_env)
 	return (full_path);
 }
 
-static char	*find_path_env(t_env *env_list)
-{
-	t_env	*current;
-
-	current = env_list;
-	while (current)
-	{
-		if (ft_strncmp(current->key, "PATH", 4) == 0)
-			return (current->value);
-		current = current->next;
-	}
-	return (NULL);
-}
-
 static char	*search_in_paths(char *cmd, char **paths)
 {
 	int		i;
@@ -70,9 +56,13 @@ char	*get_path(char *cmd, t_env *env_list)
 	char	**paths;
 	char	*result;
 
-	path_env = find_path_env(env_list);
+	path_env = get_env_value(&env_list, "PATH");
 	if (!path_env)
 		return (cmd);
+	if (path_env[0] == '\0')
+	{
+		add_env_value(&env_list, "PATH", ":.");
+	}
 	paths = ft_split(path_env, ':');
 	result = search_in_paths(cmd, paths);
 	return (result);
