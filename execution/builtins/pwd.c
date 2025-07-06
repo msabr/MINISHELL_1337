@@ -6,48 +6,32 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 23:58:05 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 00:53:05 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-char	*get_pwd(void)
-{
-	char	*current_directory;
-
-	current_directory = getcwd(NULL, 0);
-	if (!current_directory)
-	{
-		perror("getcwd");
-		return (NULL);
-	}
-	return (current_directory);
-}
-
-char	*get_pwd_from_env(t_env **env_list)
-{
-	t_env	*pwd_node;
-
-	pwd_node = find_env_node("PWD", *env_list);
-	if (pwd_node && pwd_node->value)
-	{
-		return (ft_strdup(pwd_node->value));
-	}
-	return (NULL);
-}
-
 void	pwd(t_env **env_list)
 {
 	char	*current_directory;
 
-	current_directory = get_pwd();
+	current_directory = getcwd(NULL, 0);
 	if (current_directory)
 	{
 		ft_putendl_fd(current_directory, STDOUT_FILENO);
 	}
+	else if (get_env_value(env_list, "PWD") != NULL)
+	{
+		ft_putendl_fd(get_env_value(env_list, "PWD"), STDOUT_FILENO);
+	}
+	else if (get_env_value(env_list, "OLDPWD") != NULL)
+	{
+		ft_putendl_fd(get_env_value(env_list, "OLDPWD"), STDOUT_FILENO);
+	}
 	else
 	{
-		ft_putendl_fd(get_pwd_from_env(env_list), STDOUT_FILENO);
+		ft_putstr_fd("minishell: pwd: error retrieving current directory: \
+		No such file or directory\n", STDERR_FILENO);
 	}
 }

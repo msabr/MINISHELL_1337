@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 18:29:02 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/05 23:05:30 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,13 @@ void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 			ft_putstr_fd("1Redirection error\n", STDERR_FILENO);
 			exit(EXIT_FAILURE);
 		}
-		if (cmds->exit_status != 0)
-			exit(cmds->exit_status);
 	}
 	if (is_builtin(cmds->args[0]))
 		execve_builtin(cmds->args, env_list);
 	else
 		execve(path, cmds->args, list_to_env(*env_list));
-	perror("execve");
+	if (!path || !*path)
+		perror("execve");
 	exit(EXIT_FAILURE);
 }
 

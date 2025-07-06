@@ -65,6 +65,12 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
                 continue;
             }
             cmds = parse_tokens_to_cmds(tokens);
+            if (!cmds)
+            {
+                free_token_list(tokens);
+                free(input);
+                continue;
+            }
             // print_cmds(cmds);
             // Gestion de l'affectation locale var=3
             if (cmds && cmds->args && cmds->args[0] && is_assignment(cmds->args[0]))
@@ -94,7 +100,7 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
 			dup2(out_fd, STDOUT_FILENO);
 			close(in_fd);
 			close(out_fd);
-			signal(SIGINT, sig_ctl_c);
+			signal(SIGINT, handel_ctl_c);
 		}
 		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
 		// printf("Exit status: %d\n", status);

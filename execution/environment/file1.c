@@ -6,41 +6,52 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:56:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 22:26:34 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 01:00:06 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+static t_env	*create_env_node(char *env_entry)
+{
+	t_env	*new_node;
+
+	new_node = ft_malloc(sizeof(t_env));
+	if (!new_node)
+		return (NULL);
+	new_node->key = ft_strdup(set_key(env_entry));
+	if (!new_node->key)
+		return (NULL);
+	new_node->value = ft_strdup(env_entry + ft_strlen(new_node->key) + 1);
+	if (!new_node->value)
+		return (NULL);
+	if (ft_strchr(env_entry, '='))
+		new_node->export_variable = true;
+	else
+		new_node->export_variable = false;
+	new_node->next = NULL;
+	return (new_node);
+}
+
 t_env	*env_to_list(char **env)
 {
 	t_env	*env_list;
 	t_env	*new_node;
+	t_env	*temp;
 	int		i;
 
 	env_list = NULL;
 	i = -1;
 	while (env[++i])
 	{
-		new_node = ft_malloc(sizeof(t_env));
+		new_node = create_env_node(env[i]);
 		if (!new_node)
 			return (NULL);
-		new_node->key = ft_strdup(set_key(env[i]));
-		if (!new_node->key)
-			return (NULL);
-		new_node->value = ft_strdup(env[i] + ft_strlen(new_node->key) + 1);
-		if (!new_node->value)
-			return (NULL);
-		if (ft_strchr(env[i], '='))
-			new_node->export_variable = true;
-		else
-			new_node->export_variable = false;
-		new_node->next = NULL;
 		if (!env_list)
 			env_list = new_node;
 		else
 		{
-			t_env *temp = env_list;
+			temp = env_list;
 			while (temp->next)
 				temp = temp->next;
 			temp->next = new_node;
@@ -49,87 +60,14 @@ t_env	*env_to_list(char **env)
 	return (env_list);
 }
 
-// t_env	*env_to_list_add_front(char **env)
-// {
-// 	t_env	*env_list;
-// 	t_env	*new_node;
-// 	int		i;
-
-// 	env_list = NULL;
-// 	i = -1;
-// 	while (env[++i])
-// 	{
-// 		new_node = ft_malloc(sizeof(t_env));
-// 		if (!new_node)
-// 			return (NULL);
-// 		new_node->key = ft_strdup(set_key(env[i]));
-// 		if (!new_node->key)
-// 			return (NULL);
-// 		new_node->value = ft_strdup(env[i] + ft_strlen(new_node->key) + 1);
-// 		if (!new_node->value)
-// 			return (NULL);
-// 		if (ft_strchr(env[i], '='))
-// 			new_node->export_variable = true;
-// 		else
-// 			new_node->export_variable = false;
-// 		new_node->next = env_list;
-// 		env_list = new_node;
-// 		// free(new_node);
-// 	}
-// 	return (env_list);
-// }
 static char	*fill_env_array(char *env, t_env *env_list)
 {
-
 	env = ft_strjoin(env_list->key, "=");
 	if (env_list->value)
 		env = ft_strjoin(env, env_list->value);
 	return (env);
 }
-// static char	*fill_env_array(char *env, t_env *env_list)
-// {
-// 	env = ft_strdup(env_list->key);
-// 	if (env_list->export_variable)
-// 		env = ft_strjoin(env, "=");
-// 	if (!env)
-// 		return (NULL);
-// 	if (env_list->value)
-// 		env = ft_strjoin(env, env_list->value);
-// 	return (env);
-// }
-int size_of_env_list(t_env *env_list)
-{
-	t_env	*traverser;
-	int		count;
 
-	count = 0;
-	traverser = env_list;
-	while (traverser)
-	{
-		count++;
-		traverser = traverser->next;
-	}
-	return (count);
-}
-
-// char	**list_to_env(t_env *env_list)
-// {
-// 	t_env	*traverser;
-// 	int		count;
-// 	char	**env_array;
-
-// 	count = size_of_env_list(env_list);
-// 	env_array = (char **)ft_malloc(sizeof(char *) * (count + 1));
-// 	traverser = env_list;
-// 	env_array[count] = NULL;
-// 	while (traverser)
-// 	{
-// 		env_array[count] = fill_env_array(env_array[count], traverser);
-// 		count--;
-// 		traverser = traverser->next;
-// 	}
-// 	return (env_array);
-// }
 char	**list_to_env(t_env *env_list)
 {
 	t_env	*traverser;
@@ -146,10 +84,10 @@ char	**list_to_env(t_env *env_list)
 	{
 		if (traverser->export_variable)
 		{
-		env_array[count] = fill_env_array(env_array[count], traverser);
-		if (!env_array[count])
-			return (NULL);
-		count++;
+			env_array[count] = fill_env_array(env_array[count], traverser);
+			if (!env_array[count])
+				return (NULL);
+			count++;
 		}
 		traverser = traverser->next;
 	}

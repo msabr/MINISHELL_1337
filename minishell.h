@@ -131,12 +131,14 @@ void	env_function(t_env *env_list);
 void	exit_shell(t_cmd *cmd);
 char	*set_key(const char *arg);
 void	export(t_cmd *cmd, t_env **env_list);
-char	*get_pwd(void);
 void	pwd(t_env **env_list);
 void	unset(t_cmd *cmd, t_env **env_list);
 
 //environment functions
 t_env	*env_to_list(char **env);
+t_env *copy_env(t_env *env_list);
+void	free_env_list(t_env *env_list);
+int		size_of_env_list(t_env *env_list);
 t_env	*find_env_node(char *search_key, t_env *list_head);
 void	configure_environment(t_env **env_list, char **env_array);
 char	*get_env_value(t_env **env_list, const char *key);
@@ -153,7 +155,7 @@ char	*get_path(char *cmd, t_env *env_list);
 //signals functions
 void	tt(void);
 int 	handle_exit_status(pid_t pid);
-void	sig_ctl_c(int sig);
+void	handel_ctl_c(int sig);
 void	ft_handler_signal(void);
 
 //redirection functions
