@@ -12,8 +12,7 @@
 
 NAME = libft.a
 
-CFLAGS = -Wall -Wextra -Werror
-
+CFLAGS = -Wall -Wextra -Werror -Wno-error=overflow
 CC = cc
 
 SRC = ft_atoi.c ft_itoa.c ft_bzero.c ft_calloc.c ft_malloc.c ft_free.c\
