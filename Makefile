@@ -43,7 +43,7 @@ SRC_PAR = parsing/dubaging.c parsing/expainding.c parsing/lexer2.c parsing/parse
 		parsing/syntax_error.c parsing/token_utils.c parsing/utils.c
 
 SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) $(SRC_PIPE)\
-		execution/path_functions.c main.c signals.c execution/simple_cmd.c
+		execution/path_functions.c main.c execution/signals.c execution/simple_cmd.c
 
 OBJS = $(SRCS:.c=.o)
 
