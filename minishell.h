@@ -68,23 +68,16 @@ typedef struct s_redir
 {
 	t_token_type       type;
 	char              *filename;
+	char			  *heredoc_content;
 	int               fd_in; // file descriptor for input redirection
 	int               fd_out; // file descriptor for output redirection
 	struct s_redir    *next;
 } t_redir;
 
-typedef struct s_heredoc
-{
-	char            *delimiter; 
-	char            *content;
-	struct s_heredoc *next;
-} t_heredoc;
-
 typedef struct s_cmd
 {
 	char            **args; 
 	t_redir         *redirs; 
-	t_heredoc       *heredocs;
 	bool			in_pipe; 
 	int             exit_status;
 	struct s_cmd    *next;
