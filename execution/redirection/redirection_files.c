@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 01:32:59 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 18:47:19 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,24 @@ bool	handle_redirections(t_cmd *cmds)
 	if (!handle_all_file_redirs(cmds))
 		return (false);
 	return (true);
+}
+
+void	save_std_fds(t_cmd *cmds)
+{
+	if (cmds->redirs)
+	{
+		cmds->redirs->fd_in = dup(STDIN_FILENO);
+		cmds->redirs->fd_out = dup(STDOUT_FILENO);
+	}
+}
+
+void	restore_std_fds(t_cmd *cmds)
+{
+	if (cmds->redirs)
+	{
+		dup2(cmds->redirs->fd_in, STDIN_FILENO);
+		dup2(cmds->redirs->fd_out, STDOUT_FILENO);
+		close(cmds->redirs->fd_in);
+		close(cmds->redirs->fd_out);
+	}
 }

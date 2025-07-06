@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:13:27 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 01:39:12 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 19:48:38 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*get_path(char *cmd, t_env *env_list)
 
 	path_env = get_env_value(&env_list, "PATH");
 	if (!path_env)
-		return (cmd);
+		return (NULL);
 	if (path_env[0] == '\0')
 	{
 		add_env_value(&env_list, "PATH", ":.");

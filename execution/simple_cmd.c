@@ -6,27 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 01:32:33 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 20:39:13 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	print_dir_error(char *cmd)
-{
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	if (ft_is_dir(cmd))
-	{
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": is a directory\n", STDERR_FILENO);
-	}
-	else
-	{
-		access(cmd, X_OK);
-		perror(cmd);
-	}
-	return (1);
-}
 
 int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 {
@@ -34,24 +18,24 @@ int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 		return (1);
 	if (ft_strchr(cmds->args[0], '/'))
 	{
-		if (!ft_is_dir(cmds->args[0]))
-		{
-			*path = cmds->args[0];
-			return (0);
-		}
-		else
+		if (ft_is_dir(cmds->args[0]))
 			return (print_dir_error(cmds->args[0]));
+		if (access(cmds->args[0], X_OK | F_OK) == -1)
+		{
+			if (errno == ENOENT)
+				return (print_execve_error(cmds->args[0]));
+			else if (errno == EACCES)
+				return (print_execve_permission_error(cmds->args[0]));
+			else
+				return (perror("minishell"), 1);
+		}
+		*path = ft_strdup(cmds->args[0]);
 	}
 	else
 	{
 		*path = get_path(cmds->args[0], *env_list);
 		if (!*path)
-		{
-			ft_putstr_fd("Command not found: ", STDERR_FILENO);
-			ft_putstr_fd(cmds->args[0], STDERR_FILENO);
-			ft_putchar_fd('\n', STDERR_FILENO);
-			return (127);
-		}
+			return (print_cmd_not_found_error(cmds->args[0]));
 	}
 	return (0);
 }
@@ -73,7 +57,7 @@ void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 	else
 		execve(path, cmds->args, list_to_env(*env_list));
 	if (!path || !*path)
-		perror("execve");
+		perror("minishell");
 	exit(EXIT_FAILURE);
 }
 
@@ -83,10 +67,8 @@ static int	handle_redir_and_builtin(t_cmd *cmds, t_env **env_list)
 	{
 		if (!handle_redirections(cmds))
 			return (1);
-		if (cmds->exit_status != 0)
-			return (cmds->exit_status);
 	}
-	else if (is_builtin(cmds->args[0]))
+	if (is_builtin(cmds->args[0]))
 	{
 		execve_builtin(cmds, env_list);
 		return (0);

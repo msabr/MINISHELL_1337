@@ -42,8 +42,14 @@ SRC_REDIRECT =	execution/redirection/heredoc.c execution/redirection/redirect_ap
 SRC_PAR = parsing/dubaging.c parsing/expainding.c parsing/lexer2.c parsing/parser.c\
 		parsing/syntax_error.c parsing/token_utils.c parsing/utils.c
 
-SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) $(SRC_PIPE)\
-		execution/path_functions.c main.c execution/signals.c execution/simple_cmd.c
+SRC_EXE = execution/path_functions.c\
+			main.c\
+			execution/signals.c\
+			execution/simple_cmd.c\
+			execution/print_errors.c
+
+SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) $(SRC_PIPE) $(SRC_EXE)
+		
 
 OBJS = $(SRCS:.c=.o)
 

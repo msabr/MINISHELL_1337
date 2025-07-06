@@ -84,10 +84,7 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
                 }
                 status = 0;
             }
-            int in_fd, out_fd;
-			in_fd = dup(STDIN_FILENO);
-			out_fd = dup(STDOUT_FILENO);
-			// printf("Executing command: %s\n", cmds->next->args[0]);
+            save_std_fds(cmds);
 			if (cmds->next)
 				status = exec_multiple_pipes(cmds, env_list);
 			else
@@ -96,10 +93,7 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
 				status = execve_simple_cmd(cmds, env_list);
 			}
 			status = handle_exit_status(status);
-			dup2(in_fd, STDIN_FILENO);
-			dup2(out_fd, STDOUT_FILENO);
-			close(in_fd);
-			close(out_fd);
+            restore_std_fds(cmds);
 			signal(SIGINT, handel_ctl_c);
 		}
 		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);

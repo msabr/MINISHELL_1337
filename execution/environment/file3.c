@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:16:36 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 01:10:24 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 20:04:05 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,14 @@ static void	handle_shlvl(t_env *node, t_env ***env_list)
 	if (!node || !node->value)
 		return ;
 	shlvl_value = ft_atoi(node->value);
-	if (shlvl_value < 0)
-	{
-		ft_putstr_fd("minishell: warning: SHLVL is negative, resetting to 0\n",
-			STDERR_FILENO);
+	if (shlvl_value == 999)
+		new_value = ft_strdup("");
+	else if (shlvl_value >= 1000)
+		new_value = ft_itoa(1);
+	else if (shlvl_value < 0)
 		new_value = ft_itoa(0);
-	}
 	else
-	{
 		new_value = ft_itoa(shlvl_value + 1);
-	}
 	if (!new_value)
 		return ;
 	add_env_value(*env_list, "SHLVL", new_value);
@@ -48,6 +46,9 @@ void	configure_environment(t_env **env_list, char **env_array)
 	found_node = find_env_node("PWD", *env_list);
 	if (!found_node)
 		add_env_value(env_list, "PWD", getcwd(NULL, 0));
+	found_node = find_env_node("1PWD", *env_list);
+	if (!found_node)
+		add_env_value(env_list, "1PWD", getcwd(NULL, 0));
 	found_node = find_env_node("PATH", *env_list);
 	if (!found_node)
 		add_env_value(env_list, "PATH",

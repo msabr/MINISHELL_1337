@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 00:04:23 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 20:39:42 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ void	cd(t_cmd *cmd, t_env **env_list)
 		path = cmd->args[1];
 	if (chdir(path) == -1)
 		return (perror("cd"));
-	add_env_value(env_list, "OLDPWD", get_env_value(env_list, "PWD"));
+	add_env_value(env_list, "OLDPWD", get_env_value(env_list, "1PWD"));
 	cwd = getcwd(0, 0);
 	if (cwd)
-		add_env_value(env_list, "PWD", cwd);
+		add_env_value(env_list, "1PWD", cwd);
 }
+//cd: error retrieving current directory: getcwd: cannot 
+//access parent directories: No such file or directory

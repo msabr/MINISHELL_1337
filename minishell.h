@@ -68,8 +68,8 @@ typedef struct s_redir
 {
 	t_token_type       type;
 	char              *filename;
-	int			   fd;
-	int			   fd2;
+	int               fd_in; // file descriptor for input redirection
+	int               fd_out; // file descriptor for output redirection
 	struct s_redir    *next;
 } t_redir;
 
@@ -162,10 +162,19 @@ void	ft_handler_signal(void);
 //redirection functions
 bool	is_redirection(t_cmd *cmds);
 void	handle_heredoc(t_cmd *cmd);
+void	save_std_fds(t_cmd *cmds);
+void	restore_std_fds(t_cmd *cmds);
 int		redirect_stdin(char *file_name);
 int		redirect_overwrite(char *file_name);
 int		redirect_append(char *file_name);
 bool	handle_redirections(t_cmd *cmds);
+
+//error handling functions
+int	print_dir_error(char *cmd);
+int print_cmd_not_found_error(char *cmd);
+int print_execve_error(char *cmd);
+int print_execve_permission_error(char *cmd);
+void print_exit_error(const char *arg);
 
 //main functions
 void main_loop(t_env **env_list, struct termios *saved_termios);

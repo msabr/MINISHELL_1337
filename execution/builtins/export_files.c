@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 23:32:33 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 19:24:18 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	export_withot_args(t_env *env_list)
 	sort_env_list(&current);
 	while (current)
 	{
-		if (ft_strcmp(current->key, "_"))
+		if (ft_strcmp(current->key, "_") && ft_strcmp(current->key, "1PWD"))
 			print_export_variable(current);
 		current = current->next;
 	}
