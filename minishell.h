@@ -74,9 +74,17 @@ typedef struct s_redir
 	struct s_redir    *next;
 } t_redir;
 
+typedef struct s_heredoc
+{
+	char            *delimiter; 
+	char            *content;
+	struct s_heredoc *next;
+} t_heredoc;
+
 typedef struct s_cmd
 {
-	char            **args; 
+	char            **args;
+	t_heredoc       *heredocs; // list of heredoc delimiters and contents	
 	t_redir         *redirs; 
 	bool			in_pipe; 
 	int             exit_status;
@@ -85,57 +93,35 @@ typedef struct s_cmd
 
 
 // token utils
-t_token	*lst_new_token(const char *value, t_token_type type, bool space_after);
-void	lst_add_back(t_token **list, t_token *new);
-bool	is_operator(char c);
-bool	is_double_operator(const char *s);
-t_token_type	get_operator_type(const char *s);
-void	free_token_list(t_token *head);
-void	print_token_list(t_token *list);
+t_token *lst_new_token(const char *value, t_token_type type, bool space_after);
+void lst_add_back(t_token **list, t_token *new);
+bool is_operator(char c);
+bool is_double_operator(const char *s);
+t_token_type get_operator_type(const char *s);
+void free_token_list(t_token *head);
+void print_token_list(t_token *list) ;
 
-t_token	*lexer(const char *input);
-void	skip_whitespace(const char *input, size_t *i);
-size_t	parse_word(const char *input, size_t i, t_token **head);
-size_t	parse_quote(const char *input, size_t i, t_token **head);
-size_t	parse_operator(const char *input, size_t i, t_token **head);
-size_t	parse_variable(const char *input, size_t i, t_token **head);
+//
+t_token *lexer(const char *input);
+void skip_whitespace(const char *input, size_t *i);
+size_t parse_word(const char *input, size_t i, t_token **head);
+size_t parse_quote(const char *input, size_t i, t_token **head);
+size_t parse_operator(const char *input, size_t i, t_token **head);
+size_t parse_variable(const char *input, size_t i, t_token **head) ;
 
 t_token	*lexer2(const char *input);
-size_t	parse_quote(const char *input, size_t i, t_token **head);
+size_t	parse_quote(const char *input, size_t i, t_token **head); 
 int		check_syntax_errors(t_token *tokens, const char *input);
 void	syntax_error(const char *msg);
 void	ft_set_status(int status);
 int		ft_s_ret(int set);
+// char	*ft_strncpy(char *dest, const char *src, size_t n);
 
-t_cmd	*parse_tokens_to_cmds(t_token *tokens);
-void	print_cmds(t_cmd *cmds);
-
-
-// Expansion functions
-// Fonctions principales
-void expand_token_list_v2(t_token *tokens, t_env **env, int last_status);
-bool needs_expansion(t_token *token);
-void expand_single_token(t_token *token, t_env **env, int last_status);
-
-// Gestion des quotes
-char *remove_quotes(const char *str, char quote_char);
-char *expand_quoted_string(const char *str, t_env **env, int last_status);
-char *expand_unquoted_string(const char *str, t_env **env, int last_status);
-
-// Gestion des échappements
-char *handle_escape_in_dquotes(const char *str, int *index);
-char *handle_escape_unquoted(const char *str, int *index);
-
-// Expansion des variables
-char *handle_dollar_expansion(const char *str, int *index, t_env **env, int last_status);
-char *expand_env_variable(const char *str, int *index, t_env **env);
-char *expand_braced_variable(const char *str, int *index, t_env **env, int last_status);
-
-// Fonctions utilitaires
-bool has_special_chars(const char *str);
-char **split_words(const char *str);
-int count_words(const char *str);
-char *clean_expansion_result(char *str);
+t_cmd *parse_tokens_to_cmds(t_token *tokens);
+void print_cmds(t_cmd *cmds);
+void expand_token_list(t_token *tokens, t_env **env, int last_status);
+bool    is_assignment(const char *str);
+void    set_env_value(t_env **env_list, const char *key, const char *value);
 // ---------------------------------------
 
 //built-in functions
