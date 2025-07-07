@@ -54,77 +54,43 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
         {
             tokens = lexer2(input);
             // print_token_list(tokens);
-            expand_token_list(tokens, env_list, g_status, 0);
+            expand_token_list_v2(tokens, env_list, status);
+
 
             if (check_syntax_errors(tokens, input))
             {
                 status = 258;
                 free_token_list(tokens);
-                printf("Exit status: %d\n", status);
+                // printf("Exit status: %d\n", status);
                 free(input);
                 continue;
             }
             cmds = parse_tokens_to_cmds(tokens);
+            if (!cmds)
+            {
+                free_token_list(tokens);
+                free(input);
+                continue;
+            }
             // print_cmds(cmds);
             // Gestion de l'affectation locale var=3
-            if (cmds && cmds->args && cmds->args[0] && is_assignment(cmds->args[0]))
-            {
-                char *eq = ft_strchr(cmds->args[0], '=');
-                if (eq)
-                {
-                    *eq = '\0';
-                    set_env_value(env_list, cmds->args[0], eq + 1);
-                    *eq = '=';
-                }
-                status = 0;
-            }
-            else if (cmds)
-            { 
-                if (is_redirection(cmds))
-                {
-                    int saved_stdin = dup(STDIN_FILENO);
-                    int saved_stdout = dup(STDOUT_FILENO);
-                    if (!handle_redirections(cmds))
-                    {
-                        printf("Exit status: %d\n", 1);
-                        dup2(saved_stdin, STDIN_FILENO);
-                        dup2(saved_stdout, STDOUT_FILENO);
-                        close(saved_stdin);
-                        close(saved_stdout);
-                        free_token_list(tokens);
-                        // free_cmds(cmds);
-                        free(input);
-                        continue;
-                    }
-                    dup2(saved_stdin, STDIN_FILENO);
-                    dup2(saved_stdout, STDOUT_FILENO);
-                    close(saved_stdin);
-                    close(saved_stdout);
-                }
-                if (cmds->next)
-                {
-                    int in_fd = dup(STDIN_FILENO);
-                    int out_fd = dup(STDOUT_FILENO);
-                    status = exec_multiple_pipes(cmds, env_list);
-                    dup2(in_fd, STDIN_FILENO);
-                    dup2(out_fd, STDOUT_FILENO);
-                    close(in_fd);
-                    close(out_fd);
-                    status = handle_exit_status(status);
-                }
-                else
-                {
-                    status = execve_simple_cmd(cmds, env_list);
-                }
-                signal(SIGINT, sig_ctl_c);
-            }
-            free_token_list(tokens);
-        }
-        tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
-        printf("Exit status: %d\n", status);
-        free(input);
-    }
+            save_std_fds(cmds);
+			if (cmds->next)
+				status = exec_multiple_pipes(cmds, env_list);
+			else
+			{
+				// puts("Executing single command");
+				status = execve_simple_cmd(cmds, env_list);
+			}
+			status = handle_exit_status(status);
+            restore_std_fds(cmds);
+			signal(SIGINT, handel_ctl_c);
+		}
+		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
+		// printf("Exit status: %d\n", status);
+	}
 }
+
 //withot parrsing
 
 

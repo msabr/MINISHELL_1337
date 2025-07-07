@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:50 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 20:11:09 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 19:23:22 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,19 @@ void	env_function(t_env *env_list)
 	current = env_list;
 	while (current)
 	{
-		if (current->value && current->export_variable)
+		if (ft_strcmp(current->key, "1PWD"))
 		{
-			result = ft_strjoin(current->key, "=");
-			result = ft_strjoin(result, current->value);
-			ft_putendl_fd(result, STDOUT_FILENO);
-		}
-		else if (current->export_variable)
-		{
-			result = ft_strjoin(current->key, "=");
-			ft_putendl_fd(result, STDOUT_FILENO);
+			if (current->value && current->export_variable)
+			{
+				result = ft_strjoin(current->key, "=");
+				result = ft_strjoin(result, current->value);
+				ft_putendl_fd(result, STDOUT_FILENO);
+			}
+			else if (current->export_variable)
+			{
+				result = ft_strjoin(current->key, "=");
+				ft_putendl_fd(result, STDOUT_FILENO);
+			}
 		}
 		current = current->next;
 	}

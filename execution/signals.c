@@ -6,13 +6,13 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 08:43:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 23:20:06 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 01:12:25 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-void	sig_ctl_c(int sig)
+void	handel_ctl_c(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -27,7 +27,7 @@ void	sig_ctl_c(int sig)
 void	ft_handler_signal(void)
 {
 	rl_catch_signals = 0;
-	signal(SIGINT, sig_ctl_c);
+	signal(SIGINT, handel_ctl_c);
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -54,5 +54,5 @@ int	handle_exit_status(pid_t pid)
 
 void	tt(void)
 {
-	write(1, "\033[32m----------------------\033[0m\n\n", 32);
+	write(2, "\033[32m----------------------\033[0m\n\n", 32);
 }

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:58 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 22:14:10 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 00:13:20 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	handle_heredoc(t_cmd *cmd)
 	{
 		while (true)
 		{
-			line = readline("heredoc> ");
+			line = readline("> ");
 			if (!line || !strcmp(line, current->delimiter))
 				break ;
 			ft_putendl_fd(line, pipe_fd[1]);

@@ -1,0 +1,36 @@
+---------------------------------------------
+minishell> mkdir -p 1/2/3/4
+minishell> pwd
+/mnt/homes/msabr/Desktop/minishell
+minishell> cd 1/2/3/4/
+minishell> unset PWD OLDPWD
+minishell> ls
+minishell> pwd
+/mnt/homes/msabr/Desktop/minishell/1/2/3/4
+minishell> pwd
+getcwd: No such file or directory
+minishell> cd ..
+minishell> pwd
+getcwd: No such file or directory
+minishell> 
+---------------------------------------------
+minishell> echo $?
+---------------------------------------------
+bash-3.2$ $rtfdv ls
+Libft           TODO            main.c          minishell.h
+Makefile        execution       minishell       parsing
+-------------------------------------------
+minishell> cd 1
+minishell> chmod 0 .
+minishell> cd ..
+cd: Permission denied
+
+---------------------------------------------
+minishell> export PATH=
+minishell> Makefile 
+Command not found: Makefile
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------
+---------------------------------------------

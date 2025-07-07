@@ -39,11 +39,22 @@ SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c execution
 SRC_REDIRECT =	execution/redirection/heredoc.c execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c 
 		
-SRC_PAR = parsing/dubaging.c parsing/expainding.c parsing/lexer2.c parsing/parser.c\
-		parsing/syntax_error.c parsing/token_utils.c parsing/utils.c
+SRC_PAR = parsing/dubaging.c parsing/lexer2.c parsing/parser.c\
+			parsing/syntax_error.c parsing/token_utils.c parsing/utils.c\
+			parsing/expansion/expander.c \
+			parsing/expansion/expand_env.c \
+			parsing/expansion/expand_escape.c \
+			parsing/expansion/expand_quotes.c \
+			parsing/expansion/expand_utils.c
 
-SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) $(SRC_PIPE)\
-		execution/path_functions.c main.c signals.c execution/simple_cmd.c
+SRC_EXE = execution/path_functions.c\
+			main.c\
+			execution/signals.c\
+			execution/simple_cmd.c\
+			execution/print_errors.c
+
+SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) $(SRC_PIPE) $(SRC_EXE)
+		
 
 OBJS = $(SRCS:.c=.o)
 

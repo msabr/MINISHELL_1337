@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 17:18:13 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 18:47:19 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,63 +88,22 @@ bool	handle_redirections(t_cmd *cmds)
 	return (true);
 }
 
-// int execve_simple_cmd(t_cmd *cmds, t_env **env_list)
-// {
-// 	int		status;
-// 	char	*path;
-// 	pid_t	pid;
-// 	status = 0;
-// 	if (is_builtin(cmds->args[0]))
-// 	{
-// 		execve_builtin(cmds->args, env_list);
-// 		return (0);
-// 	}
-// 	if (ft_strchr(cmds->args[0], '/'))
-// 	{
-// 		if (!ft_is_dir(cmds->args[0]))
-// 			path = cmds->args[0];
-// 		else
-// 		{
-// 			ft_putstr_fd("minishell: ", STDERR_FILENO);
-// 			if (ft_is_dir(cmds->args[0]))
-// 			{
-// 				ft_putstr_fd(cmds->args[0], STDERR_FILENO);
-// 				ft_putstr_fd(": is a directory\n", STDERR_FILENO);
-// 			}
-// 			else
-// 			{
-// 				access(cmds->args[0], X_OK);
-// 				perror(cmds->args[0]);
-// 			}
-// 			return (1);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		path = get_path(cmds->args[0], *env_list);
-// 		if (!path)
-// 		{
-// 			ft_putstr_fd("Command not found: ", STDERR_FILENO);
-// 			ft_putstr_fd(cmds->args[0], STDERR_FILENO);
-// 			ft_putchar_fd('\n', STDERR_FILENO);
-// 			return (127);
-// 		}
-// 	}
-// 	pid = fork();
-// 	if (pid < 0)
-// 		perror("fork");
-// 	else if (pid == 0)
-// 	{
-// 		signal(SIGINT, SIG_DFL);
-// 		signal(SIGQUIT, SIG_DFL);
-// 		if (is_builtin(cmds->args[0]))
-// 			execve_builtin(cmds->args, env_list);
-// 		else
-// 			execve(path, cmds->args, list_to_env(*env_list));
-// 		perror("execve");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	else
-// 		status = handle_exit_status(pid);
-// 	return (status);
-// }
+void	save_std_fds(t_cmd *cmds)
+{
+	if (cmds->redirs)
+	{
+		cmds->redirs->fd_in = dup(STDIN_FILENO);
+		cmds->redirs->fd_out = dup(STDOUT_FILENO);
+	}
+}
+
+void	restore_std_fds(t_cmd *cmds)
+{
+	if (cmds->redirs)
+	{
+		dup2(cmds->redirs->fd_in, STDIN_FILENO);
+		dup2(cmds->redirs->fd_out, STDOUT_FILENO);
+		close(cmds->redirs->fd_in);
+		close(cmds->redirs->fd_out);
+	}
+}

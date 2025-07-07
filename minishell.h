@@ -19,7 +19,6 @@
 
 extern int	g_status;
 
-// parser structures
 typedef enum e_token_type
 {
 	TOKEN_WORD,         // generic word (command or argument)
@@ -68,8 +67,9 @@ typedef struct s_redir
 {
 	t_token_type       type;
 	char              *filename;
-	int			   fd;
-	int			   fd2;
+	char			  *heredoc_content;
+	int               fd_in; // file descriptor for input redirection
+	int               fd_out; // file descriptor for output redirection
 	struct s_redir    *next;
 } t_redir;
 
@@ -85,6 +85,7 @@ typedef struct s_cmd
 	char            **args; 
 	t_redir         *redirs; 
 	t_heredoc       *heredocs;
+	bool			in_pipe; 
 	int             exit_status;
 	struct s_cmd    *next;
 }   t_cmd;
@@ -117,26 +118,54 @@ int			ft_s_ret(int set);
 
 t_cmd *parse_tokens_to_cmds(t_token *tokens);
 void print_cmds(t_cmd *cmds);
-void	expand_token_list(t_token *tokens, t_env **env, int last_status, int heredoc_mode);
-bool    is_assignment(const char *str);
-void    set_env_value(t_env **env_list, const char *key, const char *value);
+void expand_token_list_v2(t_token *tokens, t_env **env, int last_status);
+bool needs_expansion(t_token *token);
+void expand_single_token(t_token *token, t_env **env, int last_status);
+
+// Gestion des quotes
+char *remove_quotes(const char *str, char quote_char);
+char *expand_quoted_string(const char *str, t_env **env, int last_status);
+char *expand_unquoted_string(const char *str, t_env **env, int last_status);
+
+// Gestion des échappements
+char *handle_escape_in_dquotes(const char *str, int *index);
+char *handle_escape_unquoted(const char *str, int *index);
+
+// Expansion des variables
+char *handle_dollar_expansion(const char *str, int *index, t_env **env, int last_status);
+char *expand_env_variable(const char *str, int *index, t_env **env);
+char *expand_braced_variable(const char *str, int *index, t_env **env, int last_status);
+
+// Fonctions utilitaires
+bool has_special_chars(const char *str);
+char **split_words(const char *str);
+int count_words(const char *str);
+char *clean_expansion_result(char *str);
+char *strjoin_and_free(char *s1, char *s2);
+void free_words(char **words);
+char *expand_dollars(const char *input, t_env **env);
+char *expand_heredoc_content(const char *str, t_env **env, int last_status, const char *delimiter);
+int count_dollars(const char *str, int index);
+char *reduce_odd_dollars_and_handle_edge(const char *str);
 // ---------------------------------------
 
 //built-in functions
 bool	is_builtin(char *cmd);
-void	execve_builtin(char **args, t_env **env_list);
+void	execve_builtin(t_cmd *cmd, t_env **env_list);
 void	cd(t_cmd *cmd, t_env **env_list);
 void	echo(t_cmd *cmd);
 void	env_function(t_env *env_list);
 void	exit_shell(t_cmd *cmd);
 char	*set_key(const char *arg);
 void	export(t_cmd *cmd, t_env **env_list);
-char	*get_pwd(void);
 void	pwd(t_env **env_list);
 void	unset(t_cmd *cmd, t_env **env_list);
 
 //environment functions
 t_env	*env_to_list(char **env);
+t_env *copy_env(t_env *env_list);
+void	free_env_list(t_env *env_list);
+int		size_of_env_list(t_env *env_list);
 t_env	*find_env_node(char *search_key, t_env *list_head);
 void	configure_environment(t_env **env_list, char **env_array);
 char	*get_env_value(t_env **env_list, const char *key);
@@ -153,16 +182,25 @@ char	*get_path(char *cmd, t_env *env_list);
 //signals functions
 void	tt(void);
 int 	handle_exit_status(pid_t pid);
-void	sig_ctl_c(int sig);
+void	handel_ctl_c(int sig);
 void	ft_handler_signal(void);
 
 //redirection functions
 bool	is_redirection(t_cmd *cmds);
 void	handle_heredoc(t_cmd *cmd);
+void	save_std_fds(t_cmd *cmds);
+void	restore_std_fds(t_cmd *cmds);
 int		redirect_stdin(char *file_name);
 int		redirect_overwrite(char *file_name);
 int		redirect_append(char *file_name);
 bool	handle_redirections(t_cmd *cmds);
+
+//error handling functions
+int	print_dir_error(char *cmd);
+int print_cmd_not_found_error(char *cmd);
+int print_execve_error(char *cmd);
+int print_execve_permission_error(char *cmd);
+void print_exit_error(const char *arg);
 
 //main functions
 void main_loop(t_env **env_list, struct termios *saved_termios);

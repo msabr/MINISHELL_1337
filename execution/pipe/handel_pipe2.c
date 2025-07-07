@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:33:32 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 16:38:47 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 20:40:23 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,27 @@ void	exec_child(t_cmd *cur, t_execargs *args, int i)
 	char	*path;
 
 	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	redirect_pipes(args, i);
+	cur->in_pipe = true;
 	if (is_redirection(cur))
 	{
-		handle_redirections(cur);
-		
+		if (!handle_redirections(cur))
+			exit(EXIT_FAILURE);
 	}
 	if (is_builtin(cur->args[0]))
 	{
-		execve_builtin(cur->args, args->env_list);
+		execve_builtin(cur, args->env_list);
 		exit(0);
 	}
 	else
 	{
 		path = get_path(cur->args[0], *args->env_list);
 		if (!path)
-		{
-			ft_putstr_fd("Command not found: ", STDERR_FILENO);
-			ft_putstr_fd(cur->args[0], STDERR_FILENO);
-			ft_putchar_fd('\n', STDERR_FILENO);
-			exit(127);
-		}
+			return (print_cmd_not_found_error(cur->args[0]), exit(127));
 		execve(path, cur->args, list_to_env(*args->env_list));
 	}
-	perror("execve");
+	perror("minishell");
 	exit(1);
 }
 

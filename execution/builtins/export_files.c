@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 18:20:15 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 19:24:18 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	swap_env_nodes(t_env *a, t_env *b)
 	b->key = temp->key;
 	b->value = temp->value;
 	b->export_variable = temp->export_variable;
-	// free(temp);
+	free(temp);
 }
 
 void	sort_env_list(t_env **env_list)
@@ -50,30 +50,6 @@ void	sort_env_list(t_env **env_list)
 	}
 }
 
-void	append_env_value(t_env **env_list, char *key, char *value)
-{
-	t_env	*current;
-	char	*new_value;
-	char	*new_key;
-
-	new_key = malloc(ft_strlen(key));
-	ft_strlcpy(new_key, key, ft_strlen(key));
-	current = *env_list;
-	while (current)
-	{
-		if (ft_strcmp(current->key, new_key) == 0)
-		{
-			new_value = ft_strjoin(current->value, value);
-			current->value = new_value;
-			// free(|);
-			return ;
-		}
-		current = current->next;
-	}
-	add_env_value(env_list, new_key, value);
-	// free(new_key);
-}
-
 char	*set_key(const char *arg)
 {
 	char	*key;
@@ -89,31 +65,35 @@ char	*set_key(const char *arg)
 	return (key);
 }
 
-void	export_withot_args(t_env **env_list)
+static void	print_export_variable(t_env *current)
+{
+	if (current->value)
+	{
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd(current->key, STDOUT_FILENO);
+		ft_putstr_fd("=\"", STDOUT_FILENO);
+		ft_putstr_fd(current->value, STDOUT_FILENO);
+		ft_putstr_fd("\"\n", STDOUT_FILENO);
+	}
+	else
+	{
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd(current->key, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+	}
+}
+
+void	export_withot_args(t_env *env_list)
 {
 	t_env	*current;
 
-	sort_env_list(env_list);
-	current = *env_list;
+	current = copy_env(env_list);
+	sort_env_list(&current);
 	while (current)
 	{
-		if (ft_strcmp(current->key, "_"))
-		{
-			if (current->value)
-			{
-				ft_putstr_fd("declare -x ", STDOUT_FILENO);
-				ft_putstr_fd(current->key, STDOUT_FILENO);
-				ft_putstr_fd("=\"", STDOUT_FILENO);
-				ft_putstr_fd(current->value, STDOUT_FILENO);
-				ft_putstr_fd("\"\n", STDOUT_FILENO);
-			}
-			else
-			{
-				ft_putstr_fd("declare -x ", STDOUT_FILENO);
-				ft_putstr_fd(current->key, STDOUT_FILENO);
-				ft_putstr_fd("\n", STDOUT_FILENO);
-			}
-		}
+		if (ft_strcmp(current->key, "_") && ft_strcmp(current->key, "1PWD"))
+			print_export_variable(current);
 		current = current->next;
 	}
+	free_env_list(current);
 }

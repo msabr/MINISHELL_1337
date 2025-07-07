@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:43:46 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 16:38:57 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/06 17:23:50 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,5 @@ int	exec_multiple_pipes(t_cmd *cmds, t_env **env_list)
 	if (fork_and_exec(cmds, pids, &args) < 0)
 		return (handle_fork_error(pids, &args));
 	cleanup_and_wait(pids, &args, &status);
-	return (status);
+	return (handle_exit_status(status));
 }
