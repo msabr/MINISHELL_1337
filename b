@@ -1,0 +1,20 @@
+total 776
+drwxr-xr-x 7 khalid khalid   4096 Jul  8 22:00 .
+drwxr-xr-x 6 khalid khalid   4096 Jul  8 19:12 ..
+drwxr-xr-x 8 khalid khalid   4096 Jul  8 19:19 .git
+-rw-r--r-- 1 khalid khalid     66 Jul  8 18:51 .gitignore
+drwxr-xr-x 2 khalid khalid   4096 Jul  8 20:16 .vscode
+drwxr-xr-x 2 khalid khalid   4096 Jul  8 21:57 Libft
+-rw-r--r-- 1 khalid khalid   3353 Jul  8 21:56 Makefile
+-rw-r--r-- 1 khalid khalid   2016 Jul  8 18:44 TODO.todo
+-rw-r--r-- 1 khalid khalid   1027 Jul  8 22:00 a
+-rw-r--r-- 1 khalid khalid      0 Jul  8 22:00 b
+drwxr-xr-x 6 khalid khalid   4096 Jul  8 21:57 execution
+-rw-r--r-- 1 khalid khalid    115 Jul  8 20:36 l
+-rw-r--r-- 1 khalid khalid      0 Jul  8 20:33 la
+-rw-r--r-- 1 khalid khalid   3920 Jul  8 21:59 main.c
+-rw-r--r-- 1 khalid khalid  17064 Jul  8 22:00 main.o
+-rwxr-xr-x 1 khalid khalid 705824 Jul  8 22:00 minishell
+-rw-r--r-- 1 khalid khalid   7644 Jul  8 21:57 minishell.h
+drwxr-xr-x 6 khalid khalid   4096 Jul  8 21:59 parsing
+-rw-r--r-- 1 khalid khalid   1708 Jul  8 18:44 test.c

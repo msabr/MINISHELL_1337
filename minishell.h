@@ -85,16 +85,54 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }   t_cmd;
 
+/**..................................................
+t_token	*lexer(const char *input);
+// Lexing main API
+t_token	*lexer(const char *input);
 
+// Helpers & handlers
+int			is_whitespace(char c);
+bool		is_operator(char c);
+t_token_type	get_operator_type(const char *s);
+char		*ft_strndup(const char *src, size_t n);
+
+void		add_token(t_token **head, const char *val, t_token_type type, bool space);
+t_token		*lst_new_token(const char *value, t_token_type type, bool space_after);
+void		lst_add_back(t_token **list, t_token *new);
+
+void		error_syntax(const char *token);
+
+//..................................................*/
+int		check_syntax_errors(t_token *tokens, const char *input);
+void	error_syntax(const char *token);
+
+// Parsing principal
+t_cmd	*parse_tokens_to_cmd2s(t_token *tokens);
+
+// Supprime les tokens vides de la liste chainée
+void	remove_empty_token(t_token **tokens);
+
+// Helpers internes (utilisables pour tests ou extension)
+int		is_arg_token(t_token *tok);
+int		is_redir(t_token_type t);
+char	*merge_argument(t_token **ptok);
+int		add_argument(char ***args, char *new_arg);
+int		add_redirection(t_redir **redir, t_token_type type, char *filename, char *delimiter_heredoc);
+int		add_command(t_cmd **cmds, t_cmd *new);
+t_cmd	*new_command(void);
+void	free_cmd_list(t_cmd *cmds); // Gestion mémoire
+//..................................................*/
 // token utils
 t_token*		lst_new_token(const char *value, t_token_type type, bool space_after);
 void			lst_add_back(t_token **list, t_token *new);
 bool			is_operator(char c);
 bool			is_double_operator(const char *s);
-t_token_type	get_operator_type(const char *s);
 void			free_token_list(t_token *head);
 void			print_token_list(t_token *list) ;
-
+t_token_type get_operator_type(const char *s);
+int			is_whitespace(char c);
+void		add_token(t_token **head, const char *val, t_token_type type, bool space);
+void		error_syntax(const char *token);
 //
 t_token*	lexer(const char *input);
 void		skip_whitespace(const char *input, size_t *i);
@@ -111,7 +149,7 @@ void		ft_set_status(int status);
 int			ft_s_ret(int set);
 // char	*ft_strncpy(char *dest, const char *src, size_t n);
 
-t_cmd *parse_tokens_to_cmds(t_token *tokens);
+// t_cmd *parse_tokens_to_cmds(t_token *tokens);
 void print_cmds(t_cmd *cmds);
 void expand_token_list_v2(t_token *tokens, t_env **env, int last_status);
 bool needs_expansion(t_token *token);

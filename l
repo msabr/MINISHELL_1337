@@ -1,0 +1,15 @@
+.git
+.gitignore
+.vscode
+Libft
+Makefile
+TODO.todo
+execution
+l
+la
+main.c
+main.o
+minishell
+minishell.h
+parsing
+test.c

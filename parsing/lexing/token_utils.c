@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 t_token *lst_new_token(const char *value, t_token_type type, bool space_after)
 {
@@ -45,14 +45,14 @@ bool is_double_operator(const char *s) {
     return (!ft_strncmp(s, ">>", 2) || !ft_strncmp(s, "<<", 2));
 }
 
-// t_token_type get_operator_type(const char *s) {
-//     if (!ft_strncmp(s, "|", 1)) return TOKEN_PIPE;
-//     if (!ft_strncmp(s, ">>", 2)) return TOKEN_REDIR_APPEND;
-//     if (!ft_strncmp(s, "<<", 2)) return TOKEN_HEREDOC;
-//     if (!ft_strncmp(s, "<", 1)) return TOKEN_REDIR_IN;
-//     if (!ft_strncmp(s, ">", 1)) return TOKEN_REDIR_OUT;
-//     return TOKEN_WORD;
-// }
+t_token_type get_operator_type(const char *s) {
+    if (!ft_strncmp(s, "|", 1)) return TOKEN_PIPE;
+    if (!ft_strncmp(s, ">>", 2)) return TOKEN_REDIR_APPEND;
+    if (!ft_strncmp(s, "<<", 2)) return TOKEN_HEREDOC;
+    if (!ft_strncmp(s, "<", 1)) return TOKEN_REDIR_IN;
+    if (!ft_strncmp(s, ">", 1)) return TOKEN_REDIR_OUT;
+    return TOKEN_WORD;
+}
 
 void free_token_list(t_token *head) {
     t_token *tmp;

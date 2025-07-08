@@ -40,15 +40,14 @@ SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/red
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
 				# execution/redirection/redirect_heredoc.c 
 		
-SRC_PAR = parsing/dubaging.c parsing/lexer2.c parsing/parser.c\
-			parsing/syntax_error.c parsing/token_utils.c parsing/utils.c\
-			parsing/expansion/expand_env.c \
-			parsing/expansion/expand_escape.c \
-			parsing/expansion/expand_number.c \
-			parsing/expansion/expand_quotes.c \
-			parsing/expansion/expand_utils.c \
-			parsing/expansion/expander.c
-
+SRC_PAR = parsing/dubaging.c parsing/lexer2.c \
+			parsing/lexing/lexer.c parsing/lexing/lexer_handlers.c\
+			parsing/lexing/token_utils.c parsing/syntax_error.c  parsing/utils.c \
+			parsing/expansion/expand_env.c parsing/expansion/expand_escape.c \
+			parsing/expansion/expand_number.c parsing/expansion/expand_quotes.c \
+			parsing/expansion/expand_utils.c parsing/expansion/expander.c\
+			parsing/parse_cmd/parser.c parsing/parse_cmd/parser_helper.c \
+			#parsing/token_utils.c parsing/parser.c
 
 SRC_EXE = execution/path_functions.c\
 			main.c\
