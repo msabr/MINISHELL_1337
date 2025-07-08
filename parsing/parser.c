@@ -83,7 +83,7 @@ void	add_argument(char ***args, char *new_arg)
 	*args = new_args;
 }
 
-t_redir	*new_redir(t_token_type type, char *filename)
+t_redir	*new_redir(t_token_type type, char *filename, char *delimiter_heredoc)
 {
 	t_redir	*new;
 
@@ -92,16 +92,21 @@ t_redir	*new_redir(t_token_type type, char *filename)
 		return (NULL);
 	new->type = type;
 	new->filename = filename;
+	new->fd_in = -1;
+	new->fd_out = -1;
+	new->exit_status = 0;
+	new->delimiter_heredoc = delimiter_heredoc;
+	new->heredoc_content = NULL;
 	new->next = NULL;
 	return (new);
 }
 
-void	add_redirection(t_redir **redir, t_token_type type, char *filename)
+void	add_redirection(t_redir **redir, t_token_type type, char *filename, char *delimiter_heredoc)
 {
 	t_redir	*new;
 	t_redir	*tmp;
 
-	new = new_redir(type, filename);
+	new = new_redir(type, filename, delimiter_heredoc);
 	if (!new)
 		return ;
 	if (!*redir)
@@ -109,38 +114,6 @@ void	add_redirection(t_redir **redir, t_token_type type, char *filename)
 	else
 	{
 		tmp = *redir;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-}
-
-t_heredoc	*new_heredoc(char *delim)
-{
-	t_heredoc	*hd;
-
-	hd = ft_malloc(sizeof(t_heredoc));
-	if (!hd)
-		return (NULL);
-	hd->delimiter = delim;
-	hd->content = NULL;
-	hd->next = NULL;
-	return (hd);
-}
-
-void	add_heredoc(t_heredoc **hd, char *delim)
-{
-	t_heredoc	*new;
-	t_heredoc	*tmp;
-
-	new = new_heredoc(delim);
-	if (!new)
-		return ;
-	if (!*hd)
-		*hd = new;
-	else
-	{
-		tmp = *hd;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
@@ -183,9 +156,9 @@ void	handle_redir(t_cmd *cmd, t_token **tok)
 	}
 	filename = merge_argument(&target);
 	if ((*tok)->type == TOKEN_HEREDOC)
-		add_heredoc(&cmd->heredocs, filename);
+		add_redirection(&cmd->redirs, (*tok)->type, NULL, filename); // delimiter dans delimiter_heredoc
 	else
-		add_redirection(&cmd->redirs, (*tok)->type, filename);
+		add_redirection(&cmd->redirs, (*tok)->type, filename, NULL);
 	*tok = target;
 }
 

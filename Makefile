@@ -40,14 +40,14 @@ SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/red
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
 				# execution/redirection/redirect_heredoc.c 
 		
-# SRC_PAR = parsing/dubaging.c parsing/lexer2.c parsing/parser.c\
-# 			parsing/syntax_error.c parsing/token_utils.c parsing/utils.c\
-# 			parsing/expansion/expand_env.c \
-# 			parsing/expansion/expand_escape.c \
-# 			parsing/expansion/expand_number.c \
-# 			parsing/expansion/expand_quotes.c \
-# 			parsing/expansion/expand_utils.c \
-# 			parsing/expansion/expander.c
+SRC_PAR = parsing/dubaging.c parsing/lexer2.c parsing/parser.c\
+			parsing/syntax_error.c parsing/token_utils.c parsing/utils.c\
+			parsing/expansion/expand_env.c \
+			parsing/expansion/expand_escape.c \
+			parsing/expansion/expand_number.c \
+			parsing/expansion/expand_quotes.c \
+			parsing/expansion/expand_utils.c \
+			parsing/expansion/expander.c
 
 
 SRC_EXE = execution/path_functions.c\
@@ -56,7 +56,7 @@ SRC_EXE = execution/path_functions.c\
 			execution/simple_cmd.c\
 			execution/print_errors.c
 
-SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PIPE) $(SRC_EXE)
+SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_PAR) $(SRC_ENV) $(SRC_PIPE) $(SRC_EXE)
 		
 
 OBJS = $(SRCS:.c=.o)

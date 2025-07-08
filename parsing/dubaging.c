@@ -6,7 +6,7 @@
 /*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:10:54 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/02 15:59:23 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:06:00 by copilot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void print_token_list(t_token *list) {
     }
     printf("=== END OF LIST ===\n");
 }
+
 static void print_redirs(t_redir *r)
 {
     while (r)
@@ -53,19 +54,22 @@ static void print_redirs(t_redir *r)
         else if (r->type == TOKEN_REDIR_APPEND)
             printf("  [redir]  >>  %s\n", r->filename);
         else if (r->type == TOKEN_HEREDOC)
-            printf("  [redir]  <<  %s\n", r->filename);
+            printf("  [redir]  <<  %s\n", r->delimiter_heredoc);
         r = r->next;
     }
 }
 
-static void print_heredocs(t_redir *h)
+static void print_heredocs(t_redir *r)
 {
-    while (h)
+    while (r)
     {
-        printf("  [heredoc] delimiter: %s\n", h->delimiter);
-        if (h->heredoc_content)
-            printf("    heredoc_content: %s\n", h->heredoc_content);
-        h = h->next;
+        if (r->type == TOKEN_HEREDOC)
+        {
+            printf("  [heredoc] delimiter: %s\n", r->delimiter_heredoc);
+            if (r->heredoc_content)
+                printf("    heredoc_content: %s\n", r->heredoc_content);
+        }
+        r = r->next;
     }
 }
 
