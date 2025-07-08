@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 18:47:19 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/08 18:16:18 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,49 +15,21 @@
 bool	is_redirection(t_cmd *cmds)
 {
 	t_redir		*current;
-	t_heredoc	*current_heredoc;
 
 	current = cmds->redirs;
-	current_heredoc = cmds->heredocs;
 	while (current)
 	{
 		if (current->type == TOKEN_REDIR_OUT
 			|| current->type == TOKEN_REDIR_APPEND
-			|| current->type == TOKEN_REDIR_IN)
+			|| current->type == TOKEN_REDIR_IN
+			|| current->type == TOKEN_HEREDOC)
 			return (true);
 		current = current->next;
-	}
-	while (current_heredoc)
-	{
-		if (current_heredoc->delimiter)
-			return (true);
-		current_heredoc = current_heredoc->next;
 	}
 	return (false);
 }
 
-static bool	handle_all_heredocs(t_cmd *cmds)
-{
-	t_heredoc	*current_heredoc;
-
-	current_heredoc = cmds->heredocs;
-	while (current_heredoc)
-	{
-		if (current_heredoc->delimiter)
-		{
-			handle_heredoc(cmds);
-			if (cmds->exit_status != 0)
-			{
-				fprintf(stderr, "minishell: heredoc error\n");
-				return (false);
-			}
-		}
-		current_heredoc = current_heredoc->next;
-	}
-	return (true);
-}
-
-static bool	handle_all_file_redirs(t_cmd *cmds)
+bool	handle_redirections(t_cmd *cmds)
 {
 	t_redir	*current;
 	int		flag;
@@ -72,19 +44,12 @@ static bool	handle_all_file_redirs(t_cmd *cmds)
 			flag = redirect_overwrite(current->filename);
 		else if (current->type == TOKEN_REDIR_APPEND)
 			flag = redirect_append(current->filename);
+		// else if (current->type == TOKEN_HEREDOC)
+		// 	flag = redirect_heredoc(cmds);
 		if (flag)
 			return (false);
 		current = current->next;
 	}
-	return (true);
-}
-
-bool	handle_redirections(t_cmd *cmds)
-{
-	if (!handle_all_heredocs(cmds))
-		return (false);
-	if (!handle_all_file_redirs(cmds))
-		return (false);
 	return (true);
 }
 

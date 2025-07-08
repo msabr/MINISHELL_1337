@@ -12,7 +12,7 @@ READLINE_PATH = $(shell brew --prefix readline)
 READLINE_COMPILE = -I$(READLINE_PATH)/include
 READLINE_LINK = -L$(READLINE_PATH)/lib -lreadline -lhistory -ltermcap
 
-SRC_LIB= Libft/ft_atoi.c Libft/ft_itoa.c Libft/ft_bzero.c Libft/ft_calloc.c Libft/ft_malloc.c Libft/ft_free.c\
+SRC_LIB= Libft/ft_atoi.c Libft/ft_atoll.c Libft/ft_itoa.c Libft/ft_bzero.c Libft/ft_calloc.c Libft/ft_malloc.c Libft/ft_free.c\
 		Libft/ft_isalnum.c Libft/ft_isalpha.c Libft/ft_isascii.c Libft/ft_isdigit.c Libft/ft_isprint.c Libft/ft_isspace.c Libft/ft_is_number.c\
 		Libft/ft_memchr.c Libft/ft_memcmp.c Libft/ft_memcpy.c Libft/ft_memmove.c Libft/ft_memset.c\
 		Libft/ft_putchar_fd.c Libft/ft_putendl_fd.c Libft/ft_putnbr_fd.c Libft/ft_putstr_fd.c\
@@ -36,15 +36,19 @@ SRC_ENV =	execution/environment/file1.c execution/environment/file2.c\
 
 SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c execution/pipe/handel_pipe3.c\
 
-SRC_REDIRECT =	execution/redirection/heredoc.c execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
-				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c 
+SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
+				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
+				# execution/redirection/redirect_heredoc.c 
 		
-SRC_PAR = parsing/dubaging.c parsing/lexer2.c parsing/parser.c\
-			parsing/syntax_error.c parsing/token_utils.c parsing/utils.c\
-			# parsing/expansion/expand_env.c \
-			# parsing/expansion/expand_escape.c \
-			# parsing/expansion/expand_quotes.c \
-			# parsing/expansion/expand_utils.c
+# SRC_PAR = parsing/dubaging.c parsing/lexer2.c parsing/parser.c\
+# 			parsing/syntax_error.c parsing/token_utils.c parsing/utils.c\
+# 			parsing/expansion/expand_env.c \
+# 			parsing/expansion/expand_escape.c \
+# 			parsing/expansion/expand_number.c \
+# 			parsing/expansion/expand_quotes.c \
+# 			parsing/expansion/expand_utils.c \
+# 			parsing/expansion/expander.c
+
 
 SRC_EXE = execution/path_functions.c\
 			main.c\
@@ -52,12 +56,12 @@ SRC_EXE = execution/path_functions.c\
 			execution/simple_cmd.c\
 			execution/print_errors.c
 
-SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PAR) $(SRC_PIPE) $(SRC_EXE)
+SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_ENV) $(SRC_PIPE) $(SRC_EXE)
 		
 
 OBJS = $(SRCS:.c=.o)
 
-HEADERS = Libft/libft.h minishell.h execution/pipe/pipe.h execution/builtins/builtins.h
+HEADERS = Libft/libft.h minishell.h execution/pipe/pipe.h execution/builtins/builtins.h #parsing/expansion/expander.h
 
 all: check-readline $(NAME)
 

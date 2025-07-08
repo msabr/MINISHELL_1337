@@ -65,29 +65,24 @@ typedef struct s_data
 
 typedef struct s_redir
 {
-	t_token_type       type;
-	char              *filename;
-	char			  *heredoc_content;
-	int               fd_in; // file descriptor for input redirection
-	int               fd_out; // file descriptor for output redirection
-	struct s_redir    *next;
-} t_redir;
+	t_token_type	type;
+	char			*filename;
+	int				fd_in;
+	int				fd_out;
+	int				exit_status;
+	char			*delimiter_heredoc;
+	char			*heredoc_content;
+	struct s_redir	*next;
+}	t_redir;
 
-typedef struct s_heredoc
-{
-	char            *delimiter; 
-	char            *content;
-	struct s_heredoc *next;
-} t_heredoc;
 
 typedef struct s_cmd
 {
-	char            **args;
-	t_heredoc       *heredocs; // list of heredoc delimiters and contents	
-	t_redir         *redirs; 
+	char			**args;
+	t_redir			*redirs; 
 	bool			in_pipe; 
-	int             exit_status;
-	struct s_cmd    *next;
+	int				exit_status;
+	struct s_cmd	*next;
 }   t_cmd;
 
 
@@ -187,7 +182,7 @@ void	ft_handler_signal(void);
 
 //redirection functions
 bool	is_redirection(t_cmd *cmds);
-void	handle_heredoc(t_cmd *cmd);
+int		redirect_heredoc(t_cmd *cmd, t_env *env_list);
 void	save_std_fds(t_cmd *cmds);
 void	restore_std_fds(t_cmd *cmds);
 int		redirect_stdin(char *file_name);

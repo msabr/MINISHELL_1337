@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:33:32 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/07 18:45:38 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/08 18:15:09 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,14 @@ void	exec_child(t_cmd *cur, t_execargs *args, int i)
 	char	*path;
 
 	if (!cur || !cur->args || !cur->args[0])
-	{
-		print_cmd_not_found_error("Command not found");
 		exit(EXIT_FAILURE);
-	}
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	redirect_pipes(args, i);
 	cur->in_pipe = true;
 	if (is_redirection(cur))
-	{
 		if (!handle_redirections(cur))
 			exit(EXIT_FAILURE);
-	}
 	if (is_builtin(cur->args[0]))
 	{
 		execve_builtin(cur, args->env_list);

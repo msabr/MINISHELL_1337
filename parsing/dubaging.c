@@ -58,13 +58,13 @@ static void print_redirs(t_redir *r)
     }
 }
 
-static void print_heredocs(t_heredoc *h)
+static void print_heredocs(t_redir *h)
 {
     while (h)
     {
         printf("  [heredoc] delimiter: %s\n", h->delimiter);
-        if (h->content)
-            printf("    content: %s\n", h->content);
+        if (h->heredoc_content)
+            printf("    heredoc_content: %s\n", h->heredoc_content);
         h = h->next;
     }
 }
@@ -83,7 +83,7 @@ void print_cmds(t_cmd *cmds)
         }
         printf("\n");
         print_redirs(cmds->redirs);
-        print_heredocs(cmds->heredocs);
+        print_heredocs(cmds->redirs);
         if (cmds->next)
             printf("|\n");
         cmds = cmds->next;

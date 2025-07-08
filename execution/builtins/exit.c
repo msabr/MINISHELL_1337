@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 20:39:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/08 18:13:28 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	exit_shell(t_cmd *cmd)
 	}
 	if (cmd->args[1])
 	{
-		if (ft_is_number(cmd->args[1]))
+		if (ft_is_number(cmd->args[1]) && ft_atoll(cmd->args[1]) >= LONG_MAX
+			&& ft_atoll(cmd->args[1]) <= LONG_MIN)
 			status = ft_atoi(cmd->args[1]) % 256;
 		else
 		{

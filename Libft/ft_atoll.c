@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atoll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 09:54:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/08 15:40:59 by msabr            ###   ########.fr       */
+/*   Created: 2025/07/08 15:40:34 by msabr             #+#    #+#             */
+/*   Updated: 2025/07/08 15:40:54 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *str)
+long long ft_atoll(const char *str)
 {
-	int	sign;
-	int	result;
+    int			sign;
+    long long	result;
 
-	sign = 1;
-	result = 0;
-	while (ft_isspace(*str))
-		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
-	while (ft_isdigit(*str))
-	{
-		result = result * 10 + (*str - '0');
-		str++;
-	}
-	return (result * sign);
+    sign = 1;
+    result = 0;
+    while (ft_isspace(*str))
+        str++;
+    if (*str == '-' || *str == '+')
+    {
+        if (*str == '-')
+            sign = -1;
+        str++;
+    }
+    while (ft_isdigit(*str))
+    {
+        result = result * 10 + (*str - '0');
+        str++;
+    }
+    return (result * sign);
 }

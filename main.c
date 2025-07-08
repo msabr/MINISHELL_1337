@@ -14,6 +14,11 @@ char *ft_readline(const char *prompt)
 	{
 		add_history(input);
 	}
+    if (!input)
+    {
+        ft_putstr_fd("exit\n", STDERR_FILENO);
+        exit(0);
+    }
 	return (input);
 }
 
@@ -48,15 +53,11 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
             status = 1;
             g_status = 0;
         }
-        if (!input)
-            return (ft_putstr_fd("exit\n", STDERR_FILENO));
         if (input[0] != '\0')
         {
             tokens = lexer2(input);
             // print_token_list(tokens);
             // expand_token_list_v2(tokens, env_list, status);
-
-
             if (check_syntax_errors(tokens, input))
             {
                 status = 258;
@@ -73,15 +74,11 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
                 continue;
             }
             // print_cmds(cmds);
-            // Gestion de l'affectation locale var=3
             save_std_fds(cmds);
 			if (cmds->next)
 				status = exec_multiple_pipes(cmds, env_list);
 			else
-			{
-				// puts("Executing single command");
 				status = execve_simple_cmd(cmds, env_list);
-			}
 			status = handle_exit_status(status);
             restore_std_fds(cmds);
 			signal(SIGINT, handel_ctl_c);
