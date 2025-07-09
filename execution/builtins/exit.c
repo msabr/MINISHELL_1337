@@ -6,34 +6,47 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/09 15:12:18 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/09 19:28:32 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
+static int	get_sign(const char *str, int *i)
+{
+	int	sign;
+
+	sign = 1;
+	if (str[*i] == '+' || str[*i] == '-')
+	{
+		if (str[*i] == '-')
+			sign = -1;
+		(*i)++;
+	}
+	return (sign);
+}
+
 static bool	valid_number(const char *str)
 {
-	long long	num;
-	int			sign;
-	int			i;
+	unsigned long long	num;
+	int					sign;
+	int					i;
 
-	(1) && (num = 0, sign = 1, i = 0);
-	if (!str || !str[0])
+	(1) && (num = 0, i = 0);
+	if (!str || !str[i] || !ft_is_number(str))
 		return (false);
-	if (!ft_is_number(str))
-		return (false);
-	if (str[0] == '+' || str[0] == '-')
-	{
-		if (str[0] == '-')
-			sign = -1;
+	while (str[i] && ft_isspace(str[i]))
 		i++;
-	}
+	sign = get_sign(str, &i);
 	if (!str[i])
-		return (0);
+		return (false);
 	while (str[i])
 	{
-		if (num > ((long long)LONG_MAX - (str[i] - '0')) / 10)
+		if ((num > ((unsigned long long)LONG_MAX - (str[i] - '0')) / 10)
+			&& (sign == 1))
+			return (false);
+		if ((num > ((unsigned long long)LONG_MAX + 1 - (str[i] - '0')) / 10)
+			&& (sign == -1))
 			return (false);
 		num = num * 10 + (str[i] - '0');
 		i++;

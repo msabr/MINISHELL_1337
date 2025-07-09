@@ -58,8 +58,8 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
 			expand_token_list_v2(tokens, env_list, *ft_get_status());
 			// if (check_syntax_errors(tokens, input))
 			// {
-			//     printf("Syntax error detected\n");
-			//     status = 258;
+			//     // printf("Syntax error detected\n");
+			//     ft_set_status(258);
 			//     free_token_list(tokens);
 			//     // printf("Exit status: %d\n", status);
 			//     free(input);
@@ -83,7 +83,7 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
 			signal(SIGINT, handel_ctl_c);
 		}
 		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
-		printf("Exit status: %d\n", *ft_get_status());
+		// printf("Exit status: %d\n", *ft_get_status());
 	}
 }
 
