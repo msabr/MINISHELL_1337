@@ -16,7 +16,7 @@
 
 # include <signal.h>
 # include <termios.h>
-
+// # include "parsing/expension2/expansion.h"
 extern int	g_status;
 
 typedef enum e_token_type
@@ -111,6 +111,24 @@ t_cmd	*parse_tokens_to_cmd2s(t_token *tokens);
 
 // Supprime les tokens vides de la liste chainée
 void	remove_empty_token(t_token **tokens);
+
+// new expending
+
+void    expansion_all_tokens(t_token *tokens, t_env *env);
+void    expand_var_token(t_token *token, t_env *env);
+void    expand_dquote_token(t_token *token, t_env *env);
+void    expand_squote_token(t_token *token);
+int     is_in_heredoc(t_token *token);
+void    convert_exit_code(t_token *token);
+void    number_before_dollar(t_token *token);
+void    expand_env_dollar(t_token *token, t_env *env);
+char    *remove_dquotes(char *str);
+char    *remove_squotes(char *str);
+void fix_dollar_doublequote_tokens(t_token **head);
+char *expand_many_dollars(const char *str, t_env *env);
+void merge_variable_tokens(t_token *tokens);
+
+
 
 // Helpers internes (utilisables pour tests ou extension)
 int		is_arg_token(t_token *tok);
