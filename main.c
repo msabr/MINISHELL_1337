@@ -57,7 +57,8 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
         {
             tokens = lexer(input);
             print_token_list(tokens);
-            expand_token_list_v2(tokens, env_list, status);
+            expansion_all_tokens(tokens, *env_list);
+            // expand_token_list_v2(tokens, env_list, status);
             if (!check_syntax_errors(tokens, input))
             {
                 status = 258;
