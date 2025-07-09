@@ -1,26 +1,24 @@
 #include "minishell.h"
-
+// void f(void)
+// {
+// 	system("leaks minishell");
+// }
 int g_status = 0;
 
-char	*ft_readline(const char *prompt)
+char *ft_readline(const char *prompt)
 {
-	char	*input;
+	char *input;
 
 	input = readline(prompt);
 	if (input && *input)
 	{
 		add_history(input);
 	}
-	if (!input)
-	{
-		ft_putstr_fd("exit\n", STDERR_FILENO);
-		exit(0);
-	}
-	if (g_status == SIGINT)
-	{
-		ft_set_status(1);
-		g_status = 0;
-	}
+    if (!input)
+    {
+        ft_putstr_fd("exit\n", STDERR_FILENO);
+        exit(0);
+    }
 	return (input);
 }
 
@@ -41,49 +39,53 @@ int	main(int argc, char **argv, char **envp)
 
 void main_loop(t_env **env_list, struct termios *saved_termios)
 {
-	char		*input;
-	t_token		*tokens;
-	t_cmd		*cmds;
-	// int			status;
+    char    *input;
+    t_token *tokens;
+    t_cmd   *cmds;
+    int     status;
 
-	ft_set_status(0);
-	while (true)
-	{
-		input = ft_readline("minishell> ");
-
-		if (input[0] != '\0')
-		{
-			tokens = lexer(input);
-			// print_token_list(tokens);
-			expand_token_list_v2(tokens, env_list, *ft_get_status());
-			if (check_syntax_errors(tokens, input))
-			{
-			    // printf("Syntax error detected\n");
-			    ft_set_status(258);
-			    free_token_list(tokens);
-			    // printf("Exit status: %d\n", status);
-			    free(input);
-			    continue;
-			}
-			cmds = parse_tokens_to_cmd2s(tokens);
-			if (!cmds)
-			{
-				free_token_list(tokens);
-				free(input);
-				continue;
-			}
-			// print_cmds(cmds);
-			save_std_fds(cmds);
+    status = 0;
+    while (true)
+    {
+        input = ft_readline("minishell> ");
+        if (g_status == SIGINT)
+        {
+            status = 1;
+            g_status = 0;
+        }
+        if (input[0] != '\0')
+        {
+            tokens = lexer(input);
+            print_token_list(tokens);
+            expansion_all_tokens(tokens, *env_list);
+            // expand_token_list_v2(tokens, env_list, status);
+            if (!check_syntax_errors(tokens, input))
+            {
+                status = 258;
+                free_token_list(tokens);
+                printf("Exit status: %d\n", status);
+                free(input);
+                continue;
+            }
+            cmds = parse_tokens_to_cmd2s(tokens);
+            if (!cmds)
+            {
+                free_token_list(tokens);
+                free(input);
+                continue;
+            }
+            print_cmds(cmds);
+            save_std_fds(cmds);
 			if (cmds->next)
-				ft_set_status(exec_multiple_pipes(cmds, env_list));
+				status = exec_multiple_pipes(cmds, env_list);
 			else
-				ft_set_status(execve_simple_cmd(cmds, env_list));
-			handle_exit_status(*ft_get_status());
-			restore_std_fds(cmds);
+				status = execve_simple_cmd(cmds, env_list);
+			status = handle_exit_status(status);
+            restore_std_fds(cmds);
 			signal(SIGINT, handel_ctl_c);
 		}
 		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
-		// printf("Exit status: %d\n", *ft_get_status());
+		// printf("Exit status: %d\n", status);
 	}
 }
 
