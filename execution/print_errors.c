@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:51:42 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 20:38:12 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/09 16:17:03 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	print_dir_error(char *cmd)
 		access(cmd, X_OK);
 		perror(cmd);
 	}
-	return (1);
+	return (126);
 }
 
 int	print_cmd_not_found_error(char *cmd)
@@ -41,7 +41,7 @@ int	print_execve_error(char *cmd)
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-	return (127);
+	return (1);
 }
 
 int	print_execve_permission_error(char *cmd)
@@ -57,4 +57,6 @@ void	print_exit_error(const char *arg)
 	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+	ft_free();
+	exit(255);
 }

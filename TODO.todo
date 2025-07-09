@@ -15,10 +15,6 @@ getcwd: No such file or directory
 minishell> 
 ---------------------------------------------
 minishell> echo $?
----------------------------------------------
-bash-3.2$ $rtfdv ls
-Libft           TODO            main.c          minishell.h
-Makefile        execution       minishell       parsing
 -------------------------------------------
 minishell> cd 1
 minishell> chmod 0 .
@@ -26,11 +22,10 @@ minishell> cd ..
 cd: Permission denied
 
 ---------------------------------------------
-bash-3.2$ $? // command mzyana
-bash: 0: command not found
+------------- exit status -------------------
 ---------------------------------------------
-bash-3.2$ $?
-bash: 127: command not found
+bash-3.2$ $? ls
+bash: 0:
 ---------------------------------------------
 bash-3.2$ ^C
 bash-3.2$ echo $?

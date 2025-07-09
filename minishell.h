@@ -146,6 +146,7 @@ size_t		parse_quote(const char *input, size_t i, t_token **head);
 int			check_syntax_errors(t_token *tokens, const char *input);
 void		syntax_error(const char *msg);
 void		ft_set_status(int status);
+int			*ft_get_status(void);
 int			ft_s_ret(int set);
 // char	*ft_strncpy(char *dest, const char *src, size_t n);
 

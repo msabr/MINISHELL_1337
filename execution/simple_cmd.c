@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/07 19:19:07 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/09 16:15:16 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 			else if (errno == EACCES)
 				return (print_execve_permission_error(cmds->args[0]));
 			else
-				return (perror("minishell"), 1);
+				return (perror("minishell"), 126);
 		}
 		*path = ft_strdup(cmds->args[0]);
 	}

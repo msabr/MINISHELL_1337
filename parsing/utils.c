@@ -14,3 +14,9 @@ void	ft_set_status(int status)
 	ptr = ft_get_status();
 	*ptr = status;
 }
+/*
+
+ft_set_status(1);
+printf("%d\n", *ft_get_status());
+
+*/
