@@ -72,7 +72,7 @@ t_cmd	*parse_tokens_to_cmd2s(t_token *tokens)
 {
 	t_cmd	*cmds = NULL;
 
-	remove_empty_token(&tokens);
+	remove_empty_token_head(&tokens);
 	if (!tokens || (tokens->type == TOKEN_EOF && !tokens->next))
 		return (NULL);
 	if (!parse_tokens_loop(tokens, &cmds))
