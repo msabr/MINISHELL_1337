@@ -45,6 +45,7 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
     int     status;
 
     status = 0;
+    ft_set_status(0);
     while (true)
     {
         input = ft_readline("minishell> ");
@@ -58,6 +59,9 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
             tokens = lexer(input);
             print_token_list(tokens);
             expansion_all_tokens(tokens, *env_list);
+            print_token_list(tokens);
+            merge_collapsed_tokens(tokens);
+
             // expand_token_list_v2(tokens, env_list, status);
             if (!check_syntax_errors(tokens, input))
             {

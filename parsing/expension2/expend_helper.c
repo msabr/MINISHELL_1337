@@ -312,3 +312,92 @@ void merge_variable_tokens(t_token *tokens)
         curr = curr->next;
     }
 }
+
+char	*expand_variables_in_word(char *str, t_env *env)
+{
+	size_t	i = 0;
+	size_t	j = 0;
+	char	*result;
+	size_t	len = ft_strlen(str);
+	result = malloc(len * 2 + 32);
+	if (!result)
+		return (NULL);
+
+	while (str[i])
+	{
+		if (str[i] == '$' && str[i + 1])
+		{
+			i++;
+			// Cas $?
+			if (str[i] == '?')
+			{
+				char *exit_code = ft_itoa(g_status);
+				size_t k = 0;
+				while (exit_code && exit_code[k])
+					result[j++] = exit_code[k++];
+				free(exit_code);
+				i++;
+			}
+			// Cas $VAR classique (alpha/underscore puis alphanum/underscore)
+			else if (ft_isalpha(str[i]) || str[i] == '_')
+			{
+				size_t varlen = 0;
+				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
+					varlen++;
+				char *key = malloc(varlen + 1);
+				size_t k = 0;
+				while (k < varlen)
+				{
+					key[k] = str[i + k];
+					k++;
+				}
+				key[k] = '\0';
+				char *val = get_env_value(&env, key);
+				if (val)
+				{
+					size_t m = 0;
+					while (val[m])
+						result[j++] = val[m++];
+				}
+				// sinon rien (var inconnue : string vide)
+				free(key);
+				i += varlen;
+			}
+			// Cas $ suivi d'autre chose (ex: chiffre, isolé, etc.)
+			else
+			{
+				result[j++] = '$';
+				result[j++] = str[i++];
+			}
+		}
+		else
+			result[j++] = str[i++];
+	}
+	result[j] = '\0';
+	return (result);
+}
+
+void    merge_collapsed_tokens(t_token *tokens)
+{
+    t_token *curr = tokens;
+    while (curr && curr->next)
+    {
+        if ((curr->type == TOKEN_WORD || curr->type == TOKEN_VARIABLE)
+            && (curr->next->type == TOKEN_WORD || curr->next->type == TOKEN_VARIABLE)
+            && curr->space_after == 0)
+        {
+            char    *tmp = ft_strjoin(curr->value, curr->next->value);
+            free(curr->value);
+            curr->value = tmp;
+
+            t_token *to_rm = curr->next;
+            curr->space_after = to_rm->space_after;
+            curr->next = to_rm->next;
+            free(to_rm->value);
+            free(to_rm);
+        }
+        else
+            curr = curr->next;
+    }
+}
+

@@ -127,8 +127,17 @@ char    *remove_squotes(char *str);
 void fix_dollar_doublequote_tokens(t_token **head);
 char *expand_many_dollars(const char *str, t_env *env);
 void merge_variable_tokens(t_token *tokens);
+char	*expand_variables_in_word(char *str, t_env *env);
+void	merge_collapsed_tokens(t_token *tokens);
+char	*expand_token(const char *str, t_env *env);
+char	*expand_env_var(const char *var, t_env *env);
 
-
+// Expansion du code de retour ($?)
+char	*expand_exit_code(void);
+// Découpe une string à chaque '$' (pour gérer les collages)
+char	**split_by_dollar(const char *str);
+// Expansion d'un morceau de string (ex: "$USER", "$?", "abc")
+char	*expand_piece(const char *piece, t_env *env);
 
 // Helpers internes (utilisables pour tests ou extension)
 int		is_arg_token(t_token *tok);
@@ -168,6 +177,7 @@ void		syntax_error(const char *msg);
 void		ft_set_status(int status);
 int			*ft_get_status(void);
 int			ft_s_ret(int set);
+
 // char	*ft_strncpy(char *dest, const char *src, size_t n);
 
 // t_cmd *parse_tokens_to_cmds(t_token *tokens);

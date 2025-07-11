@@ -54,63 +54,235 @@ int	is_in_heredoc(t_token *token)
 
 
 
-void expansion_all_tokens(t_token *tokens, t_env *env)
-{
-    t_token *curr = tokens;
-    fix_dollar_doublequote_tokens(&tokens);
-    merge_variable_tokens(tokens); // IMPORTANT : voir la discussion précédente
+// void expansion_all_tokens(t_token *tokens, t_env *env)
+// {
+//     t_token *curr = tokens;
+//     fix_dollar_doublequote_tokens(&tokens);
+//     merge_variable_tokens(tokens); // IMPORTANT : voir la discussion précédente
 
-    while (curr)
-    {
-        if (is_in_heredoc(curr))
-        {
-            if (curr->type == TOKEN_DQUOTE)
-                curr->value = remove_dquotes(curr->value);
-            else if (curr->type == TOKEN_SQUOTE)
-                curr->value = remove_squotes(curr->value);
-            curr->type = TOKEN_WORD;
-            curr = curr->next;
-            continue;
-        }
-        if (curr->type == TOKEN_VARIABLE && curr->value && curr->value[0] == '$')
-        {
-            // Expansion directe pair/impair
-            int i = 0;
-            int dollar_count = 0;
-            while (curr->value[i] == '$')
-            {
-                dollar_count++;
-                i++;
-            }
-            const char *var_name = curr->value + i;
-            char *expanded = NULL;
-            if (var_name[0])
-            {
-                if (dollar_count % 2 == 1) // impair : expansion
-                {
-                    char *val = get_env_value(&env, var_name);
-                    if (val)
-                        expanded = ft_strdup(val);
-                    else
-                        expanded = ft_strdup("");
-                }
-                else // pair : littéral
-                {
-                    expanded = ft_strdup(var_name);
-                }
-            }
-            else
-            {
-                expanded = ft_strdup(curr->value);
-            }
-            free(curr->value);
-            curr->value = expanded;
-            curr->type = TOKEN_WORD;
-        }
-        else if (curr->type == TOKEN_DQUOTE)
-            expand_dquote_token(curr, env);
-        else if (curr->type == TOKEN_SQUOTE)
-            expand_squote_token(curr);
-        curr = curr->next;
-    }
+//     while (curr)
+//     {
+//         if (is_in_heredoc(curr))
+//         {
+//             if (curr->type == TOKEN_DQUOTE)
+//                 curr->value = remove_dquotes(curr->value);
+//             else if (curr->type == TOKEN_SQUOTE)
+//                 curr->value = remove_squotes(curr->value);
+//             curr->type = TOKEN_WORD;
+//             curr = curr->next;
+//             continue;
+//         }
+//         if (curr->type == TOKEN_VARIABLE && curr->value && curr->value[0] == '$')
+//         {
+//             // Expansion directe pair/impair
+//             int i = 0;
+//             int dollar_count = 0;
+//             while (curr->value[i] == '$')
+//             {
+//                 dollar_count++;
+//                 i++;
+//             }
+//             const char *var_name = curr->value + i;
+//             char *expanded = NULL;
+//             if (var_name[0])
+//             {
+//                 if (dollar_count % 2 == 1) // impair : expansion
+//                 {
+//                     char *val = get_env_value(&env, var_name);
+//                     if (val)
+//                         expanded = ft_strdup(val);
+//                     else
+//                         expanded = ft_strdup("");
+//                 }
+//                 else // pair : littéral
+//                 {
+//                     expanded = ft_strdup(var_name);
+//                 }
+//             }
+//             else
+//             {
+//                 expanded = ft_strdup(curr->value);
+//             }
+//             free(curr->value);
+//             curr->value = expanded;
+//             curr->type = TOKEN_WORD;
+//         }
+//         else if (curr->type == TOKEN_DQUOTE)
+//             expand_dquote_token(curr, env);
+//         else if (curr->type == TOKEN_SQUOTE)
+//             expand_squote_token(curr);
+//         else if (curr->type == TOKEN_WORD)
+// 		{
+// 			char *expanded = expand_variables_in_word(curr->value, env);
+//             // printf("hi");
+// 			free(curr->value);
+// 			curr->value = expanded;
+// 		}
+//         curr = curr->next;
+//     }
+// }
+
+
+/*
+** Cas 1 : handle un token dans un heredoc
+*/
+static void	expansion_handle_heredoc(t_token *curr)
+{
+	if (curr->type == TOKEN_DQUOTE)
+		curr->value = remove_dquotes(curr->value);
+	else if (curr->type == TOKEN_SQUOTE)
+		curr->value = remove_squotes(curr->value);
+	curr->type = TOKEN_WORD;
+}
+
+/*
+** Cas 2 : handle un token VARIABLE (seulement $... au début)
+*/
+static void	expansion_handle_variable(t_token *curr, t_env *env)
+{
+	int		i = 0;
+	int		dollar_count = 0;
+	char	*expanded = NULL;
+
+	while (curr->value[i] == '$')
+	{
+		dollar_count++;
+		i++;
+	}
+	const char *var_name = curr->value + i;
+	if (var_name[0])
+	{
+		if (dollar_count % 2 == 1)
+		{
+			char *val = get_env_value(&env, var_name);
+			if (val)
+				expanded = ft_strdup(val);
+			else
+				expanded = ft_strdup("");
+		}
+		else
+			expanded = ft_strdup(var_name);
+	}
+	else
+		expanded = ft_strdup(curr->value);
+	free(curr->value);
+	curr->value = expanded;
+	curr->type = TOKEN_WORD;
+}
+
+/*
+** Cas 3 : handle un token DQUOTE
+*/
+static void	expansion_handle_dquote(t_token *curr, t_env *env)
+{
+	expand_dquote_token(curr, env);
+}
+
+/*
+** Cas 4 : handle un token SQUOTE
+*/
+static void	expansion_handle_squote(t_token *curr)
+{
+	expand_squote_token(curr);
+}
+
+/*
+** Cas 5 : handle un token WORD générique (expansion dans les mots collés)
+*/
+static void	expansion_handle_word(t_token *curr, t_env *env)
+{
+	char *expanded = expand_variables_in_word(curr->value, env);
+	free(curr->value);
+	curr->value = expanded;
+}
+
+/*
+** Fonction principale d'expansion
+*/
+
+static char	*expand_variables_in_string(const char *str, t_env *env)
+{
+	size_t	i = 0, j = 0, len = ft_strlen(str);
+	char	*result = malloc(len * 4 + 32); // Large max
+	if (!result)
+		return (NULL);
+
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			i++;
+			if (str[i] == '?') // $?
+			{
+				char *exit_code = ft_itoa(*ft_get_status());
+				for (size_t k = 0; exit_code && exit_code[k]; k++)
+					result[j++] = exit_code[k];
+				free(exit_code);
+				i++;
+			}
+			else if (ft_isalpha(str[i]) || str[i] == '_')
+			{
+				// $VAR
+				size_t varlen = 0;
+				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
+					varlen++;
+				char *key = malloc(varlen + 1);
+				if (!key) { free(result); return NULL; }
+				for (size_t k = 0; k < varlen; k++)
+					key[k] = str[i + k];
+				key[varlen] = '\0';
+				char *val = get_env_value(&env, key);
+				if (val)
+					for (size_t m = 0; val[m]; m++)
+						result[j++] = val[m];
+				// sinon (var inconnue), rien
+				free(key);
+				i += varlen;
+			}
+			else
+			{
+				// $ suivi d’autre chose (ex: chiffre, symbole, $ tout seul)
+				result[j++] = '$';
+				if (str[i])
+					result[j++] = str[i++];
+			}
+		}
+		else
+			result[j++] = str[i++];
+	}
+	result[j] = '\0';
+	return result;
+}
+void	expansion_all_tokens(t_token *tokens, t_env *env)
+{
+	t_token	*curr = tokens;
+
+	fix_dollar_doublequote_tokens(&tokens);
+	merge_variable_tokens(tokens);
+
+	while (curr)
+	{
+		if (is_in_heredoc(curr))
+		{
+			expansion_handle_heredoc(curr);
+			curr = curr->next;
+			continue;
+		}
+        if ((curr->type == TOKEN_WORD || curr->type == TOKEN_VARIABLE) && curr->value)
+		{
+			char *expanded = expand_variables_in_string(curr->value, env);
+			free(curr->value);
+			curr->value = expanded;
+			curr->type = TOKEN_WORD;
+		}
+		if (curr->type == TOKEN_VARIABLE && curr->value && curr->value[0] == '$')
+			expansion_handle_variable(curr, env);
+		else if (curr->type == TOKEN_DQUOTE)
+			expansion_handle_dquote(curr, env);
+		else if (curr->type == TOKEN_SQUOTE)
+			expansion_handle_squote(curr);
+		else if (curr->type == TOKEN_WORD)
+			expansion_handle_word(curr, env);
+		curr = curr->next;
+	}
 }
