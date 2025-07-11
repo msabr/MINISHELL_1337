@@ -266,6 +266,10 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 				free(key);
 				i += varlen;
 			}
+            else if (ft_isdigit(str[i]))
+            {
+                i++;
+            }
 			else
 			{
 				result[j++] = '$';
