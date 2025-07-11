@@ -30,11 +30,11 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 	while (tok && tok->type != TOKEN_EOF)
 	{
 		// Ignore les tokens vides (déjà supprimés mais sécurité)
-		if (is_arg_token(tok) && (!tok->value || !tok->value[0]))
-		{
-			tok = tok->next;
-			continue;
-		}
+		// if (is_arg_token(tok) && (!tok->value || !tok->value[0]))
+		// {
+		// 	tok = tok->next;
+		// 	continue;
+		// }
 		if (!current)
 		{
 			current = new_command();
@@ -72,7 +72,7 @@ t_cmd	*parse_tokens_to_cmd2s(t_token *tokens)
 {
 	t_cmd	*cmds = NULL;
 
-	remove_empty_token_head(&tokens);
+	// remove_empty_token_head(&tokens);
 	if (!tokens || (tokens->type == TOKEN_EOF && !tokens->next))
 		return (NULL);
 	if (!parse_tokens_loop(tokens, &cmds))

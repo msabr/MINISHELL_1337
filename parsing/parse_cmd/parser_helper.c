@@ -200,10 +200,15 @@ void	remove_empty_token(t_token **tokens)
 void	remove_empty_token_head(t_token **tokens)
 {
 	t_token *tmp;
+
 	while (*tokens && (!(*tokens)->value || (*tokens)->value[0] == '\0'))
 	{
 		tmp = *tokens;
 		*tokens = (*tokens)->next;
+
+		if (*tokens)
+			(*tokens)->prev = NULL;
+
 		free(tmp->value);
 		free(tmp);
 	}
