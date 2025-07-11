@@ -200,48 +200,74 @@ static void	expansion_handle_word(t_token *curr, t_env *env)
 ** Fonction principale d'expansion
 */
 
-static char	*expand_variables_in_string(const char *str, t_env *env)
+#include "../../minishell.h"
+
+char	*expand_variables_in_string(const char *str, t_env *env)
 {
-	size_t	i = 0, j = 0, len = ft_strlen(str);
-	char	*result = malloc(len * 4 + 32); // Large max
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	char	*result;
+
+	i = 0;
+	j = 0;
+	len = ft_strlen(str);
+	result = malloc(len * 4 + 32);
 	if (!result)
 		return (NULL);
-
 	while (str[i])
 	{
 		if (str[i] == '$')
 		{
 			i++;
-			if (str[i] == '?') // $?
+			if (str[i] == '?')
 			{
-				char *exit_code = ft_itoa(*ft_get_status());
-				for (size_t k = 0; exit_code && exit_code[k]; k++)
-					result[j++] = exit_code[k];
+				char	*exit_code;
+				size_t	k;
+
+				exit_code = ft_itoa(*ft_get_status());
+				k = 0;
+				while (exit_code && exit_code[k])
+					result[j++] = exit_code[k++];
 				free(exit_code);
 				i++;
 			}
 			else if (ft_isalpha(str[i]) || str[i] == '_')
 			{
-				// $VAR
-				size_t varlen = 0;
+				size_t	varlen;
+				size_t	k;
+				char	*key;
+				char	*val;
+				size_t	m;
+
+				varlen = 0;
 				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
 					varlen++;
-				char *key = malloc(varlen + 1);
-				if (!key) { free(result); return NULL; }
-				for (size_t k = 0; k < varlen; k++)
+				key = malloc(varlen + 1);
+				if (!key)
+				{
+					free(result);
+					return (NULL);
+				}
+				k = 0;
+				while (k < varlen)
+				{
 					key[k] = str[i + k];
+					k++;
+				}
 				key[varlen] = '\0';
-				char *val = get_env_value(&env, key);
+				val = get_env_value(&env, key);
 				if (val)
-					for (size_t m = 0; val[m]; m++)
-						result[j++] = val[m];
-				// sinon (var inconnue), rien
+				{
+					m = 0;
+					while (val[m])
+						result[j++] = val[m++];
+				}
 				free(key);
 				i += varlen;
 			}
 			else
 			{
-				// $ suivi d’autre chose (ex: chiffre, symbole, $ tout seul)
 				result[j++] = '$';
 				if (str[i])
 					result[j++] = str[i++];
@@ -251,7 +277,7 @@ static char	*expand_variables_in_string(const char *str, t_env *env)
 			result[j++] = str[i++];
 	}
 	result[j] = '\0';
-	return result;
+	return (result);
 }
 void	expansion_all_tokens(t_token *tokens, t_env *env)
 {
