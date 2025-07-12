@@ -57,7 +57,7 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
         if (input[0] != '\0')
         {
             tokens = lexer(input);
-            // print_token_list(tokens);
+            print_token_list(tokens);
             expansion_all_tokens(tokens, *env_list);
             // print_token_list(tokens);
             merge_collapsed_tokens(tokens);
@@ -75,8 +75,7 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
             if (!cmds)
             {
                 free_cmd_list(cmds);
-                printf("hi");
-                // free_token_list(tokens);
+                free_token_list(tokens);
                 free(input);
                 continue;
             }

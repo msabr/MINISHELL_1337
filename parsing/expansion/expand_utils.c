@@ -20,16 +20,16 @@ char **split_words(const char *str)
     return ft_split(str, ' ');
 }
 
-int count_words(const char *str)
-{
-    char **split = split_words(str);
-    int count = 0;
-    while (split && split[count])
-        count++;
-    if (split)
-        free_words(split);
-    return count;
-}
+// int count_words(const char *str)
+// {
+//     char **split = split_words(str);
+//     int count = 0;
+//     while (split && split[count])
+//         count++;
+//     if (split)
+//         free_words(split);
+//     return count;
+// }
 
 // Nettoie le résultat d'expansion (retire quotes)
 char *clean_expansion_result(char *str)
