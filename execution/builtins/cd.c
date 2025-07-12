@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/09 15:14:49 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 17:21:49 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,4 @@ void	cd(t_cmd *cmd, t_env **env_list)
 		add_env_value(env_list, "PWD", cwd);
 	}
 }
-//cd: error retrieving current directory: getcwd: cannot 
-//access parent directories: No such file or directory
+

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:16:36 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 20:04:05 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 17:32:48 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,8 @@ void	configure_environment(t_env **env_list, char **env_array)
 	if (!found_node)
 		add_env_value(env_list, "PATH",
 			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
-	found_node = find_env_node("OLDPWD", *env_list);
-	if (!found_node)
-		add_temporary_env_value(env_list, "OLDPWD");
+	remove_env_variable(env_list, "OLDPWD");
+	add_temporary_env_value(env_list, "OLDPWD");
 }
 
 int	size_of_env_list(t_env *env_list)
@@ -114,4 +113,27 @@ t_env	*copy_env(t_env *env_list)
 		current = current->next;
 	}
 	return (new_list);
+}
+
+int	remove_env_variable(t_env **env_list, const char *key)
+{
+	t_env	*current;
+	t_env	*prev;
+
+	current = *env_list;
+	prev = NULL;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*env_list = current->next;
+			return (0);
+		}
+		prev = current;
+		current = current->next;
+	}
+	return (-1);
 }

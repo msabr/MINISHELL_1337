@@ -85,7 +85,13 @@ minishell> unset PATH
 minishell> tgref
 minishell: tgref: command not found
 ---------------------------------------------
-
+minishell> exit ""
+=== Command 1 ===
+argv: [exit]
+=== End pipeline ===
+exit
+(null)
+minishell> 
 ---------------------------------------------
 
 ---------------------------------------------

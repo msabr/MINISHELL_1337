@@ -6,34 +6,13 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 23:13:57 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 17:31:40 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	remove_env_variable(t_env **env_list, const char *key)
-{
-	t_env	*current;
-	t_env	*prev;
 
-	current = *env_list;
-	prev = NULL;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-		{
-			if (prev)
-				prev->next = current->next;
-			else
-				*env_list = current->next;
-			return (0);
-		}
-		prev = current;
-		current = current->next;
-	}
-	return (-1);
-}
 
 static int	check_env_variable(t_env **env_list, const char *key)
 {
