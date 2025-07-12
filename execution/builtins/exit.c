@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 17:20:20 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 18:14:28 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	exit_shell(t_cmd *cmd)
 	status = 0;
 	if (!cmd->in_pipe)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	printf("%s\n", cmd->args[1]);
 	if (cmd->args[1])
 	{
 		if (valid_number(cmd->args[1]))

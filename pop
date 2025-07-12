@@ -1,0 +1,4 @@
+18:30  up  1:39, 2 users, load averages: 1.19 1.39 1.46
+USER     TTY      FROM              LOGIN@  IDLE WHAT
+msabr    console  -                16:56    1:33 -
+msabr    s000     -                17:11    1:18 -zsh

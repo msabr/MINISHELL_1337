@@ -1,0 +1,10 @@
+Libft
+Makefile
+TODO.todo
+execution
+ll
+main.c
+minishell
+minishell.h
+parsing
+pop

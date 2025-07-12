@@ -29,15 +29,17 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	merge_collapsed_tokens(tokens);
 	if (!check_syntax_errors(tokens, input))
 	{
+		printf("syntax error\n");
 		*status = 258;
-		free_token_list(tokens);
+		// free_token_list(tokens);
 		return (NULL);
 	}
 	cmds = parse_tokens_to_cmd2s(tokens);
 	free_token_list(tokens);
 	if (!cmds)
 	{
-		free_cmd_list(cmds);
+		printf("minishell: parse error\n");
+		// free_cmd_list(cmds);
 		return (NULL);
 	}
 	return (cmds);
@@ -46,7 +48,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 // Execution phase: run commands, handle status, restore fds
 void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 {
-	// print_cmds(cmds);
+	print_cmds(cmds);
 	save_std_fds(cmds);
 	if (cmds->next)
 		*status = exec_multiple_pipes(cmds, env_list);
@@ -75,14 +77,15 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 			if (cmds)
 			{
 				execute_cmds(cmds, env_list, &status);
-				free_cmd_list(cmds);
+				// free_cmd_list(cmds);
 			}
-			free(input);
+			// free(input);
 		}
 		else
-			free(input);
+			// free(input);
 		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
 	}
+	ft_set_status(status);
 }
 
 int	main(int argc, char **argv, char **envp)

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/09 16:15:16 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 18:17:46 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 
 static int	handle_redir_and_builtin(t_cmd *cmds, t_env **env_list)
 {
+	if (!cmds || !cmds->args || !cmds->args[0])
+		return (1);
 	if (is_redirection(cmds))
 	{
 		if (!handle_redirections(cmds))
