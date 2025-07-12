@@ -44,9 +44,31 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 		if (is_arg_token(tok))
 		{
 			arg = merge_argument(&tok);
-			if (!arg || !add_argument(&current->args, arg))
+			if (!arg)
 				return (0);
-			continue ;
+
+			// Vérifie si c'est la commande export
+			if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0) {
+				// Pas de word splitting pour export
+				if (!add_argument(&current->args, arg))
+					return (0);
+			} else {
+				// Word splitting pour les autres commandes
+				char **split_args = ft_split(arg, ' ');
+				int idx = 0;
+				while (split_args && split_args[idx]) {
+					if (!add_argument(&current->args, split_args[idx])) {
+						for (int j = idx; split_args[j]; j++) free(split_args[j]);
+						free(split_args);
+						free(arg);
+						return (0);
+					}
+					idx++;
+				}
+				free(split_args);
+				free(arg);
+			}
+			continue;
 		}
 		if (is_redir(tok->type))
 		{

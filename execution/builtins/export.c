@@ -71,9 +71,7 @@
 
 
 
-#include "builtins.h"
 
-// Vérifie si le nom de variable est valide pour export (POSIX strict)
 static int	is_valid_export_key(const char *str)
 {
 	if (!str || !*str)
@@ -89,7 +87,6 @@ static int	is_valid_export_key(const char *str)
 	return (1);
 }
 
-// Affiche l’erreur export bash-like
 static void	print_export_error(const char *arg)
 {
 	ft_putstr_fd("export: `", STDERR_FILENO);
@@ -97,7 +94,6 @@ static void	print_export_error(const char *arg)
 	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 }
 
-// Expansion quote-safe (pas d’expansion si quotes simples)
 static char	*expand_export_value(const char *value, t_env *env)
 {
 	size_t	len;
@@ -107,83 +103,113 @@ static char	*expand_export_value(const char *value, t_env *env)
 	len = ft_strlen(value);
 	if (len >= 2 && value[0] == '\'' && value[len - 1] == '\'')
 		return (ft_substr(value, 1, len - 2));
-	return expand_variables_in_word((char *)value, env);
+	return (expand_variables_in_word((char *)value, env));
+}
+
+static int	key_has_quote(const char *key)
+{
+	int	k;
+
+	k = 0;
+	while (key && key[k])
+	{
+		if (key[k] == '"' || key[k] == '\'')
+			return (1);
+		k++;
+	}
+	return (0);
+}
+
+static void	handle_no_equal(char *key, t_env **env_list)
+{
+	if (!find_env_node(key, *env_list))
+		add_temporary_env_value(env_list, key);
+}
+
+static void	handle_append_case(t_env **env_list, char *key, char *expanded_value)
+{
+	char	*old;
+	char	*joined;
+
+	old = get_env_value(env_list, key);
+	joined = ft_strjoin(old ? old : "", expanded_value ? expanded_value : "");
+	add_env_value(env_list, key, joined);
+	free(joined);
+}
+
+static void	handle_set_case(t_env **env_list, char *key, char *expanded_value)
+{
+	add_env_value(env_list, key, expanded_value ? expanded_value : "");
+}
+
+static int	parse_export_key(char *arg, char **key)
+{
+	int		eq;
+
+	eq = 0;
+	while (arg[eq] && arg[eq] != '='
+		&& !(arg[eq] == '+' && arg[eq + 1] == '='))
+		eq++;
+	*key = ft_substr(arg, 0, eq);
+	return (eq);
+}
+
+static void	process_export_arg(
+	t_cmd *cmd, t_env **env_list, int i)
+{
+	char	*key;
+	char	*raw_value;
+	char	*expanded_value;
+	int		eq;
+	int		append;
+	int		has_equal;
+
+	eq = parse_export_key(cmd->args[i], &key);
+	if (!key || !is_valid_export_key(key) || key_has_quote(key))
+	{
+		print_export_error(cmd->args[i]);
+		free(key);
+		return ;
+	}
+	append = 0;
+	has_equal = 0;
+	if (cmd->args[i][eq] == '+' && cmd->args[i][eq + 1] == '=')
+	{
+		append = 1;
+		has_equal = 1;
+		raw_value = cmd->args[i] + eq + 2;
+	}
+	else if (cmd->args[i][eq] == '=')
+	{
+		has_equal = 1;
+		raw_value = cmd->args[i] + eq + 1;
+	}
+	else
+		raw_value = NULL;
+	if (!has_equal)
+		handle_no_equal(key, env_list);
+	else
+	{
+		expanded_value = expand_export_value(raw_value, *env_list);
+		if (append)
+			handle_append_case(env_list, key, expanded_value);
+		else
+			handle_set_case(env_list, key, expanded_value);
+		free(expanded_value);
+	}
+	free(key);
 }
 
 void	export(t_cmd *cmd, t_env **env_list)
 {
-	int		i = 1;
-	int		eq, append, has_equal, k, quote_in_key;
-	char	*key;
-	char	*raw_value;
-	char	*expanded_value;
-	char	*old;
-	char	*joined;
+	int	i;
 
+	i = 1;
 	if (!cmd->args || !cmd->args[i])
 		return (export_withot_args(*env_list));
 	while (cmd->args[i])
 	{
-		// Parsing clé/valeur/append
-		eq = 0;
-		while (cmd->args[i][eq] && cmd->args[i][eq] != '='
-			&& !(cmd->args[i][eq] == '+' && cmd->args[i][eq + 1] == '='))
-			eq++;
-		key = ft_substr(cmd->args[i], 0, eq);
-
-		// Vérifie les quotes dans le nom
-		quote_in_key = 0;
-		for (k = 0; key && key[k]; k++)
-			if (key[k] == '"' || key[k] == '\'')
-				quote_in_key = 1;
-
-		if (!key || !is_valid_export_key(key) || quote_in_key)
-		{
-			print_export_error(cmd->args[i]);
-			if (key)
-				free(key);
-			i++;
-			continue;
-		}
-		append = 0;
-		has_equal = 0;
-		if (cmd->args[i][eq] == '+' && cmd->args[i][eq + 1] == '=')
-		{
-			append = 1;
-			has_equal = 1;
-			raw_value = cmd->args[i] + eq + 2;
-		}
-		else if (cmd->args[i][eq] == '=')
-		{
-			has_equal = 1;
-			raw_value = cmd->args[i] + eq + 1;
-		}
-		else
-			raw_value = NULL;
-
-		if (!has_equal)
-		{
-			if (!find_env_node(key, *env_list))
-				add_temporary_env_value(env_list, key);
-			free(key);
-			i++;
-			continue;
-		}
-		expanded_value = expand_export_value(raw_value, *env_list);
-		if (append)
-		{
-			old = get_env_value(env_list, key);
-			joined = ft_strjoin(old ? old : "", expanded_value ? expanded_value : "");
-			add_env_value(env_list, key, joined);
-			free(joined);
-		}
-		else
-		{
-			add_env_value(env_list, key, expanded_value ? expanded_value : "");
-		}
-		free(key);
-		if (expanded_value)
-			free(expanded_value);
+		process_export_arg(cmd, env_list, i);
 		i++;
 	}
 }

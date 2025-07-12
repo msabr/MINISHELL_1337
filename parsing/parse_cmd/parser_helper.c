@@ -38,6 +38,13 @@ char	*merge_argument(t_token **ptok)
 	arg[0] = 0;
 	while (is_arg_token(tok))
 	{
+		if ((tok->type == TOKEN_SQUOTE || tok->type == TOKEN_DQUOTE)
+			&& tok->value[0] == 0 && tok->space_after)
+		{
+			*ptok = tok->next;
+			free(arg);
+			return (ft_strdup(""));
+		}
 		ft_strlcat(arg, tok->value, len + 1);
 		if (tok->space_after)
 		{
