@@ -67,7 +67,7 @@ void main_loop(t_env **env_list, struct termios *saved_termios)
             {
                 status = 258;
                 free_token_list(tokens);
-                printf("Exit status: %d\n", status);
+                printf("Exit status cc: %d\n", status);
                 free(input);
                 continue;
             }
