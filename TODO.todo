@@ -85,19 +85,77 @@ minishell> unset PATH
 minishell> tgref
 minishell: tgref: command not found
 ---------------------------------------------
+minishell> exit ""
+=== Command 1 ===
+argv: [exit]
+=== End pipeline ===
+exit
+(null)
+minishell> 
+---------------------------------------------
+bash-3.2$ export a="ls -la"
+minishell> "$a"
+total 1024
+drwxr-xr-x  13 msabr  2024_khouribga     442 Jul 12 18:14 .
+drwxr-xr-x  42 msabr  2024_khouribga    1428 Jul 12 17:11 ..
+drwxr-xr-x  13 msabr  2024_khouribga     442 Jul 12 18:10 .git
+-rw-r--r--   1 msabr  2024_khouribga     126 Jul 12 17:11 .gitignore
+drwxr-xr-x  51 msabr  2024_khouribga    1734 Jul 12 18:09 Libft
+-rw-r--r--   1 msabr  2024_khouribga    3401 Jul 12 18:09 Makefile
+-rw-r--r--   1 msabr  2024_khouribga    3386 Jul 12 17:21 TODO.todo
+drwxr-xr-x  14 msabr  2024_khouribga     476 Jul 12 18:14 execution
+-rw-r--r--   1 msabr  2024_khouribga    1896 Jul 12 18:12 main.c
+-rw-r--r--   1 msabr  2024_khouribga   14028 Jul 12 18:14 main.o
+-rwxr-xr-x   1 msabr  2024_khouribga  475376 Jul 12 18:14 minishell
+-rw-r--r--   1 msabr  2024_khouribga    8956 Jul 12 17:31 minishell.h
+drwxr-xr-x  18 msabr  2024_khouribga     612 Jul 12 18:14 parsing
+bash-3.2$ "$a"
+bash: ls -la: command not found
+---------------------------------------------
+minishell> export a="     " //space
+minishell> $a
+minishell> export a="                   " //tabs
+minishell> $a
+minishell:              : command not found
+---------------------------------------------
+minishell> "$A"
+minishell> ""$A
+minishell> $A''
+minishell> $A""
+=================================================================
+==3463==ERROR: AddressSanitizer: heap-use-after-free on address 0x603000002b48 at pc 0x0001049b5d4c bp 0x7ffeeb282f30 sp 0x7ffeeb282f28
+READ of size 8 at 0x603000002b48 thread T0
+    #0 0x1049b5d4b in is_in_heredoc+0xbb (minishell:x86_64+0x100039d4b)
+    #1 0x1049b8438 in expansion_all_tokens+0x1d8 (minishell:x86_64+0x10003c438)
+    #2 0x1049c32fd in parse_input+0x2d (minishell:x86_64+0x1000472fd)
+    #3 0x1049c39b3 in main_loop+0x223 (minishell:x86_64+0x1000479b3)
+    #4 0x1049c3b48 in main+0x148 (minishell:x86_64+0x100047b48)
+    #5 0x7fff6c329cc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
 
 ---------------------------------------------
-
+minishell> ls |
+minishell: syntax error near unexpected token `newline'
+Libft           Makefile        TODO.todo       execution       main.c          minishell       minishell.h     parsing         pop
 ---------------------------------------------
-
+minishell> ""
+minishell> ''
+minishell> "       "
+minishell> 
+bash-3.2$ ""
+bash: : command not found
+bash-3.2$ "     "
+bash:      : command not found
+bash-3.2$ '   '
+bash:    : command not found
+bash-3.2$ ''
+bash: : command not found
+bash-3.2$ 
 ---------------------------------------------
-
----------------------------------------------
-
----------------------------------------------
-
----------------------------------------------
-
+minishell> |>
+minishell: syntax error near unexpected token `|'
+minishell: syntax error near unexpected token `newline'
+minishell: parse error
+minishell> 
 ---------------------------------------------
 
 ---------------------------------------------

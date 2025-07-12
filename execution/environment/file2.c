@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:03:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 01:09:41 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 18:05:43 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,27 @@ void	add_temporary_env_value(t_env **env_list, char *key)
 	new_node->export_variable = false;
 	new_node->next = *env_list;
 	*env_list = new_node;
+}
+
+int	remove_env_variable(t_env **env_list, const char *key)
+{
+	t_env	*current;
+	t_env	*prev;
+
+	current = *env_list;
+	prev = NULL;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*env_list = current->next;
+			return (0);
+		}
+		prev = current;
+		current = current->next;
+	}
+	return (-1);
 }

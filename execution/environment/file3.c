@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:16:36 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 20:04:05 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 18:05:48 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,8 @@ void	configure_environment(t_env **env_list, char **env_array)
 	if (!found_node)
 		add_env_value(env_list, "PATH",
 			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
-	found_node = find_env_node("OLDPWD", *env_list);
-	if (!found_node)
-		add_temporary_env_value(env_list, "OLDPWD");
+	remove_env_variable(env_list, "OLDPWD");
+	add_temporary_env_value(env_list, "OLDPWD");
 }
 
 int	size_of_env_list(t_env *env_list)
