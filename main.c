@@ -1,28 +1,28 @@
 #include "minishell.h"
 
-int g_status = 0;
+int	g_status = 0;
 
-char *ft_readline(const char *prompt)
+char	*ft_readline(const char *prompt)
 {
-	char *input;
+	char	*input;
 
 	input = readline(prompt);
 	if (input && *input)
 	{
 		add_history(input);
 	}
-    if (!input)
-    {
-        ft_putstr_fd("exit\n", STDERR_FILENO);
-        exit(0);
-    }
+	if (!input)
+	{
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+		exit(0);
+	}
 	return (input);
 }
 
-t_cmd *parse_input(char *input, t_env *env_list, int *status) 
+t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 {
-	t_token *tokens;
-	t_cmd   *cmds;
+	t_token	*tokens;
+	t_cmd	*cmds;
 
 	tokens = lexer(input);
 	expansion_all_tokens(tokens, env_list);
@@ -44,7 +44,7 @@ t_cmd *parse_input(char *input, t_env *env_list, int *status)
 }
 
 // Execution phase: run commands, handle status, restore fds
-void execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
+void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 {
 	// print_cmds(cmds);
 	save_std_fds(cmds);
@@ -85,17 +85,16 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 	}
 }
 
-
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-    t_env *env_list;
-    struct termios saved_termios;
+	t_env			*env_list;
+	struct termios	saved_termios;
 
-    (void)argc;
-    (void)argv;
-    tcgetattr(STDIN_FILENO, &saved_termios);
-    configure_environment(&env_list, envp);
-    ft_handler_signal();
-    main_loop(&env_list, &saved_termios);
-    return (0);
+	(void)argc;
+	(void)argv;
+	tcgetattr(STDIN_FILENO, &saved_termios);
+	configure_environment(&env_list, envp);
+	ft_handler_signal();
+	main_loop(&env_list, &saved_termios);
+	return (0);
 }

@@ -6,13 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 17:31:40 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 18:03:50 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
-
 
 static int	check_env_variable(t_env **env_list, const char *key)
 {

@@ -12,7 +12,7 @@ READLINE_PATH = $(shell brew --prefix readline)
 READLINE_COMPILE = -I$(READLINE_PATH)/include
 READLINE_LINK = -L$(READLINE_PATH)/lib -lreadline -lhistory -ltermcap
 
-SRC_LIB= Libft/ft_atoi.c Libft/ft_atoll.c Libft/ft_itoa.c Libft/ft_bzero.c Libft/ft_calloc.c Libft/ft_malloc.c Libft/ft_free.c\
+SRC_LIB= Libft/ft_atoi.c Libft/ft_itoa.c Libft/ft_bzero.c Libft/ft_calloc.c Libft/ft_malloc.c Libft/ft_free.c\
 		Libft/ft_isalnum.c Libft/ft_isalpha.c Libft/ft_isascii.c Libft/ft_isdigit.c Libft/ft_isprint.c Libft/ft_isspace.c Libft/ft_is_number.c\
 		Libft/ft_memchr.c Libft/ft_memcmp.c Libft/ft_memcpy.c Libft/ft_memmove.c Libft/ft_memset.c\
 		Libft/ft_putchar_fd.c Libft/ft_putendl_fd.c Libft/ft_putnbr_fd.c Libft/ft_putstr_fd.c\

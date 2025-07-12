@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:16:36 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 17:32:48 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/12 18:05:48 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,27 +113,4 @@ t_env	*copy_env(t_env *env_list)
 		current = current->next;
 	}
 	return (new_list);
-}
-
-int	remove_env_variable(t_env **env_list, const char *key)
-{
-	t_env	*current;
-	t_env	*prev;
-
-	current = *env_list;
-	prev = NULL;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-		{
-			if (prev)
-				prev->next = current->next;
-			else
-				*env_list = current->next;
-			return (0);
-		}
-		prev = current;
-		current = current->next;
-	}
-	return (-1);
 }
