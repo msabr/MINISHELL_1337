@@ -1,0 +1,13 @@
+.git
+.gitignore
+A
+Libft
+Makefile
+TODO.todo
+a
+execution
+main.c
+main.o
+minishell
+minishell.h
+parsing

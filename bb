@@ -1,0 +1,13 @@
+A
+Libft
+Makefile
+TODO.todo
+a
+b
+bb
+execution
+main.c
+main.o
+minishell
+minishell.h
+parsing

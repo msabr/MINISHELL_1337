@@ -26,8 +26,9 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 
 	tokens = lexer(input);
 	expansion_all_tokens(tokens, env_list);
+    print_token_list(tokens);
 	merge_collapsed_tokens(tokens);
-	if (!check_syntax_errors(tokens, input))
+	if (check_syntax_errors(tokens, input))
 	{
 		printf("syntax error\n");
 		*status = 258;
@@ -35,6 +36,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 		return (NULL);
 	}
 	cmds = parse_tokens_to_cmd2s(tokens);
+    print_cmds(cmds);
 	free_token_list(tokens);
 	if (!cmds)
 	{
