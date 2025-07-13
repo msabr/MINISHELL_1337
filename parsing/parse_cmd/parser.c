@@ -21,14 +21,14 @@ static int	handle_redir(t_cmd *cmd, t_token **tok)
 	*tok = target;
 	return (1);
 }
-// static int is_only_spaces(const char *str) {
-//     if (!str) return 1;
-//     for (int i = 0; str[i]; i++) {
-//         if (str[i] != ' ')
-//             return 0;
-//     }
-//     return 1;
-// }
+static int is_only_spaces(const char *str) {
+    if (!str) return 1;
+    for (int i = 0; str[i]; i++) {
+        if (str[i] != ' ')
+            return 0;
+    }
+    return 1;
+}
 static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 {
 	t_cmd	*current = NULL;
@@ -51,15 +51,17 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 		if (is_arg_token(tok))
 		{
 
+			int was_quoted = tok->quoted;  // Sauvegarde le flag quoted
 			arg = merge_argument(&tok);
 			if (!arg)
 				return (0);
 
-			// Vérifie si c'est la commande export
-			if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0) {
-				// Pas de word splitting pour export
-				if (!add_argument(&current->args, arg))
+			if (was_quoted || arg[0] == '\0' || is_only_spaces(arg)) // <-- clé !
+			{
+				// Ajoute l'argument tel quel, même vide ou espaces
+				if (!add_argument(&current->args, arg)) {
 					return (0);
+				}
 			} else {
 				// Word splitting pour les autres commandes
 				char **split_args = ft_split(arg, ' ');
