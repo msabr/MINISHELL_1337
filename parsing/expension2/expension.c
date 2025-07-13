@@ -1,5 +1,14 @@
-
 # include "../../minishell.h"
+/*
+** Vérifie si un token était originellement quoté (simple ou double quote)
+*/
+int	was_originally_quoted(t_token *token)
+{
+	if (!token)
+		return (0);
+	return (token->quoted && (token->type == TOKEN_SQUOTE || token->type == TOKEN_DQUOTE));
+}
+
 /*
 ** Vérifie si le token est dans un heredoc (en regardant derrière les espaces)
 */
@@ -128,10 +137,14 @@ int	is_in_heredoc(t_token *token)
 */
 static void	expansion_handle_heredoc(t_token *curr)
 {
-	if (curr->type == TOKEN_DQUOTE)
-		curr->value = remove_dquotes(curr->value);
-	else if (curr->type == TOKEN_SQUOTE)
-		curr->value = remove_squotes(curr->value);
+	// Utilise le champ quoted pour savoir si le token était quoté à l'origine
+	if (was_originally_quoted(curr))
+	{
+		if (curr->type == TOKEN_DQUOTE)
+			curr->value = remove_dquotes(curr->value);
+		else if (curr->type == TOKEN_SQUOTE)
+			curr->value = remove_squotes(curr->value);
+	}
 	curr->type = TOKEN_WORD;
 }
 

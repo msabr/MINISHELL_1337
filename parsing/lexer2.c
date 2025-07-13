@@ -21,6 +21,16 @@ void	add_token(t_token **head, const char *val,
 	lst_add_back(head, new);
 }
 
+void	add_token_quoted(t_token **head, const char *val,
+			t_token_type type, bool space, int quoted)
+{
+	t_token	*new;
+
+	new = lst_new_token(val, type, space);
+	new->quoted = quoted;
+	lst_add_back(head, new);
+}
+
 size_t	word_length(const char *input, size_t i)
 {
 	size_t	len;
@@ -105,9 +115,9 @@ void	handle_quote(const char *input, size_t *i, t_token **head)
 	if (input[*i + 1] == '\0' || ft_isspace(input[*i + 1]))
 		space = 1;
 	if (quote == '\'')
-		add_token(head, val, TOKEN_SQUOTE, space);
+		add_token_quoted(head, val, TOKEN_SQUOTE, space, 1);
 	else
-		add_token(head, val, TOKEN_DQUOTE, space);
+		add_token_quoted(head, val, TOKEN_DQUOTE, space, 1);
 	(*i)++;
 }
 

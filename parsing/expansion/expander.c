@@ -42,6 +42,11 @@ bool needs_expansion(t_token *token)
 {
     if (!token || !token->value)
         return false;
+    
+    // Si le token était initialement quoté, on peut le détecter avec le champ quoted
+    if (token->quoted && (token->type == TOKEN_SQUOTE || token->type == TOKEN_DQUOTE))
+        return true;
+        
     return (strchr(token->value, '$') || strchr(token->value, '\'') || strchr(token->value, '\"'));
 }
 
