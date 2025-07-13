@@ -50,7 +50,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 // Execution phase: run commands, handle status, restore fds
 void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 {
-	print_cmds(cmds);
+	// print_cmds(cmds);
 	save_std_fds(cmds);
 	if (cmds->next)
 		*status = exec_multiple_pipes(cmds, env_list);

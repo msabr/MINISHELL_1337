@@ -85,7 +85,7 @@ static void	handle_quote(const char *input, size_t *i, t_token **head)
 		type = TOKEN_SQUOTE;
 	else
 		type = TOKEN_DQUOTE;
-	add_token(head, val, type, space);
+	add_token_quoted(head, val, type, space, 1);
 	free(val);
 	if (input[*i])
 		(*i)++;
@@ -161,13 +161,17 @@ t_token	*lexer(const char *input)
 	{
 		if (is_whitespace(input[i]))
 		{
-			while (input[i] && is_whitespace(input[i]))
-				i++;
+			// while (input[i] && is_whitespace(input[i]))
+			// 	i++;
 		}
 		else if (is_operator(input[i]))
 			handle_operator(input, &i, &head);
 		else if (input[i] == '\'' || input[i] == '"')
+		{
 			handle_quote(input, &i, &head);
+			printf("gg");
+
+		}
 		else if (input[i] == '$')
 			handle_variable(input, &i, &head);
 		else

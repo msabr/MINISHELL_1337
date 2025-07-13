@@ -19,6 +19,7 @@ t_token *lst_new_token(const char *value, t_token_type type, bool space_after)
     tok->value = ft_strdup(value);
     tok->type = type;
     tok->space_after = space_after;
+    tok->quoted = 0;
     tok->next = NULL;
     tok->prev = NULL;
     return tok;

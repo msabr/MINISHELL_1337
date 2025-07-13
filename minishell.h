@@ -40,6 +40,7 @@ typedef struct s_token
 	char            *value;        // content of the token
 	t_token_type    type;          // type of token
 	bool            space_after;   // true if space after (useful for expansion/merging)
+	int				quoted;
 	struct s_token  *next;         // next token in list
 	struct s_token  *prev;         // previous token (optional, for easier parsing)
 }   t_token;
@@ -98,6 +99,7 @@ t_token_type	get_operator_type(const char *s);
 char		*ft_strndup(const char *src, size_t n);
 
 void		add_token(t_token **head, const char *val, t_token_type type, bool space);
+void		add_token_quoted(t_token **head, const char *val, t_token_type type, bool space, int quoted);
 t_token		*lst_new_token(const char *value, t_token_type type, bool space_after);
 void		lst_add_back(t_token **list, t_token *new);
 
@@ -116,6 +118,7 @@ void	remove_empty_token(t_token **tokens);
 // new expending
 
 void    expansion_all_tokens(t_token *tokens, t_env *env);
+int     was_originally_quoted(t_token *token);
 void    expand_var_token(t_token *token, t_env *env);
 void    expand_dquote_token(t_token *token, t_env *env);
 void    expand_squote_token(t_token *token);
@@ -162,6 +165,7 @@ void			print_token_list(t_token *list) ;
 t_token_type get_operator_type(const char *s);
 int			is_whitespace(char c);
 void		add_token(t_token **head, const char *val, t_token_type type, bool space);
+void		add_token_quoted(t_token **head, const char *val, t_token_type type, bool space, int quoted);
 void		error_syntax(const char *token);
 //
 t_token*	lexer(const char *input);
