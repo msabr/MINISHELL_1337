@@ -162,8 +162,8 @@ t_token	*lexer(const char *input)
 	{
 		if (is_whitespace(input[i]))
 		{
-			// while (input[i] && is_whitespace(input[i]))
-			// 	i++;
+			while (input[i] && is_whitespace(input[i]))
+				i++;
 		}
 		else if (is_operator(input[i]))
 			handle_operator(input, &i, &head);

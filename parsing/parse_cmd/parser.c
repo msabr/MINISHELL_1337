@@ -60,9 +60,11 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 			{
 				// Ajoute l'argument tel quel, même vide ou espaces
 				if (!add_argument(&current->args, arg)) {
+					printf("hello");
 					return (0);
 				}
-			} else {
+			} 
+			else {
 				// Word splitting pour les autres commandes
 				char **split_args = ft_split(arg, ' ');
 				int idx = 0;

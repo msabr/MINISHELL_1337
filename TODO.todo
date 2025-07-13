@@ -124,19 +124,7 @@ minishell> ls |
 minishell: syntax error near unexpected token `newline'
 Libft           Makefile        TODO.todo       execution       main.c          minishell       minishell.h     parsing         pop
 ---------------------------------------------
-minishell> ""
-minishell> ''
-minishell> "       "
-minishell> 
-bash-3.2$ ""
-bash: : command not found
-bash-3.2$ "     "
-bash:      : command not found
-bash-3.2$ '   '
-bash:    : command not found
-bash-3.2$ ''
-bash: : command not found
-bash-3.2$ 
+
 ---------------------------------------------
 minishell> |>
 minishell: syntax error near unexpected token `|'
