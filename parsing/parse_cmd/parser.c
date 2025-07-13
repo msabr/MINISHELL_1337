@@ -58,6 +58,12 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 			arg = merge_argument(&tok);
 			if (!arg)
 				return (0);
+			
+			if (!was_quoted && arg[0] == '\0' && (current->args == NULL || current->args[0] == NULL)) {
+					free(arg);
+					continue;
+    }
+
 			if (was_expanded && !was_quoted) {
 				tok = tok ->next;
 				printf("hello");
