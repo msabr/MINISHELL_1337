@@ -169,15 +169,29 @@ static void	expansion_handle_variable(t_token *curr, t_env *env)
 		{
 			char *val = get_env_value(&env, var_name);
 			if (val)
+			{
 				expanded = ft_strdup(val);
+				curr->expended = 0;
+
+			}
 			else
+			{	
 				expanded = ft_strdup("");
+				curr->expended = 1;
+			}
+
 		}
 		else
+		{
 			expanded = ft_strdup(var_name);
+			curr->expended = 0;
+		}
 	}
 	else
+	{
 		expanded = ft_strdup(curr->value);
+		curr->expended = 0;
+	}
 	free(curr->value);
 	curr->value = expanded;
 	curr->type = TOKEN_WORD;
@@ -213,7 +227,6 @@ static void	expansion_handle_word(t_token *curr, t_env *env)
 ** Fonction principale d'expansion
 */
 
-#include "../../minishell.h"
 
 char	*expand_variables_in_string(const char *str, t_env *env)
 {

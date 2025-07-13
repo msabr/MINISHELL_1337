@@ -175,6 +175,7 @@ void	number_before_dollar(t_token *token)
 {
 	free(token->value);
 	token->value = strdup("");
+	token->expended = 1;
 }
 
 void	expand_env_dollar(t_token *token, t_env *env)
@@ -195,9 +196,15 @@ void	expand_env_dollar(t_token *token, t_env *env)
 	}
 	free(token->value);
 	if (!val)
+	{
 		token->value = strdup("");
+		token->expended = 1;
+	}
 	else
+	{
 		token->value = val;
+		token->expended = 0;
+	}
 	free(key_val);
 }
 

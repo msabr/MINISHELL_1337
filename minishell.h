@@ -41,6 +41,7 @@ typedef struct s_token
 	t_token_type    type;          // type of token
 	bool            space_after;   // true if space after (useful for expansion/merging)
 	int				quoted;
+	int				expended;
 	struct s_token  *next;         // next token in list
 	struct s_token  *prev;         // previous token (optional, for easier parsing)
 }   t_token;

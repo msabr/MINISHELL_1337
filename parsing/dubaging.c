@@ -32,12 +32,13 @@ void print_token_list(t_token *list) {
     int i = 0;
     printf("=== TOKEN LIST ===\n");
     while (list) {
-        printf("[%d] type: %-12s | value: \"%s\" | space_after: %d | quoted: %d\n",
+        printf("[%d] type: %-12s | value: \"%s\" | space_after: %d | quoted: %d | expended: %d\n",
             i++,
             token_type_name(list->type),
             list->value ? list->value : "(null)",
             list->space_after,
-            list->quoted
+            list->quoted,
+            list->expended
         );
         list = list->next;
     }

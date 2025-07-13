@@ -51,10 +51,19 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 		if (is_arg_token(tok))
 		{
 
-			int was_quoted = tok->quoted;  // Sauvegarde le flag quoted
+			
+
+			int was_quoted = tok->quoted;
+			int was_expanded = tok->expended;
 			arg = merge_argument(&tok);
 			if (!arg)
 				return (0);
+			if (was_expanded && !was_quoted) {
+				tok = tok ->next;
+				printf("hello");
+				free(arg);
+				continue;
+			}
 
 			if (was_quoted || arg[0] == '\0' || is_only_spaces(arg)) // <-- clé !
 			{
