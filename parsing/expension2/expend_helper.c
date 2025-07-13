@@ -225,6 +225,7 @@ char	*remove_dquotes(char *str)
 void fix_dollar_doublequote_tokens(t_token **head) {
     t_token *token = *head;
     while (token && token->next) {
+
         if (token->type == TOKEN_VARIABLE &&
             token->value && token->value[0] == '$' &&
             token->next->type == TOKEN_DQUOTE)
@@ -242,16 +243,13 @@ void fix_dollar_doublequote_tokens(t_token **head) {
             // On peut transformer le DQUOTE en WORD pour la suite
             dquote_token->type = TOKEN_WORD;
 
-            // Libérer le token "$"
-            free(to_remove->value);
-            free(to_remove);
-
             token = dquote_token; // continuer sur la suite
         } else {
             token = token->next;
         }
     }
 }
+
 
 char *expand_many_dollars(const char *str, t_env *env)
 {

@@ -21,7 +21,14 @@ static int	handle_redir(t_cmd *cmd, t_token **tok)
 	*tok = target;
 	return (1);
 }
-
+// static int is_only_spaces(const char *str) {
+//     if (!str) return 1;
+//     for (int i = 0; str[i]; i++) {
+//         if (str[i] != ' ')
+//             return 0;
+//     }
+//     return 1;
+// }
 static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 {
 	t_cmd	*current = NULL;
@@ -43,6 +50,7 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 		}
 		if (is_arg_token(tok))
 		{
+
 			arg = merge_argument(&tok);
 			if (!arg)
 				return (0);

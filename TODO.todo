@@ -118,19 +118,6 @@ minishell> export a="                   " //tabs
 minishell> $a
 minishell:              : command not found
 ---------------------------------------------
-minishell> "$A"
-minishell> ""$A
-minishell> $A''
-minishell> $A""
-=================================================================
-==3463==ERROR: AddressSanitizer: heap-use-after-free on address 0x603000002b48 at pc 0x0001049b5d4c bp 0x7ffeeb282f30 sp 0x7ffeeb282f28
-READ of size 8 at 0x603000002b48 thread T0
-    #0 0x1049b5d4b in is_in_heredoc+0xbb (minishell:x86_64+0x100039d4b)
-    #1 0x1049b8438 in expansion_all_tokens+0x1d8 (minishell:x86_64+0x10003c438)
-    #2 0x1049c32fd in parse_input+0x2d (minishell:x86_64+0x1000472fd)
-    #3 0x1049c39b3 in main_loop+0x223 (minishell:x86_64+0x1000479b3)
-    #4 0x1049c3b48 in main+0x148 (minishell:x86_64+0x100047b48)
-    #5 0x7fff6c329cc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
 
 ---------------------------------------------
 minishell> ls |
@@ -158,10 +145,10 @@ minishell: parse error
 minishell> 
 ---------------------------------------------
 
----------------------------------------------
+---------------------------------------------       
 
 ---------------------------------------------
-
+	
 ---------------------------------------------
 
 ---------------------------------------------

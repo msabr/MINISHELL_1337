@@ -289,6 +289,8 @@ void	expansion_all_tokens(t_token *tokens, t_env *env)
 
 	fix_dollar_doublequote_tokens(&tokens);
 	merge_variable_tokens(tokens);
+	// remove_empty_token(&tokens);
+	curr = tokens;
 
 	while (curr)
 	{

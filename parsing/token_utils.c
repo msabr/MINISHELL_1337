@@ -12,13 +12,14 @@
 
 #include "../minishell.h"
 
-t_token *lst_new_token(const char *value, t_token_type type, bool space_after)
+t_token *lst_new_token(const char *value, t_token_type type, bool space_after,int quoted)
 {
     t_token *tok = ft_malloc(sizeof(t_token));
     if (!tok) return NULL;
     tok->value = ft_strdup(value);
     tok->type = type;
     tok->space_after = space_after;
+    tok->quoted = quoted;
     tok->next = NULL;
     tok->prev = NULL;
     return tok;

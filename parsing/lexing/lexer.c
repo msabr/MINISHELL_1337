@@ -64,6 +64,7 @@ static void	handle_quote(const char *input, size_t *i, t_token **head)
 	quote = input[*i];
 	(*i)++;
 	start = *i;
+	
 	if (!is_quote_closed(input, start, quote))
 	{
 		error_syntax("unclosed quote");

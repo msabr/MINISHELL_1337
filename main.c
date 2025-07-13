@@ -26,6 +26,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 
 	tokens = lexer(input);
 	expansion_all_tokens(tokens, env_list);
+    // remove_empty_token(&tokens);
     print_token_list(tokens);
 	merge_collapsed_tokens(tokens);
 	if (check_syntax_errors(tokens, input))
@@ -50,7 +51,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 // Execution phase: run commands, handle status, restore fds
 void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 {
-	print_cmds(cmds);
+	// print_cmds(cmds);
 	save_std_fds(cmds);
 	if (cmds->next)
 		*status = exec_multiple_pipes(cmds, env_list);
