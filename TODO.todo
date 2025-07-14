@@ -132,7 +132,8 @@ minishell: syntax error near unexpected token `newline'
 minishell: parse error
 minishell> 
 ---------------------------------------------
-
+"$FGFGFGF;"
+;: command not found
 ---------------------------------------------       
 
 ---------------------------------------------

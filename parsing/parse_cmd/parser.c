@@ -50,9 +50,6 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 		}
 		if (is_arg_token(tok))
 		{
-
-			
-
 			int was_quoted = tok->quoted;
 			int was_expanded = tok->expended;
 			arg = merge_argument(&tok);
@@ -60,13 +57,11 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 				return (0);
 			
 			if (!was_quoted && arg[0] == '\0' && (current->args == NULL || current->args[0] == NULL)) {
-					free(arg);
-					continue;
-    }
-
+				free(arg);
+				continue;
+			}
 			if (was_expanded && !was_quoted) {
 				tok = tok ->next;
-				printf("hello");
 				free(arg);
 				continue;
 			}
@@ -79,6 +74,11 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 					return (0);
 				}
 			} 
+			if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0) {
+				// Pas de word splitting pour export
+				if (!add_argument(&current->args, arg))
+					return (0);
+			}
 			else {
 				// Word splitting pour les autres commandes
 				char **split_args = ft_split(arg, ' ');
