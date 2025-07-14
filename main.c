@@ -8,9 +8,7 @@ char	*ft_readline(const char *prompt)
 
 	input = readline(prompt);
 	if (input && *input)
-	{
 		add_history(input);
-	}
 	if (!input)
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
@@ -19,7 +17,7 @@ char	*ft_readline(const char *prompt)
 	if (g_status == SIGINT)
 	{
 		ft_set_status(1);
-
+		g_status = 0;
 	}
 	return (input);
 }
@@ -93,6 +91,7 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 			// free(input);
 		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
 	}
+	rl_clear_history();
 }
 
 int	main(int argc, char **argv, char **envp)

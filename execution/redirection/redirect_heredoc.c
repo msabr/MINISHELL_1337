@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 20:17:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/08 17:08:01 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/14 19:41:51 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,11 +153,12 @@ int	redirect_heredoc(t_cmd  *cmd, t_env *env)
 			if (cmd->redirs->fd_in == -3)
 			{
 				cmd->redirs->exit_status = 1;
-				return ;
+				return (-1);
 			}
 		}
 		if (flag)
-			return ;
+			return (-1);
 		cmd = cmd->next;
 	}
+	return (0);
 }

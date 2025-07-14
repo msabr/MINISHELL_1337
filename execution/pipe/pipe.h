@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:32:29 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/14 17:11:03 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/14 17:34:31 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	init_execargs(t_execargs *args, t_cmd *cmds, t_env **env_list);
 int		setup_pipes_and_pids(t_execargs *args, pid_t **pids);
 int		handle_fork_error(pid_t *pids, t_execargs *args);
 void	cleanup_and_wait(pid_t *pids, t_execargs *args, int *status);
+int	handle_exit_status_multiple_pipes(pid_t *pids, t_execargs args);
 int		exec_multiple_pipes(t_cmd *cmds, t_env **env_list);
 
 #endif

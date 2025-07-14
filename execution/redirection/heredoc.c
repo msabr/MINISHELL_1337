@@ -6,130 +6,209 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:58 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/08 18:15:28 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/14 19:41:24 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../minishell.h"
+#include "../../minishell.h"
 
-// int	valide_delimiter(int type)
+// static int	parent_heredoc(t_heredoc *here, pid_t pid)
 // {
-// 	return (type == STRING || type == SINGLE_Q || type == DOUBLE_Q
-// 		|| type == VAR || type == DOUBLE_DLR || type == EXIT_STATUS);
-// }
+// 	int	status;
+// 	int	exit_code;
 
-// char	*ft_delimiter(t_token_node **debut, int *flag)
-// {
-// 	t_token_node	*cur;
-// 	char			*delimiter;
-
-// 	delimiter = NULL;
-// 	cur = (*debut)->next;
-// 	if (cur && cur->type == SPC)
-// 		cur = cur->next;
-// 	while (cur && valide_delimiter(cur->type))
+// 	close(here->fd_write);
+// 	waitpid(pid, &status, 0);
+// 	if (WIFSIGNALED(status))
 // 	{
-// 		if (!(*flag) && (cur->type == SINGLE_Q || cur->type == DOUBLE_Q))
-// 			(*flag) = 42;
-// 		if (!delimiter)
-// 			delimiter = ft_strdup("");
-// 		delimiter = ft_strjoin(delimiter, cur->value);
-// 		cur = cur->next;
+// 		close(here->fd_read);
+// 		set_exit_status(1);
+// 		return (1);
 // 	}
-// 	return (delimiter);
-// }
-
-// void	ft_herdoc(t_token_node *debut, t_env_var *env, t_minishell *data)
-// {
-// 	int				flag;
-// 	char			*delimiter;
-// 	t_token_node	*cur;
-
-// 	cur = NULL;
-// 	flag = 0;
-// 	while (debut)
+// 	else if (WIFEXITED(status))
 // 	{
-// 		if (debut->type == HEREDOC)
+// 		exit_code = WEXITSTATUS(status);
+// 		if (exit_code == 130 || exit_code != 0)
 // 		{
-// 			if (verify_cmd(cur, NULL, false) == -1)
-// 				break ;
-// 			delimiter = ft_delimiter(&debut, &flag);
-// 			if (!delimiter)
-// 				break ;
-// 			debut->fd_hrd = readline_hdc(delimiter, env, flag, data);
-// 			if (debut->fd_hrd == -3)
-// 			{
-// 				data->exit_status = 1;
-// 				return ;
-// 			}
+// 			close(here->fd_read);
+// 			set_exit_status(1);
+// 			return (1);
 // 		}
-// 		add_lst_back_token(&cur, new_token(debut->type, debut->value, -3));
-// 		debut = debut->next;
 // 	}
+// 	return (0);
 // }
 
-
-// int	write_to_file(char *buffer)
+// static int	child_heredoc(t_heredoc *here)
 // {
-// 	char	*file_tmp;
-// 	int		i;
-// 	int		fd;
-// 	int		fd_read;
+// 	pid_t	pid;
 
-// 	file_tmp = ft_strdup("hiba.txt");
-// 	i = 0;
-// 	while (access(file_tmp, F_OK) != -1)
-// 		file_tmp = ft_strjoin("hiba.txt", ft_itoa(i++));
-// 	fd = open(file_tmp, O_CREAT | O_RDWR, 0777);
-// 	fd_read = open(file_tmp, O_RDWR, 0777);
-// 	if (fd < 0)
-// 		write(2, "Error\n", 6);
-// 	if (fd_read < 0)
-// 		write(2, "Error\n", 6);
-// 	if (!buffer)
-// 		buffer = ft_strdup("");
-// 	write(fd, buffer, ft_strlen(buffer));
-// 	close(fd);
-// 	unlink(file_tmp);
-// 	return (fd_read);
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		close(here->fd_read);
+// 		handle_signals();
+// 		here_dic_helper(here);
+// 	}
+// 	else if (pid < 0)
+// 	{
+// 		perror("fork");
+// 		close(here->fd_write);
+// 		close(here->fd_read);
+// 		return (-1);
+// 	}
+// 	return (pid);
 // }
 
-// char	*add_cmd_dn_buffer(char *cmd, char *buffer)
+// static int	open_heredoc(t_heredoc *here)
 // {
-// 	if (!cmd)
-// 		cmd = ft_strdup("");
-// 	if (!buffer)
-// 		buffer = ft_strdup("");
-// 	buffer = ft_strjoin(buffer, cmd);
-// 	buffer = ft_strjoin(buffer, ft_strdup("\n"));
-// 	return (buffer);
+// 	unlink("/tmp/heredoc_temp");
+// 	here->fd_write = open("/tmp/heredoc_temp", O_WRONLY
+// 			| O_CREAT | O_TRUNC, 0666);
+// 	here->fd_read = open("/tmp/heredoc_temp", O_RDONLY);
+// 	if (here->fd_write < 0 || here->fd_read < 0)
+// 	{
+// 		perror("open");
+// 		close(here->fd_write);
+// 		close(here->fd_read);
+// 		return (1);
+// 	}
+// 	unlink("/tmp/heredoc_temp");
+// 	return (0);
 // }
 
-// int	readline_hdc(char *delimiter, t_env_var *env, int flag, t_minishell *data)
+// static int	heredoc_utils(t_heredoc *here)
 // {
-// 	char	*cmd;
-// 	char	*cmd_copy;
-// 	char	*buffer;
+// 	pid_t	pid;
 
-// 	buffer = NULL;
-// 	signal(SIGINT, handel_herdoc);
+// 	if (open_heredoc(here) != 0)
+// 		return (1);
+// 	pid = child_heredoc(here);
+// 	if (pid == -1)
+// 		return (1);
+// 	if (parent_heredoc(here, pid) != 0)
+// 		return (1);
+// 	if (here->index + 1 == here->cmd->heredoc_num)
+// 		here->cmd->fd_heredoc = here->fd_read;
+// 	else
+// 		close(here->fd_read);
+// 	return (0);
+// }
+
+// void	handle_heredoc_sig(int sig)
+// {
+// 	(void)sig;
+// 	write(1, "\n", 1);
+// 	exit(1);
+// }
+
+// void	handle_signals(void)
+// {
+// 	signal(SIGINT, handle_heredoc_sig);
+// 	signal(SIGQUIT, SIG_IGN);
+// }
+
+// int	here_doc(t_cmd *cmd, t_env **env)
+// {
+// 	t_heredoc	    tmp;
+
+// 	tmp = cmd->heredocs;
+// 	while (tmp)
+// 	{
+// 		tmp.index = 0;
+// 		tmp.env = env;
+// 		while (tmp.index < tmp->heredoc_num)
+// 		{
+// 			if (heredoc_utils(&tmp) != 0)
+// 				return (1);
+// 			tmp.index++;
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// 	return (0);
+// }
+void	write_heredoc(int fd_write, char *str, t_env **env, int flag)
+{
+	char	*exp_str;
+
+	if (flag)
+	{
+		write(fd_write, str, ft_strlen(str));
+		write(fd_write, "\n", 1);
+	}
+	else
+	{
+		exp_str = expand_token(str, env);
+		write(fd_write, exp_str, ft_strlen(exp_str));
+		write(fd_write, "\n", 1);
+	}
+}
+
+// void	here_dic_helper(t_heredoc *here)
+// {
+// 	char	*str;
+
+// 	handle_signals();
 // 	while (1)
 // 	{
-// 		cmd = readline("> ");
-// 		cmd_copy = cmd;
-// 		if (!ttyname(0))
-// 			return (free(cmd_copy), open(ttyname(2), O_RDWR), -3);
-// 		if (!cmd)
-// 			return (write_to_file(buffer));
-// 		if (!ft_strcmp(cmd, delimiter))
+// 		str = readline("> ");
+// 		if (!str)
 // 		{
-// 			free(cmd_copy);
-// 			break ;
+// 			close(here->fd_write);
+// 			exit(0);
 // 		}
-// 		if (flag != 42)
-// 			cmd = expand_vars_and_heredoc(cmd, env, data);
-// 		buffer = add_cmd_dn_buffer(cmd, buffer);
-// 		free(cmd_copy);
+// 		if (ft_strcmp(here->cmd->heredoc_delimiters[here->index], str) == 0)
+// 		{
+// 			free(str);
+// 			close(here->fd_write);
+// 			exit(0);
+// 		}
+// 		write_heredoc(here->fd_write, str, here->env, here->cmd->flag);
+// 		free(str);
 // 	}
-// 	return (write_to_file(buffer));
 // }
+
+void	write_heredoc(int fd_write, char *str, t_env **env, int flag)
+{
+	char	*exp_str;
+
+	if (flag)
+	{
+		write(fd_write, str, ft_strlen(str));
+		write(fd_write, "\n", 1);
+	}
+	else
+	{
+		exp_str = expand_token(str, env);
+		write(fd_write, exp_str, ft_strlen(exp_str));
+		write(fd_write, "\n", 1);
+	}
+}
+
+
+int redirect_heredoc(t_cmd *cmds)
+{
+    t_heredoc	*here;
+    char        *input;
+
+    here = cmds->heredocs;
+    handle_signals();
+	while (1)
+    {
+        input = readline("> ");
+        if (!input)
+        {
+            close(here->fd_write);
+            exit(0);
+        }
+        if (ft_strcmp(cmds->heredocs->delimiter, input) == 0)
+        {
+            free(input);
+            close(here->fd_write);
+            return (0);
+        }
+        write_heredoc(here->fd_write, input, here->env, here->flag);
+        free(input);
+    }
+        
+    return (0);
+}

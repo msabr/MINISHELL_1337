@@ -14,7 +14,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# include <signal.h>
 # include <termios.h>
 // # include "parsing/expension2/expansion.h"
 
@@ -73,16 +72,25 @@ typedef struct s_redir
 	int				fd_in;
 	int				fd_out;
 	int				exit_status;
-	char			*delimiter_heredoc;
-	char			*heredoc_content;
 	struct s_redir	*next;
 }	t_redir;
 
+typedef struct s_heredoc
+{
+	char	*delimiter;
+	int		fd_read;
+	int		heredoc_num;
+	int		fd_write;
+	int		index;
+	int		flag; // 1 if the heredoc is quoted, 0 if not
+	t_env	**env;
+}	t_heredoc;
 
 typedef struct s_cmd
 {
 	char			**args;
-	t_redir			*redirs; 
+	t_redir			*redirs;
+	t_heredoc		*heredocs;
 	bool			in_pipe; 
 	int				exit_status;
 	struct s_cmd	*next;
@@ -264,7 +272,7 @@ void	restore_std_fds(t_cmd *cmds);
 int		redirect_stdin(char *file_name);
 int		redirect_overwrite(char *file_name);
 int		redirect_append(char *file_name);
-bool	handle_redirections(t_cmd *cmds);
+bool	handle_redirections(t_cmd *cmds, t_env *env);
 
 //error handling functions
 int	print_dir_error(char *cmd);
@@ -275,5 +283,8 @@ void print_exit_error(const char *arg);
 
 //main functions
 void main_loop(t_env **env_list, struct termios *saved_termios);
+
+
+
 
 #endif

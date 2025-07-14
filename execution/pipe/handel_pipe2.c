@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:33:32 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/14 17:10:46 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/14 19:44:24 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	exec_child(t_cmd *cur, t_execargs *args, int i)
 	redirect_pipes(args, i);
 	cur->in_pipe = true;
 	if (is_redirection(cur))
-		if (!handle_redirections(cur))
+		if (!handle_redirections(cur, *args->env_list))
 			exit(EXIT_FAILURE);
 	if (is_builtin(cur->args[0]))
 	{
