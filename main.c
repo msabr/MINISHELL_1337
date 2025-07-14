@@ -16,6 +16,11 @@ char	*ft_readline(const char *prompt)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 		exit(0);
 	}
+	if (g_status == SIGINT)
+	{
+		ft_set_status(1);
+
+	}
 	return (input);
 }
 
@@ -57,8 +62,8 @@ void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 		*status = exec_multiple_pipes(cmds, env_list);
 	else
 		*status = execve_simple_cmd(cmds, env_list);
-	*status = handle_exit_status(*status);
 	restore_std_fds(cmds);
+	ft_set_status(*status);
 	signal(SIGINT, handel_ctl_c);
 }
 
@@ -84,11 +89,10 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 			}
 			// free(input);
 		}
-		else
+		// else
 			// free(input);
 		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
 	}
-	ft_set_status(status);
 }
 
 int	main(int argc, char **argv, char **envp)
