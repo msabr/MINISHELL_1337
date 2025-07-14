@@ -66,18 +66,22 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 				continue;
 			}
 
-			if (was_quoted || arg[0] == '\0' || is_only_spaces(arg)) // <-- clé !
+			if (was_quoted || arg[0] == '\0' || is_only_spaces(arg))
 			{
-				// Ajoute l'argument tel quel, même vide ou espaces
+				// Ajoute l'argument tel quel, structure prend possession de arg
 				if (!add_argument(&current->args, arg)) {
-					printf("hello");
+					free(arg); // en cas d'échec d'ajout, on free
 					return (0);
 				}
-			} 
-			if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0) {
-				// Pas de word splitting pour export
-				if (!add_argument(&current->args, arg))
+				arg = NULL; // ne pas le free plus tard
+			}
+			else if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0) {
+				// export = pas de word splitting, mais il ne faut pas ajouter deux fois le même pointeur !
+				if (!add_argument(&current->args, arg)) {
+					free(arg);
 					return (0);
+				}
+				arg = NULL;
 			}
 			else {
 				// Word splitting pour les autres commandes
