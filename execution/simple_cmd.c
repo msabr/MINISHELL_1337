@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 18:17:46 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/14 19:44:20 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,7 @@ void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 	signal(SIGQUIT, SIG_DFL);
 	if (!cmds || !cmds->args || !cmds->args[0])
 		exit(EXIT_FAILURE);
-	if (is_redirection(cmds))
-	{
-		if (!handle_redirections(cmds))
-		{
-			ft_putstr_fd("Redirection error\n", STDERR_FILENO);
-			exit(EXIT_FAILURE);
-		}
-	}
-	if (is_builtin(cmds->args[0]))
-		execve_builtin(cmds, env_list);
-	else
-		execve(path, cmds->args, list_to_env(*env_list));
+	execve(path, cmds->args, list_to_env(*env_list));
 	if (!path || !*path)
 		perror("minishell");
 	exit(EXIT_FAILURE);
@@ -65,13 +54,15 @@ void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 
 static int	handle_redir_and_builtin(t_cmd *cmds, t_env **env_list)
 {
-	if (!cmds || !cmds->args || !cmds->args[0])
+	if (!cmds)
 		return (1);
 	if (is_redirection(cmds))
 	{
-		if (!handle_redirections(cmds))
+		if (!handle_redirections(cmds, *env_list))
 			return (1);
 	}
+	if (!cmds->args || !cmds->args[0])
+		return (1);
 	if (is_builtin(cmds->args[0]))
 	{
 		execve_builtin(cmds, env_list);

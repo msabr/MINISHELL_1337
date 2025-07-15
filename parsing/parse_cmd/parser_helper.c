@@ -97,8 +97,9 @@ t_redir	*new_redir(t_token_type type, char *filename, char *delimiter_heredoc)
 	new->fd_in = -1;
 	new->fd_out = -1;
 	new->exit_status = 0;
-	new->delimiter_heredoc = delimiter_heredoc;
-	new->heredoc_content = NULL;
+	(void)delimiter_heredoc; // Pour éviter l'avertissement si non utilisé
+	// new->delimiter_heredoc = delimiter_heredoc;
+	// new->heredoc_content = NULL;
 	new->next = NULL;
 	return (new);
 }
@@ -165,7 +166,7 @@ void	free_cmd_list(t_cmd *cmds)
 		{
 			rtmp = cmds->redirs->next;
 			free(cmds->redirs->filename);
-			free(cmds->redirs->delimiter_heredoc);
+			// free(cmds->redirs->delimiter_heredoc);
 			free(cmds->redirs);
 			cmds->redirs = rtmp;
 		}

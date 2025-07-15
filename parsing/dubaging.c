@@ -45,35 +45,35 @@ void print_token_list(t_token *list) {
     printf("=== END OF LIST ===\n");
 }
 
-static void print_redirs(t_redir *r)
-{
-    while (r)
-    {
-        if (r->type == TOKEN_REDIR_IN)
-            printf("  [redir]   <  %s\n", r->filename);
-        else if (r->type == TOKEN_REDIR_OUT)
-            printf("  [redir]   >  %s\n", r->filename);
-        else if (r->type == TOKEN_REDIR_APPEND)
-            printf("  [redir]  >>  %s\n", r->filename);
-        else if (r->type == TOKEN_HEREDOC)
-            printf("  [redir]  <<  %s\n", r->delimiter_heredoc);
-        r = r->next;
-    }
-}
+// static void print_redirs(t_redir *r)
+// {
+//     while (r)
+//     {
+//         if (r->type == TOKEN_REDIR_IN)
+//             printf("  [redir]   <  %s\n", r->filename);
+//         else if (r->type == TOKEN_REDIR_OUT)
+//             printf("  [redir]   >  %s\n", r->filename);
+//         else if (r->type == TOKEN_REDIR_APPEND)
+//             printf("  [redir]  >>  %s\n", r->filename);
+//         else if (r->type == TOKEN_HEREDOC)
+//             printf("  [redir]  <<  %s\n", r->delimiter_heredoc);
+//         r = r->next;
+//     }
+// }
 
-static void print_heredocs(t_redir *r)
-{
-    while (r)
-    {
-        if (r->type == TOKEN_HEREDOC)
-        {
-            printf("  [heredoc] delimiter: %s\n", r->delimiter_heredoc);
-            if (r->heredoc_content)
-                printf("    heredoc_content: %s\n", r->heredoc_content);
-        }
-        r = r->next;
-    }
-}
+// static void print_heredocs(t_redir *r)
+// {
+//     while (r)
+//     {
+//         if (r->type == TOKEN_HEREDOC)
+//         {
+//             printf("  [heredoc] delimiter: %s\n", r->delimiter_heredoc);
+//             if (r->heredoc_content)
+//                 printf("    heredoc_content: %s\n", r->heredoc_content);
+//         }
+//         r = r->next;
+//     }
+// }
 
 void print_cmds(t_cmd *cmds)
 {
@@ -88,8 +88,8 @@ void print_cmds(t_cmd *cmds)
                 printf(" [%s]", cmds->args[j]);
         }
         printf("\n");
-        print_redirs(cmds->redirs);
-        print_heredocs(cmds->redirs);
+        // print_redirs(cmds->redirs);
+        // print_heredocs(cmds->redirs);
         if (cmds->next)
             printf("|\n");
         cmds = cmds->next;
