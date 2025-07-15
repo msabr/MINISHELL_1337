@@ -6,87 +6,34 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:31:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 00:24:48 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/15 15:55:22 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe.h"
 
-int	count_cmds(t_cmd *cmds)
+void	init_execargs(t_execargs *args, t_cmd *cmds, t_env **env_list)
 {
-	int	count;
-
-	count = 0;
-	while (cmds)
-	{
-		count++;
-		cmds = cmds->next;
-	}
-	return (count);
+	args->n = count_cmds(cmds);
+	args->pipes = NULL;
+	args->env_list = env_list;
 }
 
-int	**create_pipes(int n)
+int	exec_multiple_pipes(t_cmd *cmds, t_env **env_list)
 {
-	int	**pipes;
-	int	i;
+	t_execargs	args;
+	pid_t		*pids;
+	int			status;
 
-	i = 0;
-	pipes = ft_malloc(sizeof(int *) * (n - 1));
-	if (!pipes)
-		return (perror("malloc"), NULL);
-	while (i < n - 1)
-	{
-		pipes[i] = ft_malloc(sizeof(int) * 2);
-		if (!pipes[i])
-			return (perror("malloc"), NULL);
-		if (pipe(pipes[i]) == -1)
-			return (perror("pipe"), NULL);
-		i++;
-	}
-	return (pipes);
-}
-
-void	close_and_free_pipes(int **pipes, int n)
-{
-	int	i;
-
-	i = 0;
-	while (i < n - 1)
-	{
-		close(pipes[i][0]);
-		close(pipes[i][1]);
-		free(pipes[i]);
-		i++;
-	}
-	free(pipes);
-}
-
-void	kill_all_pids(pid_t *pids, int n)
-{
-	int	i;
-
-	i = 0;
-	while (i < n)
-	{
-		kill(pids[i], SIGKILL);
-		waitpid(pids[i], NULL, 0);
-		i++;
-	}
-}
-
-void	redirect_pipes(t_execargs *args, int i)
-{
-	int	j;
-
-	j = 0;
-	if (i > 0)
-		dup2(args->pipes[i - 1][0], STDIN_FILENO);
-	if (i < args->n - 1)
-		dup2(args->pipes[i][1], STDOUT_FILENO);
-	while (j < args->n - 1)
-	{
-		close(args->pipes[j][0]);
-		close(args->pipes[j][1]);
-		j++;
-	}
+	pids = NULL;
+	init_execargs(&args, cmds, env_list);
+	signal(SIGINT, SIG_IGN);
+	if (args.n == 0)
+		return (0);
+	if (setup_pipes_and_pids(&args, &pids))
+		return (1);
+	if (fork_and_exec(cmds, pids, &args) < 0)
+		return (handle_fork_error(pids, &args));
+	cleanup_and_wait(pids, &args, &status);
+	return (status);
 }

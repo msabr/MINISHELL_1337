@@ -6,85 +6,48 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:33:32 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/14 19:44:24 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/15 15:55:35 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe.h"
 
-void	exec_child(t_cmd *cur, t_execargs *args, int i)
+void	redirect_pipes(t_execargs *args, int i)
 {
-	char	*path;
-
-	if (!cur || !cur->args || !cur->args[0])
-		exit(EXIT_FAILURE);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	redirect_pipes(args, i);
-	cur->in_pipe = true;
-	if (is_redirection(cur))
-		if (!handle_redirections(cur, *args->env_list))
-			exit(EXIT_FAILURE);
-	if (is_builtin(cur->args[0]))
-	{
-		execve_builtin(cur, args->env_list);
-		exit(0);
-	}
-	else
-	{
-		path = get_path(cur->args[0], *args->env_list);
-		if (!path)
-			return (print_cmd_not_found_error(cur->args[0]), exit(127));
-		execve(path, cur->args, list_to_env(*args->env_list));
-	}
-	perror("minishell");
-	exit(1);
-}
-
-int	fork_and_exec(t_cmd *cmds, pid_t *pids, t_execargs *args)
-{
-	t_cmd	*cur;
-	int		i;
-
-	i = 0;
-	cur = cmds;
-	while (i < args->n)
-	{
-		pids[i] = fork();
-		if (pids[i] < 0)
-		{
-			kill_all_pids(pids, i);
-			perror("fork");
-			return (-1);
-		}
-		if (pids[i] == 0)
-			exec_child(cur, args, i);
-		cur = cur->next;
-		i++;
-	}
-	return (0);
-}
-
-int	wait_all(pid_t *pids, int n)
-{
-	int	status;
 	int	j;
 
 	j = 0;
-	status = 0;
-	while (j < n)
+	if (i > 0)
+		dup2(args->pipes[i - 1][0], STDIN_FILENO);
+	if (i < args->n - 1)
+		dup2(args->pipes[i][1], STDOUT_FILENO);
+	while (j < args->n - 1)
 	{
-		waitpid(pids[j], &status, 0);
+		close(args->pipes[j][0]);
+		close(args->pipes[j][1]);
 		j++;
 	}
-	return (status);
 }
 
-void	init_execargs(t_execargs *args, t_cmd *cmds, t_env **env_list)
+int	**create_pipes(int n)
 {
-	args->n = count_cmds(cmds);
-	args->pipes = NULL;
-	args->env_list = env_list;
+	int	**pipes;
+	int	i;
+
+	i = 0;
+	pipes = ft_malloc(sizeof(int *) * (n - 1));
+	if (!pipes)
+		return (perror("malloc"), NULL);
+	while (i < n - 1)
+	{
+		pipes[i] = ft_malloc(sizeof(int) * 2);
+		if (!pipes[i])
+			return (perror("malloc"), NULL);
+		if (pipe(pipes[i]) == -1)
+			return (perror("pipe"), NULL);
+		i++;
+	}
+	return (pipes);
 }
 
 int	setup_pipes_and_pids(t_execargs *args, pid_t **pids)

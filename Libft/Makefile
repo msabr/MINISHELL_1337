@@ -6,13 +6,14 @@
 #    By: msabr <msabr@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 16:26:22 by msabr             #+#    #+#              #
-#    Updated: 2025/07/12 18:09:43 by msabr            ###   ########.fr        #
+#    Updated: 2025/07/15 15:00:18 by msabr            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-CFLAGS = -Wall -Wextra -Werror -Wno-error=overflow
+CFLAGS = -Wall -Wextra -Werror
+
 CC = cc
 
 SRC = ft_atoi.c ft_itoa.c ft_bzero.c ft_calloc.c ft_malloc.c ft_free.c\
@@ -42,9 +43,9 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 	
 clean:
-	rm -f $(OBJS)
+	rm -rf $(OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -rf $(NAME)
 
 re: fclean all

@@ -78,9 +78,6 @@ $(NAME): $(LIBFT) $(OBJS) $(HEADERS)
 $(LIBFT): $(SRC_LIB)
 	make -C Libft
 
-exec:
-	./$(NAME)
-
 clean:
 	$(RM) $(OBJS)
 	make clean -C Libft
@@ -91,7 +88,8 @@ fclean: clean
 
 re: fclean all
 
-run: $(NAME)
+run:
+	clear
 	./$(NAME)
 
 install-readline:
