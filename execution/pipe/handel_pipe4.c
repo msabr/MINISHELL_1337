@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 15:48:57 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/15 15:50:54 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/15 16:17:11 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	set_and_exit(int status)
 void	exec_child(t_cmd *cur, t_execargs *args, int i)
 {
 	char	*path;
+	int		status;
 
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	set_default_signals();
 	redirect_pipes(args, i);
 	cur->in_pipe = true;
 	if (is_redirection(cur))
@@ -38,9 +38,9 @@ void	exec_child(t_cmd *cur, t_execargs *args, int i)
 	}
 	else
 	{
-		path = get_path(cur->args[0], *args->env_list);
-		if (!path)
-			return (print_cmd_not_found_error(cur->args[0]), set_and_exit(127));
+		status = get_exec_path(cur, args->env_list, &path);
+		if (status)
+			set_and_exit(status);
 		execve(path, cur->args, list_to_env(*args->env_list));
 	}
 	perror("minishell");

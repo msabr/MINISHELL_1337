@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/14 19:44:20 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/15 16:13:43 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 
 void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	set_default_signals();
 	if (!cmds || !cmds->args || !cmds->args[0])
 		exit(EXIT_FAILURE);
 	execve(path, cmds->args, list_to_env(*env_list));

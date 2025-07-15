@@ -40,7 +40,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 		return (NULL);
 	}
 	cmds = parse_tokens_to_cmd2s(tokens);
-    // print_cmds(cmds);
+    print_cmds(cmds);
 	free_token_list(tokens);
 	if (!cmds)
 	{
@@ -57,14 +57,11 @@ void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 	// print_cmds(cmds);
 	save_std_fds(cmds);
 	if (cmds->next)
-		exec_multiple_pipes(cmds, env_list);
+		*status = exec_multiple_pipes(cmds, env_list);
 	else
-	{
 		*status = execve_simple_cmd(cmds, env_list);
-		ft_set_status(*status);
-
-	}
 	restore_std_fds(cmds);
+	ft_set_status(*status);
 	signal(SIGINT, handel_ctl_c);
 }
 

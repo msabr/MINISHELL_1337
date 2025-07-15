@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 08:43:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/14 17:03:32 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/15 16:13:28 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ int	handle_exit_status(pid_t pid)
 	}
 	g_status = 0;
 	return (status);
+}
+
+void	set_default_signals(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 void	tt(void)

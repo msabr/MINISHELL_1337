@@ -255,6 +255,7 @@ char	**list_to_env(t_env *env_list);
 // execution functions
 bool	ft_is_dir(const char *path);
 int		exec_multiple_pipes(t_cmd *cmds, t_env **env_list);
+int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path);
 int		execve_simple_cmd(t_cmd *cmds, t_env **env_list);
 char	*get_path(char *cmd, t_env *env_list);
 
@@ -263,6 +264,7 @@ void	tt(void);
 int 	handle_exit_status(pid_t pid);
 void	handel_ctl_c(int sig);
 void	ft_handler_signal(void);
+void	set_default_signals(void);
 
 //redirection functions
 bool	is_redirection(t_cmd *cmds);

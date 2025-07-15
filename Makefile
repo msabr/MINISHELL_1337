@@ -34,7 +34,8 @@ SRC_Builtins =	execution/builtins/cd.c execution/builtins/echo.c execution/built
 SRC_ENV =	execution/environment/file1.c execution/environment/file2.c\
 			execution/environment/file3.c
 
-SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c execution/pipe/handel_pipe3.c\
+SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c \
+			execution/pipe/handel_pipe3.c execution/pipe/handel_pipe4.c
 
 SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
