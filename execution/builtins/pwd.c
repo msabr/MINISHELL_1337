@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 15:50:26 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 16:04:49 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*ft_getcwd(void)
 {
 	char	*tmp;
 	char	*tmp2;
-	
+
 	tmp = getcwd(NULL, 0);
 	if (!tmp)
 		return (NULL);

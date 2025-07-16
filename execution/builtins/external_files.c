@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 20:17:16 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 15:46:09 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 16:04:32 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	execve_builtin(t_cmd *cmd, t_env **env_list)
 {
-	int status;
+	int	status;
 
 	status = 0;
 	if (ft_strcmp(cmd->args[0], "echo") == 0)

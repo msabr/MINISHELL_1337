@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:03:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 14:32:16 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 16:05:43 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	*get_env_value(t_env **env_list, const char *key)
 
 void	add_env_value(t_env **env_list, char *key, char *value)
 {
-	// printf("add_env_value: %s=%s\n", key, value);
 	t_env	*current;
 	t_env	*new_node;
 

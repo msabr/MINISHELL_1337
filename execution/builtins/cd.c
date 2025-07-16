@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 15:44:34 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 16:04:14 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	cd(t_cmd *cmd, t_env **env_list)
 	{
 		path = get_env_value(env_list, "HOME");
 		if (!path)
-			return(ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO), 1);
+			return (ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO), 1);
 		else if (!path[0])
 			return (0);
 	}

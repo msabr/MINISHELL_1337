@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 15:48:57 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 15:40:02 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 16:06:29 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	handle_fork_error(pid_t *pids, t_execargs *args)
 {
 	free(pids);
 	if (args->pipes)
-		close_and_free_pipes(args->pipes, args->n);
+		close_pipes(args->pipes, args->n);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:32:29 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/15 15:55:08 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 16:06:29 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	redirect_pipes(t_execargs *args, int i);
 int		**create_pipes(int n);
 int		setup_pipes_and_pids(t_execargs *args, pid_t **pids);
 int		count_cmds(t_cmd *cmds);
-void	close_and_free_pipes(int **pipes, int n);
+void	close_pipes(int **pipes, int n);
 void	cleanup_and_wait(pid_t *pids, t_execargs *args, int *status);
 void	print_signal(int sig, int *flag);
 int		wait_all(pid_t *pids, int n);

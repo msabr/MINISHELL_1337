@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 13:30:17 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 16:05:08 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	swap_env_nodes(t_env *a, t_env *b)
 	b->key = temp->key;
 	b->value = temp->value;
 	b->export_variable = temp->export_variable;
-	// free(temp);
 }
 
 void	sort_env_list(t_env **env_list)
@@ -95,5 +94,4 @@ void	export_withot_args(t_env *env_list)
 			print_export_variable(current);
 		current = current->next;
 	}
-	// free_env_list(current);
 }
