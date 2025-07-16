@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:03:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/15 20:47:21 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 14:32:16 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	add_temporary_env_value(t_env **env_list, char *key)
 			return ;
 		current = current->next;
 	}
-	new_node = malloc(sizeof(t_env));
+	new_node = ft_malloc(sizeof(t_env));
 	new_node->key = ft_strdup(key);
 	new_node->value = NULL;
 	new_node->export_variable = false;

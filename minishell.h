@@ -65,16 +65,6 @@ typedef struct s_data
 	int            exit_status;
 } t_data;
 
-typedef struct s_redir
-{
-	t_token_type	type;
-	char			*filename;
-	int				fd_in;
-	int				fd_out;
-	int				exit_status;
-	struct s_redir	*next;
-}	t_redir;
-
 typedef struct s_heredoc
 {
 	char	*delimiter;
@@ -86,13 +76,21 @@ typedef struct s_heredoc
 	t_env	**env;
 }	t_heredoc;
 
+typedef struct s_redir
+{
+	t_token_type	type;
+	t_heredoc		*heredoc;
+	char			*filename;
+	int				fd_in;
+	int				fd_out;
+	struct s_redir	*next;
+}	t_redir;
+
 typedef struct s_cmd
 {
 	char			**args;
 	t_redir			*redirs;
-	t_heredoc		*heredocs;
 	bool			in_pipe; 
-	int				exit_status;
 	struct s_cmd	*next;
 }   t_cmd;
 
@@ -238,6 +236,7 @@ char	*set_key(const char *arg);
 void	export(t_cmd *cmd, t_env **env_list);
 void	pwd(t_env **env_list);
 void	unset(t_cmd *cmd, t_env **env_list);
+char	*ft_getcwd(void);
 
 //environment functions
 t_env	*env_to_list(char **env);

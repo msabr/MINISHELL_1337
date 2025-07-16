@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 15:48:57 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/15 16:17:11 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 13:38:16 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	set_and_exit(int status)
 {
 	ft_set_status(status);
-	exit(status);
+	ft_exit(status);
 }
 
 void	exec_child(t_cmd *cur, t_execargs *args, int i)

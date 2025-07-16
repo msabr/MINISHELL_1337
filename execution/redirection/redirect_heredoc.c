@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 20:17:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/14 19:41:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 15:07:10 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char *expand_vars_and_heredoc(char *cmd, t_env *env)
 
 	expanded_cmd = expand_dollars(cmd, &env);
 	heredoc_content = expand_heredoc_content(expanded_cmd, &env, 0, NULL);
-	free(expanded_cmd);
+	// free(expanded_cmd);
 	return (heredoc_content);
 }
 
@@ -77,18 +77,18 @@ int	readline_hdc(char *delimiter, t_env *env, int flag)
 		cmd = readline("> ");
 		cmd_copy = cmd;
 		if (!ttyname(0))
-			return (free(cmd_copy), open(ttyname(2), O_RDWR), -3);
+			return (open(ttyname(2), O_RDWR), -3);
 		if (!cmd)
 			return (write_to_file(buffer));
 		if (!ft_strcmp(cmd, delimiter))
 		{
-			free(cmd_copy);
+			// free(cmd_copy);
 			break ;
 		}
 		if (flag != 42)
 			cmd = expand_vars_and_heredoc(cmd, env);
 		buffer = add_cmd_dn_buffer(cmd, buffer);
-		free(cmd_copy);
+		// free(cmd_copy);
 	}
 	return (write_to_file(buffer));
 }
@@ -104,7 +104,7 @@ int verify_cmd(t_cmd *cmd, char **args, bool is_builtin)
 	}
 	if (cmd->redirs->type == TOKEN_HEREDOC && !cmd->redirs->filename)
 	{
-		cmd->redirs->exit_status = 1;
+		// cmd->redirs->exit_status = 1;
 		return (-1);
 	}
 	return (0);
@@ -152,7 +152,7 @@ int	redirect_heredoc(t_cmd  *cmd, t_env *env)
 			cmd->redirs->fd_in = readline_hdc(delimiter, env, flag);
 			if (cmd->redirs->fd_in == -3)
 			{
-				cmd->redirs->exit_status = 1;
+				// cmd->redirs->exit_status = 1;
 				return (-1);
 			}
 		}

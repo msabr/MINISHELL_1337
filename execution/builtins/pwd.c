@@ -6,17 +6,30 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 18:03:35 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 14:42:12 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
+char	*ft_getcwd(void)
+{
+	char	*tmp;
+	char	*tmp2;
+	
+	tmp = getcwd(NULL, 0);
+	if (!tmp)
+		return (NULL);
+	tmp2 = ft_strdup(tmp);
+	free(tmp);
+	return (tmp2);
+}
+
 void	pwd(t_env **env_list)
 {
 	char	*current_directory;
 
-	current_directory = getcwd(NULL, 0);
+	current_directory = ft_getcwd();
 	if (current_directory)
 	{
 		ft_putendl_fd(current_directory, STDOUT_FILENO);

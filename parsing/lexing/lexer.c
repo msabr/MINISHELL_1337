@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:00:00 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/15 18:04:00 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 13:34:44 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	handle_word(const char *input, size_t *i, t_token **head)
 		space = 0;
 	if (val && val[0] != '\0')
 		add_token(head, val, TOKEN_WORD, space);
-	free(val);
+	// free(val);
 	*i += len;
 }
 
@@ -87,7 +87,7 @@ static void	handle_quote(const char *input, size_t *i, t_token **head)
 	else
 		type = TOKEN_DQUOTE;
 	add_token_quoted(head, val, type, space, 1);
-	free(val);
+	// free(val);
 	if (input[*i])
 		(*i)++;
 }
@@ -125,7 +125,7 @@ static void	handle_variable(const char *input, size_t *i, t_token **head)
 	else
 		space = 0;
 	add_token(head, val, TOKEN_VARIABLE, space);
-	free(val);
+	// free(val);
 	*i += len;
 }
 
@@ -147,7 +147,7 @@ static void	handle_operator(const char *input, size_t *i, t_token **head)
 	else
 		space = 0;
 	add_token(head, val, type, space);
-	free(val);
+	// free(val);
 	*i += len;
 }
 

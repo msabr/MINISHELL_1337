@@ -56,13 +56,13 @@ t_token_type get_operator_type(const char *s) {
     return TOKEN_WORD;
 }
 
-void free_token_list(t_token *head) {
-    t_token *tmp;
-    while (head) {
-        tmp = head->next;
-        if (head->value)
-            free(head->value);
-        free(head);
-        head = tmp;
-    }
-}
+// void free_token_list(t_token *head) {
+//     t_token *tmp;
+//     while (head) {
+//         tmp = head->next;
+//         // if (head->value)
+//         //     free(head->value);
+//         // free(head);
+//         head = tmp;
+//     }
+// }

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:43:46 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/15 15:52:22 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 13:30:46 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ void	close_and_free_pipes(int **pipes, int n)
 	{
 		close(pipes[i][0]);
 		close(pipes[i][1]);
-		free(pipes[i]);
+		// free(pipes[i]);
 		i++;
 	}
-	free(pipes);
+	// free(pipes);
 }
 
 void	cleanup_and_wait(pid_t *pids, t_execargs *args, int *status)
@@ -46,7 +46,7 @@ void	cleanup_and_wait(pid_t *pids, t_execargs *args, int *status)
 		close_and_free_pipes(args->pipes, args->n);
 	*status = wait_all(pids, args->n);
 	ft_set_status(*status);
-	free(pids);
+	// free(pids);
 }
 
 void	print_signal(int sig, int *flag)

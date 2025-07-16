@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 12:36:28 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 13:38:08 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,11 @@ static void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 {
 	set_default_signals();
 	if (!cmds || !cmds->args || !cmds->args[0])
-		exit(EXIT_FAILURE);
+		ft_exit(EXIT_FAILURE);
 	execve(path, cmds->args, list_to_env(*env_list));
 	if (!path || !*path)
 		perror("minishell");
-	exit(EXIT_FAILURE);
+	ft_exit(EXIT_FAILURE);
 }
 
 static int	handle_redir_and_builtin(t_cmd *cmds, t_env **env_list)

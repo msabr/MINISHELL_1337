@@ -61,7 +61,7 @@ void	handle_word(const char *input, size_t *i, t_token **head)
 	if (input[*i + len] == '\0' || ft_isspace(input[*i + len]))
 		space = 1;
 	add_token(head, val, TOKEN_WORD, space);
-	free(val);
+	// free(val);
 	*i += len;
 }
 
@@ -153,7 +153,7 @@ void	handle_variable(const char *input, size_t *i, t_token **head)
 	if (input[*i + len] == '\0' || ft_isspace(input[*i + len]))
 		space = 1;
 	add_token(head, val, TOKEN_VARIABLE, space);
-	free(val);
+	// free(val);
 	*i += len;
 }
 
@@ -181,7 +181,7 @@ void	handle_operator(const char *input, size_t *i, t_token **head)
 	if (input[*i + len] == '\0' || ft_isspace(input[*i + len]))
 		space = 1;
 	add_token(head, val, type, space);
-	free(val);
+	// free(val);
 	*i += len;
 }
 

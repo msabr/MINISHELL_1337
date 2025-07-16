@@ -9,7 +9,7 @@ void expand_token_list_v2(t_token *tokens, t_env **env, int last_status)
         if (curr->type == TOKEN_SQUOTE)
         {
             char *tmp = remove_quotes(curr->value, '\'');
-            free(curr->value);
+            // free(curr->value);
             curr->value = tmp;
         }
         else if (curr->type == TOKEN_DQUOTE)
@@ -20,8 +20,8 @@ void expand_token_list_v2(t_token *tokens, t_env **env, int last_status)
             {
                 char *expanded = expand_quoted_string(curr->value, env, last_status);
                 char *cleaned = remove_quotes(expanded, '\"');
-                free(curr->value);
-                free(expanded);
+                // free(curr->value);
+                // free(expanded);
                 curr->value = cleaned;
             }
         }
@@ -29,8 +29,8 @@ void expand_token_list_v2(t_token *tokens, t_env **env, int last_status)
         {
             char *expanded = expand_unquoted_string(curr->value, env, last_status);
             char *cleaned = clean_expansion_result(expanded);
-            free(curr->value);
-            free(expanded);
+            // free(curr->value);
+            // free(expanded);
             curr->value = cleaned;
         }
         curr = curr->next;
@@ -62,6 +62,6 @@ void expand_single_token(t_token *token, t_env **env, int last_status)
     else
         expanded = expand_unquoted_string(token->value, env, last_status);
 
-    free(token->value);
+    // free(token->value);
     token->value = clean_expansion_result(expanded);
 }

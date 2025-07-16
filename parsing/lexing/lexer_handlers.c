@@ -34,7 +34,7 @@ char	*ft_strndup(const char *src, size_t n)
 	char	*dst;
 	size_t	i;
 
-	dst = (char *)malloc(n + 1);
+	dst = (char *)ft_malloc(n + 1);
 	if (!dst)
 		return (NULL);
 	i = 0;

@@ -42,7 +42,7 @@ char	*merge_argument(t_token **ptok)
 			&& tok->value[0] == 0 && tok->space_after)
 		{
 			*ptok = tok->next;
-			free(arg);
+			// free(arg);
 			return (ft_strdup(""));
 		}
 		ft_strlcat(arg, tok->value, len + 1);
@@ -82,7 +82,7 @@ int	add_argument(char ***args, char *new_arg)
 	}
 	new_args[argc] = new_arg;
 	new_args[argc + 1] = NULL;
-	free(*args);
+	// free(*args);
 	*args = new_args;
 	return (1);
 }
@@ -96,7 +96,7 @@ t_redir	*new_redir(t_token_type type, char *filename, char *delimiter_heredoc)
 	new->filename = filename;
 	new->fd_in = -1;
 	new->fd_out = -1;
-	new->exit_status = 0;
+	// new->exit_status = 0;
 	(void)delimiter_heredoc; // Pour éviter l'avertissement si non utilisé
 	// new->delimiter_heredoc = delimiter_heredoc;
 	// new->heredoc_content = NULL;
@@ -146,34 +146,34 @@ int	add_command(t_cmd **cmds, t_cmd *new)
 	return (1);
 }
 
-void	free_cmd_list(t_cmd *cmds)
-{
-	t_cmd	*tmp;
-	t_redir	*rtmp;
-	int		i;
+// void	free_cmd_list(t_cmd *cmds)
+// {
+// 	t_cmd	*tmp;
+// 	t_redir	*rtmp;
+// 	int		i;
 
-	while (cmds)
-	{
-		tmp = cmds->next;
-		i = 0;
-		if (cmds->args)
-		{
-			while (cmds->args[i])
-				free(cmds->args[i++]);
-			free(cmds->args);
-		}
-		while (cmds->redirs)
-		{
-			rtmp = cmds->redirs->next;
-			free(cmds->redirs->filename);
-			// free(cmds->redirs->delimiter_heredoc);
-			free(cmds->redirs);
-			cmds->redirs = rtmp;
-		}
-		free(cmds);
-		cmds = tmp;
-	}
-}
+// 	while (cmds)
+// 	{
+// 		tmp = cmds->next;
+// 		i = 0;
+// 		if (cmds->args)
+// 		{
+// 			while (cmds->args[i])
+// 				free(cmds->args[i++]);
+// 			free(cmds->args);
+// 		}
+// 		while (cmds->redirs)
+// 		{
+// 			rtmp = cmds->redirs->next;
+// 			free(cmds->redirs->filename);
+// 			// free(cmds->redirs->delimiter_heredoc);
+// 			free(cmds->redirs);
+// 			cmds->redirs = rtmp;
+// 		}
+// 		free(cmds);
+// 		cmds = tmp;
+// 	}
+// }
 
 // Supprime tous les tokens vides (value == NULL ou value[0] == 0) de la liste chainée
 void	remove_empty_token(t_token **tokens)
@@ -194,8 +194,8 @@ void	remove_empty_token(t_token **tokens)
 			else
 				*tokens = curr->next;
 			curr = curr->next;
-			free(to_free->value);
-			free(to_free);
+			// free(to_free->value);
+			// free(to_free);
 		}
 		else
 		{
@@ -217,7 +217,7 @@ void	remove_empty_token_head(t_token **tokens)
 		if (*tokens)
 			(*tokens)->prev = NULL;
 
-		free(tmp->value);
-		free(tmp);
+		// free(tmp->value);
+		// free(tmp);
 	}
 }

@@ -79,7 +79,7 @@ static char	*replace_question(char *str, int index)
 	char	*suffix = ft_substr(str, index + 2, ft_strlen(str) - (index + 2));
 	char	*temp = ft_strjoin(prefix, exit_code);
 	char	*new_str = ft_strjoin(temp, suffix);
-	free(exit_code); free(prefix); free(suffix); free(temp);
+	//free(exit_code); free(prefix); free(suffix); free(temp);
 	return (new_str);
 }
 
@@ -88,7 +88,7 @@ static char	*replace_number(char *str, int index)
 	char	*prefix = ft_substr(str, 0, index);
 	char	*suffix = ft_substr(str, index + 2, ft_strlen(str) - (index + 2));
 	char	*new_str = ft_strjoin(prefix, suffix);
-	free(prefix); free(suffix);
+	//free(prefix); free(suffix);
 	return (new_str);
 }
 
@@ -102,7 +102,7 @@ static char	*replace_dollar(char *str, int index, t_env *env)
 	char	*suffix = ft_strdup(&str[index + ft_strlen(key_val) + 1]);
 	char	*temp = ft_strjoin(prefix, val);
 	char	*new_str = ft_strjoin(temp, suffix);
-	free(key_val); free(prefix); free(suffix); free(temp);
+	//free(key_val); free(prefix); free(suffix); free(temp);
 	return (new_str);
 }
 
@@ -115,21 +115,21 @@ void	expand_dquote_token(t_token *token, t_env *env)
 	int index;
 	while ((index = find_question(result)) != -1)
 	{
-		char *tmp = result;
+		// char *tmp = result;
 		result = replace_question(result, index);
-		free(tmp);
+		// free(tmp);
 	}
 	while ((index = find_number(result)) != -1)
 	{
-		char *tmp = result;
+		// char *tmp = result;
 		result = replace_number(result, index);
-		free(tmp);
+		// free(tmp);
 	}
 	while ((index = find_dollar(result)) != -1)
 	{
-		char *tmp = result;
+		// char *tmp = result;
 		result = replace_dollar(result, index, env);
-		free(tmp);
+		// free(tmp);
 	}
 	// free(token->value);
 	token->value = result;
@@ -144,13 +144,13 @@ char	*remove_squotes(char *str)
 
 	if (str[0] == '\'' && len > 1 && str[len - 1] == '\'')
 	{
-		res = malloc(len - 1);
+		res = ft_malloc(len - 1);
 		if (!res)
 			return (NULL);
 		for (i = 1, j = 0; i < len - 1; i++)
 			res[j++] = str[i];
 		res[j] = 0;
-		free(str);
+		// free(str);
 		return (res);
 	}
 	return (str);
@@ -167,13 +167,13 @@ void	expand_squote_token(t_token *token)
 void	convert_exit_code(t_token *token)
 {
 	char	*exit_code = ft_itoa(g_status);
-	free(token->value);
+	// free(token->value);
 	token->value = exit_code;
 }
 
 void	number_before_dollar(t_token *token)
 {
-	free(token->value);
+	// free(token->value);
 	token->value = strdup("");
 	token->expended = 1;
 }
@@ -194,7 +194,7 @@ void	expand_env_dollar(t_token *token, t_env *env)
 		}
 		env = env->next;
 	}
-	free(token->value);
+	// free(token->value);
 	if (!val)
 	{
 		token->value = strdup("");
@@ -205,7 +205,7 @@ void	expand_env_dollar(t_token *token, t_env *env)
 		token->value = val;
 		token->expended = 0;
 	}
-	free(key_val);
+	// free(key_val);
 }
 
 char	*remove_dquotes(char *str)
@@ -216,13 +216,13 @@ char	*remove_dquotes(char *str)
 
 	if (str[0] == '"' && len > 1 && str[len - 1] == '"')
 	{
-		res = malloc(len - 1);
+		res = ft_malloc(len - 1);
 		if (!res)
 			return (NULL);
 		for (i = 1, j = 0; i < len - 1; i++)
 			res[j++] = str[i];
 		res[j] = 0;
-		free(str);
+		// free(str);
 		return (res);
 	}
 	return (str);
@@ -302,15 +302,15 @@ void merge_variable_tokens(t_token *tokens)
             while (next && next->type == TOKEN_VARIABLE && curr->space_after == 0)
             {
                 char *tmp = ft_strjoin(curr->value, next->value);
-                free(curr->value);
+                // free(curr->value);
                 curr->value = tmp;
 
                 // retire next de la liste chaînée
                 curr->next = next->next;
                 if (next->next)
                     next->next->prev = curr;
-                free(next->value);
-                free(next);
+                // free(next->value);
+                // free(next);
                 next = curr->next;
             }
         }
@@ -324,7 +324,7 @@ char	*expand_variables_in_word(char *str, t_env *env)
 	size_t	j = 0;
 	char	*result;
 	size_t	len = ft_strlen(str);
-	result = malloc(len * 2 + 32);
+	result = ft_malloc(len * 2 + 32);
 	if (!result)
 		return (NULL);
 
@@ -340,7 +340,7 @@ char	*expand_variables_in_word(char *str, t_env *env)
 				size_t k = 0;
 				while (exit_code && exit_code[k])
 					result[j++] = exit_code[k++];
-				free(exit_code);
+				// free(exit_code);
 				i++;
 			}
 			// Cas $VAR classique (alpha/underscore puis alphanum/underscore)
@@ -349,7 +349,7 @@ char	*expand_variables_in_word(char *str, t_env *env)
 				size_t varlen = 0;
 				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
 					varlen++;
-				char *key = malloc(varlen + 1);
+				char *key = ft_malloc(varlen + 1);
 				size_t k = 0;
 				while (k < varlen)
 				{
@@ -365,7 +365,7 @@ char	*expand_variables_in_word(char *str, t_env *env)
 						result[j++] = val[m++];
 				}
 				// sinon rien (var inconnue : string vide)
-				free(key);
+				// free(key);
 				i += varlen;
 			}
 			// Cas $ suivi d'autre chose (ex: chiffre, isolé, etc.)
@@ -392,14 +392,14 @@ void    merge_collapsed_tokens(t_token *tokens)
             && curr->space_after == 0)
         {
             char    *tmp = ft_strjoin(curr->value, curr->next->value);
-            free(curr->value);
+            // free(curr->value);
             curr->value = tmp;
 
             t_token *to_rm = curr->next;
             curr->space_after = to_rm->space_after;
             curr->next = to_rm->next;
-            free(to_rm->value);
-            free(to_rm);
+            // free(to_rm->value);
+            // free(to_rm);
         }
         else
             curr = curr->next;

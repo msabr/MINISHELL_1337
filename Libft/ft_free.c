@@ -6,19 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:27:51 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 23:40:52 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 14:44:30 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static t_gc	**ft_env_gc(void)
-{
-	static t_gc	*gc;
-
-	gc = NULL;
-	return (&gc);
-}
 
 void	ft_free(void)
 {
@@ -29,9 +21,10 @@ void	ft_free(void)
 	while (current)
 	{
 		tmp = current;
-		current = current->next;
-		free(tmp->ptr);
+		if (tmp->ptr)
+			free(tmp->ptr);
 		free(tmp);
+		current = current->next;
 	}
 	*ft_env_gc() = NULL;
 }

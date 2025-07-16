@@ -1,44 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 17:24:49 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 14:36:45 by msabr            ###   ########.fr       */
+/*   Created: 2025/07/16 13:14:16 by msabr             #+#    #+#             */
+/*   Updated: 2025/07/16 14:53:48 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
-t_gc	**ft_env_gc(void)
+#include "../minishell.h"
+
+void	ft_exit(int status)
 {
-	static t_gc	*gc;
-
-	return (&gc);
-}
-
-void	*ft_malloc(size_t size)
-{
-	t_gc	*new;
-	void	*ptr;
-	t_gc	**gc;
-
-	if (size == 0)
-		return (NULL);
-	ptr = malloc(size);
-	if (!ptr)
-		ft_exit(1);
-	new = malloc(sizeof(t_gc));
-	if (!new)
-		ft_exit(1);
-	gc = ft_env_gc();
-	new->ptr = ptr;
-	if (*gc)
-		new->next = *gc;
-	else
-		new->next = NULL;
-	*gc = new;
-	return (ptr);
+    ft_free();
+    rl_clear_history();
+    exit(status);
 }

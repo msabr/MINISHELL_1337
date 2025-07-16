@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:51:42 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 11:42:12 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 13:38:00 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,5 @@ void	print_exit_error(const char *arg)
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 	ft_free();
 	ft_set_status(255);
-	exit(255);
+	ft_exit(255);
 }

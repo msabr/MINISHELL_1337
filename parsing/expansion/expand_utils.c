@@ -38,7 +38,7 @@ char *clean_expansion_result(char *str)
         return NULL;
     char *cleaned = remove_quotes(str, '\'');
     char *final = remove_quotes(cleaned, '\"');
-    free(cleaned);
+    // free(cleaned);
     return final;
 }
 
@@ -47,18 +47,18 @@ char *clean_expansion_result(char *str)
 char *strjoin_and_free(char *a, char *b)
 {
     char *joined = ft_strjoin(a, b);
-    free(a);
-    free(b);
+    // free(a);
+    // free(b);
     return joined;
 }
 
-void free_words(char **words)
-{
-    int i = 0;
-    while (words[i])
-        free(words[i++]);
-    free(words);
-}
+// void free_words(char **words)
+// {
+//     int i = 0;
+//     while (words[i])
+//         free(words[i++]);
+//     free(words);
+// }
 
 // Cherche la valeur d'une variable d'environnement
 // char *get_env_value(t_env **env, const char *key)
@@ -94,7 +94,7 @@ char *expand_dollars(const char *input, t_env **env)
                 char *var_name = ft_substr(input, i + dollar_count, var_len);
                 char *env_val = get_env_value(env, var_name);
                 result = strjoin_and_free(result, env_val ? env_val : "");
-                free(var_name);
+                // free(var_name);
                 i += dollar_count + var_len;
             }
             else

@@ -79,7 +79,7 @@ void	add_argument(char ***args, char *new_arg)
 	}
 	new_args[argc] = new_arg;
 	new_args[argc + 1] = NULL;
-	free(*args);
+	// free(*args);
 	*args = new_args;
 }
 

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 21:29:34 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 18:09:37 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 14:27:59 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,16 @@
 
 typedef struct s_gc
 {
-	void			*ptr;
-	struct s_gc		*next;
-
+	void		*ptr;
+	struct s_gc	*next;
 }	t_gc;
 
+
+t_gc	**ft_env_gc(void);
 int		ft_atoi(const char *str);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t n, size_t size);
+void	ft_exit(int status);
 void	ft_free(void);
 bool	ft_is_number(const char *str);
 bool	ft_isalnum(int c);
@@ -38,7 +40,6 @@ bool	ft_isprint(int c);
 bool	ft_isspace(int c);
 char	*ft_itoa(int n);
 void	*ft_malloc(size_t size);
-void	*ft_malloc_env(size_t size);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 void	*ft_memcpy(void *dst, const void *src, size_t n);

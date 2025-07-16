@@ -57,12 +57,12 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 				return (0);
 			
 			if (!was_quoted && arg[0] == '\0' && (current->args == NULL || current->args[0] == NULL)) {
-				free(arg);
+				// free(arg);
 				continue;
 			}
 			if (was_expanded && !was_quoted) {
 				tok = tok ->next;
-				free(arg);
+				// free(arg);
 				continue;
 			}
 
@@ -70,7 +70,7 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 			{
 				// Ajoute l'argument tel quel, structure prend possession de arg
 				if (!add_argument(&current->args, arg)) {
-					free(arg); // en cas d'échec d'ajout, on free
+					// free(arg); // en cas d'échec d'ajout, on free
 					return (0);
 				}
 				arg = NULL; // ne pas le free plus tard
@@ -78,7 +78,7 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 			else if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0) {
 				// export = pas de word splitting, mais il ne faut pas ajouter deux fois le même pointeur !
 				if (!add_argument(&current->args, arg)) {
-					free(arg);
+					// free(arg);
 					return (0);
 				}
 				arg = NULL;
@@ -89,15 +89,15 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 				int idx = 0;
 				while (split_args && split_args[idx]) {
 					if (!add_argument(&current->args, split_args[idx])) {
-						for (int j = idx; split_args[j]; j++) free(split_args[j]);
-						free(split_args);
-						free(arg);
+						// for (int j = idx; split_args[j]; j++) free(split_args[j]);
+						// free(split_args);
+						// free(arg);
 						return (0);
 					}
 					idx++;
 				}
-				free(split_args);
-				free(arg);
+				// free(split_args);
+				// free(arg);
 			}
 			continue;
 		}
@@ -130,7 +130,7 @@ t_cmd	*parse_tokens_to_cmd2s(t_token *tokens)
 		return (NULL);
 	if (!parse_tokens_loop(tokens, &cmds))
 	{
-		free_cmd_list(cmds);
+		// free_cmd_list(cmds);
 		return (NULL);
 	}
 	return (cmds);

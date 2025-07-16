@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:16:36 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 18:05:48 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 14:42:18 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ void	configure_environment(t_env **env_list, char **env_array)
 		handle_shlvl(found_node, &env_list);
 	found_node = find_env_node("PWD", *env_list);
 	if (!found_node)
-		add_env_value(env_list, "PWD", getcwd(NULL, 0));
+		add_env_value(env_list, "PWD", ft_getcwd());
 	found_node = find_env_node("1PWD", *env_list);
 	if (!found_node)
-		add_env_value(env_list, "1PWD", getcwd(NULL, 0));
+		add_env_value(env_list, "1PWD", ft_getcwd());
 	found_node = find_env_node("PATH", *env_list);
 	if (!found_node)
 		add_env_value(env_list, "PATH",
@@ -99,7 +99,7 @@ t_env	*copy_env(t_env *env_list)
 	current = env_list;
 	while (current)
 	{
-		new_node = malloc(sizeof(t_env));
+		new_node = ft_malloc(sizeof(t_env));
 		if (!new_node)
 			return (NULL);
 		new_node->key = ft_strdup(current->key);

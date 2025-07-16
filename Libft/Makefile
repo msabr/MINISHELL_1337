@@ -6,7 +6,7 @@
 #    By: msabr <msabr@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 16:26:22 by msabr             #+#    #+#              #
-#    Updated: 2025/07/15 15:00:18 by msabr            ###   ########.fr        #
+#    Updated: 2025/07/16 13:16:32 by msabr            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 CC = cc
 
-SRC = ft_atoi.c ft_itoa.c ft_bzero.c ft_calloc.c ft_malloc.c ft_free.c\
+SRC = ft_atoi.c ft_itoa.c ft_bzero.c ft_calloc.c ft_malloc.c ft_free.c ft_exit.c\
 		ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c ft_isspace.c ft_is_number.c\
 		ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memset.c\
 		ft_putchar_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_putstr_fd.c\

@@ -4,7 +4,7 @@
 char *remove_quotes(const char *str, char quote_char)
 {
     size_t len = strlen(str);
-    char *result = malloc(len + 1);
+    char *result = ft_malloc(len + 1);
     size_t j = 0;
     for (size_t i = 0; i < len; i++)
         if (str[i] != quote_char)

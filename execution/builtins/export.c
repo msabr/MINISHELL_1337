@@ -7,7 +7,7 @@
 // 	char	*new_value;
 // 	char	*new_key;
 
-// 	new_key = malloc(ft_strlen(key));
+// 	new_key = ft_malloc(ft_strlen(key));
 // 	ft_strlcpy(new_key, key, ft_strlen(key));
 // 	current = *env_list;
 // 	while (current)
@@ -118,7 +118,7 @@ static char *get_key(const char *arg, int *is_append) {
 // Affiche les variables exportées triées
 static void print_sorted_export(t_env *env) {
 	int count = size_of_env_list(env);
-	t_env **arr = malloc(sizeof(t_env*) * count);
+	t_env **arr = ft_malloc(sizeof(t_env*) * count);
 	t_env *cur = env;
 	int i = 0;
 	while (cur) {
@@ -145,7 +145,7 @@ static void print_sorted_export(t_env *env) {
 				ft_putstr_fd("\n", 1);
 		}
 	}
-	free(arr);
+	// free(arr);
 }
 
 // Ajoute/modifie une variable d'environnement (append ou non)
@@ -153,9 +153,9 @@ static void set_env_value(t_env **env_list, const char *key, const char *value, 
 	t_env *node = find_env_node((char*)key, *env_list);
 	if (append) {
 		if (node && node->value) {
-			char *old = node->value;
+			// char *old = node->value;
 			node->value = ft_strjoin(node->value, value ? value : "");
-			free(old);
+			// free(old);
 		} else {
 			add_env_value(env_list, (char*)key, (char*)value);
 		}
@@ -197,7 +197,7 @@ void export(t_cmd *cmd, t_env **env_list) {
 		// Validation stricte : pas de split sur espaces, pas de caractères spéciaux, ni quotes
 		if (!is_valid_identifier(key)) {
 			print_export_error(arg);
-			free(key);
+			// free(key);
 			continue;
 		}
 
@@ -208,7 +208,7 @@ void export(t_cmd *cmd, t_env **env_list) {
 		} else {
 			mark_export_only(env_list, key);
 		}
-		free(key);
+		// free(key);
 	}
 	ft_set_status(0);
 }

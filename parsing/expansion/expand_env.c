@@ -8,7 +8,7 @@ char *expand_env_variable(const char *str, int *index, t_env **env)
         (*index)++;
     char *var = strndup(str + start, *index - start);
     char *val = get_env_value(env, var);
-    free(var);
+    // free(var);
     if (!val)
         return strdup("");
     return strdup(val);
@@ -24,7 +24,7 @@ char *expand_braced_variable(const char *str, int *index, t_env **env, int last_
     char *var = strndup(str + start, end - start);
     char *val = get_env_value(env, var);
     (*index) = end + 1;
-    free(var);
+    // free(var);
     if (!val)
         return strdup("");
     return strdup(val);
@@ -71,7 +71,7 @@ char *handle_dollar_expansion(const char *str, int *index, t_env **env, int last
     else
     {
         // $ tout seul ou $ suivi de caractère non reconnu
-        char *result = malloc(2);
+        char *result = ft_malloc(2);
         result[0] = str[(*index)++];
         result[1] = '\0';
         return result;

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 17:56:07 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 14:41:57 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	cd(t_cmd *cmd, t_env **env_list)
 	if (chdir(path) == -1)
 		return (perror("cd"));
 	add_env_value(env_list, "OLDPWD", get_env_value(env_list, "1PWD"));
-	cwd = getcwd(0, 0);
+	cwd = ft_getcwd();
 	if (cwd)
 	{
 		add_env_value(env_list, "1PWD", cwd);

@@ -192,7 +192,7 @@ static void	expansion_handle_variable(t_token *curr, t_env *env)
 		expanded = ft_strdup(curr->value);
 		curr->expended = 0;
 	}
-	free(curr->value);
+	// free(curr->value);
 	curr->value = expanded;
 	curr->type = TOKEN_WORD;
 }
@@ -219,7 +219,7 @@ static void	expansion_handle_squote(t_token *curr)
 static void	expansion_handle_word(t_token *curr, t_env *env)
 {
 	char *expanded = expand_variables_in_word(curr->value, env);
-	free(curr->value);
+	// free(curr->value);
 	curr->value = expanded;
 }
 
@@ -238,7 +238,7 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 	i = 0;
 	j = 0;
 	len = ft_strlen(str);
-	result = malloc(len * 4 + 32);
+	result = ft_malloc(len * 4 + 32);
 	if (!result)
 		return (NULL);
 	while (str[i])
@@ -255,7 +255,7 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 				k = 0;
 				while (exit_code && exit_code[k])
 					result[j++] = exit_code[k++];
-				free(exit_code);
+				// free(exit_code);
 				i++;
 			}
 			else if (ft_isalpha(str[i]) || str[i] == '_')
@@ -269,10 +269,10 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 				varlen = 0;
 				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
 					varlen++;
-				key = malloc(varlen + 1);
+				key = ft_malloc(varlen + 1);
 				if (!key)
 				{
-					free(result);
+					// free(result);
 					return (NULL);
 				}
 				k = 0;
@@ -289,7 +289,7 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 					while (val[m])
 						result[j++] = val[m++];
 				}
-				free(key);
+				// free(key);
 				i += varlen;
 			}
             else if (ft_isdigit(str[i]))
@@ -329,7 +329,7 @@ void	expansion_all_tokens(t_token *tokens, t_env *env)
         if ((curr->type == TOKEN_WORD || curr->type == TOKEN_VARIABLE) && curr->value)
 		{
 			char *expanded = expand_variables_in_string(curr->value, env);
-			free(curr->value);
+			// free(curr->value);
 			curr->value = expanded;
 			curr->type = TOKEN_WORD;
 		}

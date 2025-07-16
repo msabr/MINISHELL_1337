@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:33:32 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/15 15:55:35 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 13:38:12 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ int	setup_pipes_and_pids(t_execargs *args, pid_t **pids)
 	}
 	*pids = ft_malloc(sizeof(pid_t) * args->n);
 	if (!*pids)
-		exit(1);
+		ft_exit(1);
 	return (0);
 }

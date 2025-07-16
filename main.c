@@ -4,16 +4,19 @@ int	g_status = 0;
 
 char	*ft_readline(const char *prompt)
 {
+	char	*temp;
 	char	*input;
 
-	input = readline(prompt);
-	if (input && *input)
-		add_history(input);
-	if (!input)
+	temp = readline(prompt);
+	if (!temp)
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-		exit(0);
+		ft_exit(0);
 	}
+	input = ft_strdup(temp);
+	free(temp);
+	if (input && *input)
+		add_history(input);
 	if (g_status == SIGINT)
 	{
 		ft_set_status(1);
@@ -41,7 +44,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	}
 	cmds = parse_tokens_to_cmd2s(tokens);
 	// print_cmds(cmds);
-	free_token_list(tokens);
+	// free_token_list(tokens);
 	if (!cmds)
 	{
 		printf("minishell: parse error\n");
@@ -93,12 +96,16 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 	}
 	rl_clear_history();
 }
-
+void f()
+{
+	system("leaks minishell");
+}
 int	main(int argc, char **argv, char **envp)
 {
 	t_env			*env_list;
 	struct termios	saved_termios;
 
+	atexit(f);
 	(void)argc;
 	(void)argv;
 	tcgetattr(STDIN_FILENO, &saved_termios);
