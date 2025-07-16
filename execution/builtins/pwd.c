@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 14:42:12 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 15:50:26 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,9 @@ void	pwd(t_env **env_list)
 
 	current_directory = ft_getcwd();
 	if (current_directory)
-	{
 		ft_putendl_fd(current_directory, STDOUT_FILENO);
-	}
 	else if (get_env_value(env_list, "1PWD") != NULL)
-	{
 		ft_putendl_fd(get_env_value(env_list, "1PWD"), STDOUT_FILENO);
-	}
 	else if (get_env_value(env_list, "OLDPWD") != NULL)
-	{
 		ft_putendl_fd(get_env_value(env_list, "OLDPWD"), STDOUT_FILENO);
-	}
-	else
-	{
-		ft_putstr_fd("minishell: pwd: error retrieving current directory: \
-No such file or directory\n", STDERR_FILENO);
-	}
 }

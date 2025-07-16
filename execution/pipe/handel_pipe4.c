@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 15:48:57 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 13:38:16 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 15:40:02 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,7 @@ void	exec_child(t_cmd *cur, t_execargs *args, int i)
 	if (!cur || !cur->args || !cur->args[0])
 		set_and_exit(0);
 	if (is_builtin(cur->args[0]))
-	{
-		execve_builtin(cur, args->env_list);
-		set_and_exit(0);
-	}
+		set_and_exit(execve_builtin(cur, args->env_list));
 	else
 	{
 		status = get_exec_path(cur, args->env_list, &path);

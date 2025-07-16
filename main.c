@@ -96,16 +96,14 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 	}
 	rl_clear_history();
 }
-void f()
-{
-	system("leaks minishell");
-}
+// void f(){system("leaks minishell");}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_env			*env_list;
 	struct termios	saved_termios;
 
-	atexit(f);
+	// atexit(f);
 	(void)argc;
 	(void)argv;
 	tcgetattr(STDIN_FILENO, &saved_termios);

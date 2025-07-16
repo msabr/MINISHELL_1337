@@ -227,15 +227,15 @@ char	*reduce_odd_dollars_and_handle_edge(const char *str);
 
 //built-in functions
 bool	is_builtin(char *cmd);
-void	execve_builtin(t_cmd *cmd, t_env **env_list);
-void	cd(t_cmd *cmd, t_env **env_list);
+int		execve_builtin(t_cmd *cmd, t_env **env_list);
+int		cd(t_cmd *cmd, t_env **env_list);
 void	echo(t_cmd *cmd);
 void	env_function(t_env *env_list);
 void	exit_shell(t_cmd *cmd);
 char	*set_key(const char *arg);
 void	export(t_cmd *cmd, t_env **env_list);
 void	pwd(t_env **env_list);
-void	unset(t_cmd *cmd, t_env **env_list);
+int		unset(t_cmd *cmd, t_env **env_list);
 char	*ft_getcwd(void);
 
 //environment functions

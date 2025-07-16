@@ -6,13 +6,13 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 14:41:57 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 15:44:34 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	cd(t_cmd *cmd, t_env **env_list)
+int	cd(t_cmd *cmd, t_env **env_list)
 {
 	char	*path;
 	char	*cwd;
@@ -21,17 +21,14 @@ void	cd(t_cmd *cmd, t_env **env_list)
 	{
 		path = get_env_value(env_list, "HOME");
 		if (!path)
-		{
-			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
-			return ;
-		}
+			return(ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO), 1);
 		else if (!path[0])
-			return ;
+			return (0);
 	}
 	else
 		path = cmd->args[1];
 	if (chdir(path) == -1)
-		return (perror("cd"));
+		return (perror("cd"), 1);
 	add_env_value(env_list, "OLDPWD", get_env_value(env_list, "1PWD"));
 	cwd = ft_getcwd();
 	if (cwd)
@@ -39,4 +36,5 @@ void	cd(t_cmd *cmd, t_env **env_list)
 		add_env_value(env_list, "1PWD", cwd);
 		add_env_value(env_list, "PWD", cwd);
 	}
+	return (0);
 }

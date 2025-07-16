@@ -1,27 +1,6 @@
----------------------------------------------
-minishell> mkdir -p 1/2/3/4
-minishell> pwd
-/mnt/homes/msabr/Desktop/minishell
-minishell> cd 1/2/3/4/
-minishell> unset PWD OLDPWD
-minishell> ls
-minishell> pwd
-/mnt/homes/msabr/Desktop/minishell/1/2/3/4
-minishell> pwd
-getcwd: No such file or directory
-minishell> cd ..
-minishell> pwd
-getcwd: No such file or directory
-minishell> 
--------------------------------------------
-minishell> cd 1
-minishell> chmod 0 .
-minishell> cd ..
-cd: Permission denied
-
----------------------------------------------
-------------- exit status -------------------
----------------------------------------------
+------------------------------------------------------------------------------------------
+------------- exit status ----------------------------------------------------------------
+------------------------------------------------------------------------------------------
 bash-3.2$ $? ls
 bash: 0:
 ---------------------------------------------
@@ -65,71 +44,15 @@ bash-3.2$ cat
 bash-3.2$ echo $?
 131
 ---------------------------------------------
-minishell> ./Makefilelsls
-minishell: ./Makefilelsls: No such file or directory
-minishell> echo $?
-1����
-corr: 127
----------------------------------------------
-minishell> export PATH+=:.
-minishell> Makefile 
-minishell: Makefile: command not found
----------------------------------------------
-minishell> export PATH=
-minishell> cmd
-minishell: cmd: command not found
----------------------------------------------
-minishell> unset PATH
-minishell> tgref
-minishell: tgref: command not found
----------------------------------------------
-minishell> exit ""
-=== Command 1 ===
-argv: [exit]
-=== End pipeline ===
-exit
-(null)
-minishell> 
----------------------------------------------
-
----------------------------------------------
-
-
----------------------------------------------
-
----------------------------------------------       
-bash-3.2$ unset PATH $PWD 
-bash: unset: `/mnt/homes/msabr/Desktop/mini4': not a valid identifier
-bash-3.2$ echo $? 
-1
-
-
-minishell> unset PATH $PWD 
-=== Command 1 ===
-argv: [unset] [PATH] [/mnt/homes/msabr/Desktop/mini4]
-=== End pipeline ===
-unset: `/mnt/homes/msabr/Desktop/mini4': not a valid identifier
-minishell> echo $? 
-=== Command 1 ===
-argv: [echo] [0]
-=== End pipeline ===
-0
----------------------------------------------
-minishell> echo $PATH $PWD
- /mnt/homes/msabr/Desktop/mini4
-minishell> echo "" $PWD   
- /mnt/homes/msabr/Desktop/mini4
-minishell> 
----------------------------------------------
-
-
----------------------------------------------
 minishell> cd -
 cd: No such file or directory
 minishell> echo $? 
-0
-minishell> 
-exit status 1
+1
+---------------------------------------------
+minishell> unset p = o
+unset: `=': not a valid identifier
+minishell> echo $?
+1
 ---------------------------------------------
 minishell> touch op
 minishell> chmod +x op
@@ -138,26 +61,36 @@ minishell> echo $?
 1
 minishell> 
 exit status 0
+------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
 
----------------------------------------------
-export a=akas 1b=ajsjas c=asasjas
-minishell: export: `1b=ajsjas': not a valid identifier
-minishell> $?
-minishell: 0: command not found
-bash-3.2$ $?
-bash: 1: command not found
----------------------------------------------
-minishell> grtgrt
-minishell: grtgrt: command not found
+minishell> mkdir -p 1/2/3/4
+minishell> pwd
+/mnt/homes/msabr/Desktop/minishell
+minishell> cd 1/2/3/4/
+minishell> unset PWD OLDPWD
+minishell> ls
+minishell> pwd
+/mnt/homes/msabr/Desktop/minishell/1/2/3/4
+minishell> pwd
+getcwd: No such file or directory
+minishell> cd ..
+minishell> pwd
+getcwd: No such file or directory
 minishell> 
-exit
-minishell> $?
+---------------------------------------------
+minishell> echo $val $PWD
+ /mnt/homes/msabr/Desktop/mini4
+bash-3.2$  echo $val $PWD
+/mnt/homes/msabr/Desktop/mini4
+    -------------------------------------
+minishell> echo "" $PWD
+ /mnt/homes/msabr/Desktop/mini4
+bash-3.2$  echo "" $PWD
+ /mnt/homes/msabr/Desktop/mini4
+---------------------------------------------
 
-the same here
-minishell: dsjdsjdsj: command not found
-minishell> exit
-exit
-minishell> $?
 ---------------------------------------------
 
 ---------------------------------------------

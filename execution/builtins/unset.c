@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 18:03:50 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 15:40:51 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@ static int	check_env_variable(t_env **env_list, const char *key)
 }
 
 //unset with no options
-void	unset(t_cmd *cmd, t_env **env_list)
+int	unset(t_cmd *cmd, t_env **env_list)
 {
 	int	i;
+	int	status;
 
 	i = 1;
+	status = 0;
 	while (cmd->args && cmd->args[i])
 	{
 		if (is_valid_key_unset(cmd->args[i]) == false)
@@ -39,6 +41,7 @@ void	unset(t_cmd *cmd, t_env **env_list)
 			ft_putstr_fd("unset: `", STDERR_FILENO);
 			ft_putstr_fd(cmd->args[i], STDERR_FILENO);
 			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+			status = 1;
 		}
 		else if (check_env_variable(env_list, cmd->args[i]) == 0)
 		{
@@ -46,4 +49,5 @@ void	unset(t_cmd *cmd, t_env **env_list)
 		}
 		cmd->args++;
 	}
+	return (status);
 }

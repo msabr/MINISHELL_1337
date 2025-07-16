@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 13:38:08 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 15:39:38 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,7 @@ static int	handle_redir_and_builtin(t_cmd *cmds, t_env **env_list)
 	if (!cmds->args || !cmds->args[0])
 		return (1);
 	if (is_builtin(cmds->args[0]))
-	{
-		execve_builtin(cmds, env_list);
-		return (0);
-	}
+		return (execve_builtin(cmds, env_list));
 	return (-1);
 }
 
