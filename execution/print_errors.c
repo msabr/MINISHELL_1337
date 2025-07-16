@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:51:42 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/14 21:01:40 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 11:42:12 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,8 @@
 int	print_dir_error(char *cmd)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	if (ft_is_dir(cmd))
-	{
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": is a directory\n", STDERR_FILENO);
-	}
-	else
-	{
-		access(cmd, X_OK);
-		perror(cmd);
-	}
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(": is a directory\n", STDERR_FILENO);
 	return (126);
 }
 
@@ -41,7 +33,7 @@ int	print_execve_error(char *cmd)
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-	return (1);
+	return (127);
 }
 
 int	print_execve_permission_error(char *cmd)

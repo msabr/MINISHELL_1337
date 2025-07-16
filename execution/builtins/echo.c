@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 11:41:10 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/04 17:21:42 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/15 18:53:16 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,8 @@ void	echo(t_cmd *cmd)
 		return (ft_putchar_fd('\n', STDOUT_FILENO));
 	while (cmd->args[i])
 	{
-		if (!cmd->args[i])
-			break ;
 		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
-		if (cmd->args[i + 1])
+		if (cmd->args[i + 1] && cmd->args[i + 1][0] != '\0')
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}

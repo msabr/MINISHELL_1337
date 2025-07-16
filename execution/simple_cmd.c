@@ -6,41 +6,91 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/15 16:13:43 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/16 12:36:28 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+// int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
+// {
+// 	if (!cmds || !cmds->args || !cmds->args[0])
+// 		return (1);
+// 	if ( is_directory(cmds->args[0]) && ft_strchr(cmds->args[0], '/'))
+// 		return (print_dir_error(cmds->args[0]));
+// 	if (access(cmds->args[0], X_OK | F_OK) == -1 && ft_strchr(cmds->args[0], '/'))
+// 	{
+// 		if (errno == ENOENT)
+// 			return (print_execve_error(cmds->args[0]));
+// 		else if (errno == EACCES)
+// 			return (print_execve_permission_error(cmds->args[0]));
+// 		else
+// 			return (perror("minishell"), 126);
+// 	}
+// 	else if (!ft_strchr(cmds->args[0], '/'))
+// 	{
+// 		*path = get_path(cmds->args[0], *env_list);
+// 		if (!*path)
+// 			return (perror("minishell"), 155);
+// 	}
+// 	else
+// 		*path = ft_strdup(cmds->args[0]);
+// 	return (0);
+// }
+
+static bool	ft_aid(char *cmd, t_env **env_list)
+
+{
+	int		i;
+	char 	**paths;
+	char	*path_env;
+	char	*full_path;
+	
+	i = 0;
+	path_env = get_env_value(env_list, "PATH");
+	if (!path_env || path_env[0] == '\0')
+		path_env = ":.";
+	paths = ft_split(path_env, ':');
+	if (!paths)
+		return (false);
+	while (paths[i])
+	{
+		full_path = ft_strjoin(paths[i], ft_strjoin("/", cmd));
+		if (! is_directory(full_path) && access(full_path, F_OK) == 0)
+			return (true);
+		i++;
+	}
+	return (false);
+}
 
 int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 {
+	char	*tmp;
+
 	if (!cmds || !cmds->args || !cmds->args[0])
 		return (1);
-	if (ft_strchr(cmds->args[0], '/'))
+	if (ft_strchr(cmds->args[0], '/') != NULL || ft_strlen(get_env_value(env_list, "PATH")) == 0)
 	{
-		if (ft_is_dir(cmds->args[0]))
+		if ( is_directory(cmds->args[0]))
 			return (print_dir_error(cmds->args[0]));
-		if (access(cmds->args[0], X_OK | F_OK) == -1)
+		if (access(cmds->args[0], X_OK) == -1)
 		{
 			if (errno == ENOENT)
-				return (print_execve_error(cmds->args[0]));
-			else if (errno == EACCES)
-				return (print_execve_permission_error(cmds->args[0]));
-			else
-				return (perror("minishell"), 126);
+				return (perror("minishell"), 127);
+			return (perror("minishell"), 126);
 		}
 		*path = ft_strdup(cmds->args[0]);
+		return (0);
 	}
-	else
-	{
-		*path = get_path(cmds->args[0], *env_list);
-		if (!*path)
-			return (print_cmd_not_found_error(cmds->args[0]));
-	}
+	tmp = get_path(cmds->args[0], *env_list);
+	if (!tmp && ft_aid(cmds->args[0], env_list))
+		return (access(cmds->args[0], X_OK), perror("minishell"), 126); 
+	else if (!tmp)
+		return (print_cmd_not_found_error(cmds->args[0]));
+	*path = tmp;
 	return (0);
 }
 
-void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
+static void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 {
 	set_default_signals();
 	if (!cmds || !cmds->args || !cmds->args[0])

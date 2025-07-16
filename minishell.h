@@ -126,20 +126,20 @@ void	remove_empty_token(t_token **tokens);
 
 // new expending
 
-void    expansion_all_tokens(t_token *tokens, t_env *env);
-int     was_originally_quoted(t_token *token);
-void    expand_var_token(t_token *token, t_env *env);
-void    expand_dquote_token(t_token *token, t_env *env);
-void    expand_squote_token(t_token *token);
-int     is_in_heredoc(t_token *token);
-void    convert_exit_code(t_token *token);
-void    number_before_dollar(t_token *token);
-void    expand_env_dollar(t_token *token, t_env *env);
-char    *remove_dquotes(char *str);
-char    *remove_squotes(char *str);
-void fix_dollar_doublequote_tokens(t_token **head);
-char *expand_many_dollars(const char *str, t_env *env);
-void merge_variable_tokens(t_token *tokens);
+void	expansion_all_tokens(t_token *tokens, t_env *env);
+int		was_originally_quoted(t_token *token);
+void	expand_var_token(t_token *token, t_env *env);
+void	expand_dquote_token(t_token *token, t_env *env);
+void	expand_squote_token(t_token *token);
+int		is_in_heredoc(t_token *token);
+void	convert_exit_code(t_token *token);
+void	number_before_dollar(t_token *token);
+void	expand_env_dollar(t_token *token, t_env *env);
+char	*remove_dquotes(char *str);
+char	*remove_squotes(char *str);
+void	fix_dollar_doublequote_tokens(t_token **head);
+char	*expand_many_dollars(const char *str, t_env *env);
+void	merge_variable_tokens(t_token *tokens);
 char	*expand_variables_in_word(char *str, t_env *env);
 void	merge_collapsed_tokens(t_token *tokens);
 char	*expand_token(const char *str, t_env *env);
@@ -171,60 +171,60 @@ bool			is_operator(char c);
 bool			is_double_operator(const char *s);
 void			free_token_list(t_token *head);
 void			print_token_list(t_token *list) ;
-t_token_type get_operator_type(const char *s);
-int			is_whitespace(char c);
-void		add_token(t_token **head, const char *val, t_token_type type, bool space);
-void		add_token_quoted(t_token **head, const char *val, t_token_type type, bool space, int quoted);
-void		error_syntax(const char *token);
+t_token_type	get_operator_type(const char *s);
+int				is_whitespace(char c);
+void			add_token(t_token **head, const char *val, t_token_type type, bool space);
+void			add_token_quoted(t_token **head, const char *val, t_token_type type, bool space, int quoted);
+void			error_syntax(const char *token);
 //
-t_token*	lexer(const char *input);
-void		skip_whitespace(const char *input, size_t *i);
-size_t		parse_word(const char *input, size_t i, t_token **head);
-size_t		parse_quote(const char *input, size_t i, t_token **head);
-size_t		parse_operator(const char *input, size_t i, t_token **head);
-size_t		parse_variable(const char *input, size_t i, t_token **head) ;
+t_token*		lexer(const char *input);
+void			skip_whitespace(const char *input, size_t *i);
+size_t			parse_word(const char *input, size_t i, t_token **head);
+size_t			parse_quote(const char *input, size_t i, t_token **head);
+size_t			parse_operator(const char *input, size_t i, t_token **head);
+size_t			parse_variable(const char *input, size_t i, t_token **head) ;
 
-t_token		*lexer2(const char *input);
-size_t		parse_quote(const char *input, size_t i, t_token **head); 
-int			check_syntax_errors(t_token *tokens, const char *input);
-void		syntax_error(const char *msg);
-void		ft_set_status(int status);
-int			*ft_get_status(void);
-int			ft_s_ret(int set);
+t_token			*lexer2(const char *input);
+size_t			parse_quote(const char *input, size_t i, t_token **head); 
+int				check_syntax_errors(t_token *tokens, const char *input);
+void			syntax_error(const char *msg);
+void			ft_set_status(int status);
+int				*ft_get_status(void);
+int				ft_s_ret(int set);
 
 // char	*ft_strncpy(char *dest, const char *src, size_t n);
 
 // t_cmd *parse_tokens_to_cmds(t_token *tokens);
-void print_cmds(t_cmd *cmds);
-void expand_token_list_v2(t_token *tokens, t_env **env, int last_status);
-bool needs_expansion(t_token *token);
-void expand_single_token(t_token *token, t_env **env, int last_status);
+void	print_cmds(t_cmd *cmds);
+void	expand_token_list_v2(t_token *tokens, t_env **env, int last_status);
+bool	needs_expansion(t_token *token);
+void	expand_single_token(t_token *token, t_env **env, int last_status);
 
 // Gestion des quotes
-char *remove_quotes(const char *str, char quote_char);
-char *expand_quoted_string(const char *str, t_env **env, int last_status);
-char *expand_unquoted_string(const char *str, t_env **env, int last_status);
+char	*remove_quotes(const char *str, char quote_char);
+char	*expand_quoted_string(const char *str, t_env **env, int last_status);
+char	*expand_unquoted_string(const char *str, t_env **env, int last_status);
 
 // Gestion des échappements
-char *handle_escape_in_dquotes(const char *str, int *index);
-char *handle_escape_unquoted(const char *str, int *index);
+char	*handle_escape_in_dquotes(const char *str, int *index);
+char	*handle_escape_unquoted(const char *str, int *index);
 
 // Expansion des variables
-char *handle_dollar_expansion(const char *str, int *index, t_env **env, int last_status);
-char *expand_env_variable(const char *str, int *index, t_env **env);
-char *expand_braced_variable(const char *str, int *index, t_env **env, int last_status);
+char	*handle_dollar_expansion(const char *str, int *index, t_env **env, int last_status);
+char	*expand_env_variable(const char *str, int *index, t_env **env);
+char	*expand_braced_variable(const char *str, int *index, t_env **env, int last_status);
 
 // Fonctions utilitaires
-bool has_special_chars(const char *str);
-char **split_words(const char *str);
-int count_words(const char *str);
-char *clean_expansion_result(char *str);
-char *strjoin_and_free(char *s1, char *s2);
-void free_words(char **words);
-char *expand_dollars(const char *input, t_env **env);
-char *expand_heredoc_content(const char *str, t_env **env, int last_status, const char *delimiter);
-int count_dollars(const char *str, int index);
-char *reduce_odd_dollars_and_handle_edge(const char *str);
+bool	has_special_chars(const char *str);
+char	**split_words(const char *str);
+int		count_words(const char *str);
+char	*clean_expansion_result(char *str);
+char	*strjoin_and_free(char *s1, char *s2);
+void	free_words(char **words);
+char	*expand_dollars(const char *input, t_env **env);
+char	*expand_heredoc_content(const char *str, t_env **env, int last_status, const char *delimiter);
+int		count_dollars(const char *str, int index);
+char	*reduce_odd_dollars_and_handle_edge(const char *str);
 // ---------------------------------------
 
 //built-in functions
@@ -241,21 +241,21 @@ void	unset(t_cmd *cmd, t_env **env_list);
 
 //environment functions
 t_env	*env_to_list(char **env);
-t_env *copy_env(t_env *env_list);
-void	free_env_list(t_env *env_list);
-int		size_of_env_list(t_env *env_list);
+char	**list_to_env(t_env *env_list);
 t_env	*find_env_node(char *search_key, t_env *list_head);
-void	configure_environment(t_env **env_list, char **env_array);
-int	remove_env_variable(t_env **env_list, const char *key);
 char	*get_env_value(t_env **env_list, const char *key);
 void	add_env_value(t_env **env_list, char *key, char *value);
 void	add_temporary_env_value(t_env **env_list, char *key);
-char	**list_to_env(t_env *env_list);
+void	remove_env_variable(t_env **env_list, const char *key);
+void	configure_environment(t_env **env_list, char **env_array);
+int		size_of_env_list(t_env *env_list);
+void	free_env_list(t_env *env_list);
+t_env	*copy_env(t_env *env_list);
 
 // execution functions
-bool	ft_is_dir(const char *path);
+bool	 is_directory(const char *path);
 int		exec_multiple_pipes(t_cmd *cmds, t_env **env_list);
-int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path);
+int		get_exec_path(t_cmd *cmds, t_env **env_list, char **path);
 int		execve_simple_cmd(t_cmd *cmds, t_env **env_list);
 char	*get_path(char *cmd, t_env *env_list);
 
@@ -275,18 +275,13 @@ int		redirect_stdin(char *file_name);
 int		redirect_overwrite(char *file_name);
 int		redirect_append(char *file_name);
 bool	handle_redirections(t_cmd *cmds, t_env *env);
-
 //error handling functions
-int	print_dir_error(char *cmd);
-int print_cmd_not_found_error(char *cmd);
-int print_execve_error(char *cmd);
-int print_execve_permission_error(char *cmd);
-void print_exit_error(const char *arg);
-
+int		print_dir_error(char *cmd);
+int		print_cmd_not_found_error(char *cmd);
+int		print_execve_error(char *cmd);
+int		print_execve_permission_error(char *cmd);
+void	print_exit_error(const char *arg);
 //main functions
-void main_loop(t_env **env_list, struct termios *saved_termios);
-
-
-
+void	main_loop(t_env **env_list, struct termios *saved_termios);
 
 #endif

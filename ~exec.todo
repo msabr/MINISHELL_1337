@@ -13,8 +13,6 @@ minishell> cd ..
 minishell> pwd
 getcwd: No such file or directory
 minishell> 
----------------------------------------------
-minishell> echo $?
 -------------------------------------------
 minishell> cd 1
 minishell> chmod 0 .
@@ -93,71 +91,73 @@ exit
 (null)
 minishell> 
 ---------------------------------------------
-bash-3.2$ export a="ls -la"
-minishell> "$a"
-total 1024
-drwxr-xr-x  13 msabr  2024_khouribga     442 Jul 12 18:14 .
-drwxr-xr-x  42 msabr  2024_khouribga    1428 Jul 12 17:11 ..
-drwxr-xr-x  13 msabr  2024_khouribga     442 Jul 12 18:10 .git
--rw-r--r--   1 msabr  2024_khouribga     126 Jul 12 17:11 .gitignore
-drwxr-xr-x  51 msabr  2024_khouribga    1734 Jul 12 18:09 Libft
--rw-r--r--   1 msabr  2024_khouribga    3401 Jul 12 18:09 Makefile
--rw-r--r--   1 msabr  2024_khouribga    3386 Jul 12 17:21 TODO.todo
-drwxr-xr-x  14 msabr  2024_khouribga     476 Jul 12 18:14 execution
--rw-r--r--   1 msabr  2024_khouribga    1896 Jul 12 18:12 main.c
--rw-r--r--   1 msabr  2024_khouribga   14028 Jul 12 18:14 main.o
--rwxr-xr-x   1 msabr  2024_khouribga  475376 Jul 12 18:14 minishell
--rw-r--r--   1 msabr  2024_khouribga    8956 Jul 12 17:31 minishell.h
-drwxr-xr-x  18 msabr  2024_khouribga     612 Jul 12 18:14 parsing
-bash-3.2$ "$a"
-bash: ls -la: command not found
----------------------------------------------
-minishell> export a="     " //space
-minishell> $a
-minishell> export a="                   " //tabs
-minishell> $a
-minishell:              : command not found
----------------------------------------------
 
 ---------------------------------------------
-minishell> ls |
-minishell: syntax error near unexpected token `newline'
-Libft           Makefile        TODO.todo       execution       main.c          minishell       minishell.h     parsing         pop
----------------------------------------------
+
 
 ---------------------------------------------
-minishell> |>
-minishell: syntax error near unexpected token `|'
-minishell: syntax error near unexpected token `newline'
-minishell: parse error
+
+---------------------------------------------       
+bash-3.2$ unset PATH $PWD 
+bash: unset: `/mnt/homes/msabr/Desktop/mini4': not a valid identifier
+bash-3.2$ echo $? 
+1
+
+
+minishell> unset PATH $PWD 
+=== Command 1 ===
+argv: [unset] [PATH] [/mnt/homes/msabr/Desktop/mini4]
+=== End pipeline ===
+unset: `/mnt/homes/msabr/Desktop/mini4': not a valid identifier
+minishell> echo $? 
+=== Command 1 ===
+argv: [echo] [0]
+=== End pipeline ===
+0
+---------------------------------------------
+minishell> echo $PATH $PWD
+ /mnt/homes/msabr/Desktop/mini4
+minishell> echo "" $PWD   
+ /mnt/homes/msabr/Desktop/mini4
 minishell> 
 ---------------------------------------------
-"$FGFGFGF;"
-;: command not found
----------------------------------------------       
+
 
 ---------------------------------------------
-	
+minishell> cd -
+cd: No such file or directory
+minishell> echo $? 
+0
+minishell> 
+exit status 1
 ---------------------------------------------
+minishell> touch op
+minishell> chmod +x op
+minishell> ./op
+minishell> echo $? 
+1
+minishell> 
+exit status 0
 
 ---------------------------------------------
-
+export a=akas 1b=ajsjas c=asasjas
+minishell: export: `1b=ajsjas': not a valid identifier
+minishell> $?
+minishell: 0: command not found
+bash-3.2$ $?
+bash: 1: command not found
 ---------------------------------------------
+minishell> grtgrt
+minishell: grtgrt: command not found
+minishell> 
+exit
+minishell> $?
 
----------------------------------------------
-
----------------------------------------------
-
----------------------------------------------
-
----------------------------------------------
-
----------------------------------------------
-
----------------------------------------------
-
----------------------------------------------
-
+the same here
+minishell: dsjdsjdsj: command not found
+minishell> exit
+exit
+minishell> $?
 ---------------------------------------------
 
 ---------------------------------------------

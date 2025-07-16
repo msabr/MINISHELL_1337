@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:00:00 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/08 19:00:00 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:04:00 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ t_token	*lexer(const char *input)
 		else if (input[i] == '\'' || input[i] == '"')
 		{
 			handle_quote(input, &i, &head);
-			printf("gg");
+			// printf("gg");
 
 		}
 		else if (input[i] == '$')

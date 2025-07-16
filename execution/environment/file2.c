@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:03:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/12 18:05:43 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/15 20:47:21 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char	*get_env_value(t_env **env_list, const char *key)
 
 void	add_env_value(t_env **env_list, char *key, char *value)
 {
+	// printf("add_env_value: %s=%s\n", key, value);
 	t_env	*current;
 	t_env	*new_node;
 
@@ -70,7 +71,7 @@ void	add_temporary_env_value(t_env **env_list, char *key)
 	*env_list = new_node;
 }
 
-int	remove_env_variable(t_env **env_list, const char *key)
+void	remove_env_variable(t_env **env_list, const char *key)
 {
 	t_env	*current;
 	t_env	*prev;
@@ -85,10 +86,9 @@ int	remove_env_variable(t_env **env_list, const char *key)
 				prev->next = current->next;
 			else
 				*env_list = current->next;
-			return (0);
+			return ;
 		}
 		prev = current;
 		current = current->next;
 	}
-	return (-1);
 }
