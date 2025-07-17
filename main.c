@@ -33,6 +33,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	tokens = lexer(input);
 	// print_token_list(tokens);
 	expansion_all_tokens(tokens, env_list);
+	// print_token_list(tokens);
 	// remove_empty_token(&tokens);
 	merge_collapsed_tokens(tokens);
 	if (check_syntax_errors(tokens, input))

@@ -163,7 +163,7 @@ void	remove_empty_token_head(t_token **tokens);
 
 //..................................................*/
 // token utils
-t_token*		lst_new_token(const char *value, t_token_type type, bool space_after);
+t_token*		lst_new_token(const char *value, t_token_type type, bool space_after,int expended);
 void			lst_add_back(t_token **list, t_token *new);
 bool			is_operator(char c);
 bool			is_double_operator(const char *s);
@@ -171,8 +171,8 @@ void			free_token_list(t_token *head);
 void			print_token_list(t_token *list) ;
 t_token_type	get_operator_type(const char *s);
 int				is_whitespace(char c);
-void			add_token(t_token **head, const char *val, t_token_type type, bool space);
-void			add_token_quoted(t_token **head, const char *val, t_token_type type, bool space, int quoted);
+void			add_token(t_token **head, const char *val, t_token_type type, bool space,int expneded);
+void			add_token_quoted(t_token **head, const char *val, t_token_type type, bool space, int expneded);
 void			error_syntax(const char *token);
 //
 t_token*		lexer(const char *input);
