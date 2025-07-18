@@ -107,6 +107,8 @@ int	main(int argc, char **argv, char **envp)
 	// atexit(f);
 	(void)argc;
 	(void)argv;
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+		return (ft_putstr_fd("minishell: not a terminal\n", STDERR_FILENO), 1);
 	tcgetattr(STDIN_FILENO, &saved_termios);
 	configure_environment(&env_list, envp);
 	ft_handler_signal();
