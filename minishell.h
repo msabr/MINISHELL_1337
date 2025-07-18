@@ -115,9 +115,13 @@ void		error_syntax(const char *token);
 //..................................................*/
 int		check_syntax_errors(t_token *tokens, const char *input);
 void	error_syntax(const char *token);
-
+int     count_args(char **args);
+t_token *find_token_for_value(t_token *tokens, char *value);
+char    *strjoin_and_free(char *s1, char *s2);
 // Parsing principal
 t_cmd	*parse_tokens_to_cmd2s(t_token *tokens);
+// t_cmd	*parse_tokens_to_cmd2s(t_token *tokens, t_env *env);
+void	parse_export_handler(t_token *tokens, t_cmd *cmd, t_env *env);
 
 // Supprime les tokens vides de la liste chainée
 void	remove_empty_token(t_token **tokens);
@@ -234,6 +238,7 @@ void	env_function(t_env *env_list);
 void	exit_shell(t_cmd *cmd);
 char	*set_key(const char *arg);
 void	export(t_cmd *cmd, t_env **env_list);
+// void	export(char **args, t_env **env_list);
 void	pwd(t_env **env_list);
 int		unset(t_cmd *cmd, t_env **env_list);
 char	*ft_getcwd(void);

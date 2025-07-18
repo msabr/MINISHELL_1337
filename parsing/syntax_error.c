@@ -94,10 +94,10 @@ int	check_syntax_errors(t_token *tokens, const char *input)
 	{
 		if (curr->type == TOKEN_WORD && curr->value)
 		{
-			if (!ft_strcmp(curr->value, "&&") || !ft_strcmp(curr->value, "||")
+			if ((!curr->expended) &&(!ft_strcmp(curr->value, "&&") || !ft_strcmp(curr->value, "||")
 				|| !ft_strcmp(curr->value, ";") || !ft_strcmp(curr->value, ";;")
 				|| !ft_strcmp(curr->value, "&") || !ft_strcmp(curr->value, "(")
-				|| !ft_strcmp(curr->value, ")"))
+				|| !ft_strcmp(curr->value, ")")))
 				return (error_syntax(curr->value), 1);
 		}
 		if (curr->type == TOKEN_PIPE && curr->next && curr->next->type == TOKEN_PIPE)
@@ -109,6 +109,12 @@ int	check_syntax_errors(t_token *tokens, const char *input)
 		if (is_redir(curr->type) &&
 			(!curr->next || !is_arg_token(curr->next)))
 			return (error_syntax(token_repr(curr->next)), 1);
+		// Correction heredoc sans délimiteur
+		if (curr->type == TOKEN_HEREDOC) {
+			if (!curr->next || curr->next->type == TOKEN_EOF || !curr->next->value || curr->next->value[0] == '\0') {
+				return (error_syntax("newline"), 1);
+			}
+		}
 		curr = curr->next;
 	}
 	// Si la ligne ne contient QUE des redirs et arguments, ignorer (bash)

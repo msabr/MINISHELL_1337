@@ -31,9 +31,9 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	t_cmd	*cmds;
 
 	tokens = lexer(input);
-	// print_token_list(tokens);
+	print_token_list(tokens);
 	expansion_all_tokens(tokens, env_list);
-	// print_token_list(tokens);
+	print_token_list(tokens);
 	// remove_empty_token(&tokens);
 	merge_collapsed_tokens(tokens);
 	if (check_syntax_errors(tokens, input))
@@ -44,7 +44,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 		return (NULL);
 	}
 	cmds = parse_tokens_to_cmd2s(tokens);
-	// print_cmds(cmds);
+	print_cmds(cmds);
 	// free_token_list(tokens);
 	if (!cmds)
 	{
@@ -79,7 +79,7 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 	// ft_set_status(0);
 	while (true)
 	{
-		input = ft_readline("minishell> ");
+		input = ft_readline("minishell$ ");
 		handel_ctl_c(g_status);
 		if (input[0] != '\0')
 		{

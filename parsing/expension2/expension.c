@@ -228,19 +228,153 @@ static void	expansion_handle_word(t_token *curr, t_env *env)
 */
 
 
+// char	*expand_variables_in_string(const char *str, t_env *env)
+// {
+// 	size_t	i;
+// 	size_t	j;
+// 	size_t	len;
+// 	char	*result;
+
+// 	i = 0;
+// 	j = 0;
+// 	len = ft_strlen(str);
+// 	result = ft_malloc(len * 4 + 32);
+// 	if (!result)
+// 		return (NULL);
+// 	while (str[i])
+// 	{
+// 		if (str[i] == '$')
+// 		{
+// 			i++;
+// 			if (str[i] == '?')
+// 			{
+// 				char	*exit_code;
+// 				size_t	k;
+
+// 				exit_code = ft_itoa(*ft_get_status());
+// 				k = 0;
+// 				while (exit_code && exit_code[k])
+// 					result[j++] = exit_code[k++];
+// 				// free(exit_code);
+// 				i++;
+// 			}
+// 			else if (ft_isalpha(str[i]) || str[i] == '_')
+// 			{
+// 				size_t	varlen;
+// 				size_t	k;
+// 				char	*key;
+// 				char	*val;
+// 				size_t	m;
+
+// 				varlen = 0;
+// 				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
+// 					varlen++;
+// 				key = ft_malloc(varlen + 1);
+// 				if (!key)
+// 				{
+// 					// free(result);
+// 					return (NULL);
+// 				}
+// 				k = 0;
+// 				while (k < varlen)
+// 				{
+// 					key[k] = str[i + k];
+// 					k++;
+// 				}
+// 				key[varlen] = '\0';
+// 				val = get_env_value(&env, key);
+// 				if (val)
+// 				{
+// 					m = 0;
+// 					while (val[m])
+// 						result[j++] = val[m++];
+// 				}
+// 				// free(key);
+// 				i += varlen;
+// 			}
+//             else if (ft_isdigit(str[i]))
+//             {
+//                 i++;
+//             }
+// 			else
+// 			{
+// 				result[j++] = '$';
+// 				if (str[i])
+// 					result[j++] = str[i++];
+// 			}
+// 		}
+// 		else
+// 			result[j++] = str[i++];
+// 	}
+// 	result[j] = '\0';
+// 	return (result);
+// }
+
+
 char	*expand_variables_in_string(const char *str, t_env *env)
 {
-	size_t	i;
-	size_t	j;
-	size_t	len;
+	size_t	i = 0, j = 0, len = 0;
+	size_t	tmp_len = 0;
 	char	*result;
 
-	i = 0;
-	j = 0;
-	len = ft_strlen(str);
-	result = ft_malloc(len * 4 + 32);
+	// 1. CALCUL DE LA TAILLE RÉELLE DU RÉSULTAT
+	while (str[len])
+	{
+		if (str[len] == '$')
+		{
+			size_t varlen = 0;
+			if (str[len + 1] == '?')
+			{
+				char *exit_code = ft_itoa(*ft_get_status());
+				tmp_len += ft_strlen(exit_code);
+				// free(exit_code); // Si ft_itoa alloue
+				len += 2;
+				continue;
+			}
+			else if (ft_isalpha(str[len + 1]) || str[len + 1] == '_')
+			{
+				varlen = 1;
+				while (str[len + varlen] && (ft_isalnum(str[len + varlen]) || str[len + varlen] == '_'))
+					varlen++;
+				char *key = ft_malloc(varlen);
+				if (!key) return NULL;
+				for (size_t k = 0; k < varlen - 1; ++k)
+					key[k] = str[len + 1 + k];
+				key[varlen - 1] = '\0';
+				char *val = get_env_value(&env, key);
+				tmp_len += val ? ft_strlen(val) : 0;
+				// free(key);
+				len += varlen;
+				continue;
+			}
+            else if (ft_isdigit(str[len + 1]))
+            {
+                len += 2;
+                continue;
+            }
+			else
+			{
+				tmp_len += 1; // pour le '$'
+				if (str[len + 1])
+					tmp_len += 1;
+				len += (str[len + 1]) ? 2 : 1;
+				continue;
+			}
+		}
+		else
+		{
+			tmp_len += 1;
+			len++;
+		}
+	}
+	// 2. ALLOCATION DE LA BONNE TAILLE
+	result = ft_malloc(tmp_len + 1);
 	if (!result)
 		return (NULL);
+
+	// 3. COPIE EFFECTIVE AVEC EXPANSION
+	i = 0;
+	j = 0;
 	while (str[i])
 	{
 		if (str[i] == '$')
@@ -248,11 +382,8 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 			i++;
 			if (str[i] == '?')
 			{
-				char	*exit_code;
-				size_t	k;
-
-				exit_code = ft_itoa(*ft_get_status());
-				k = 0;
+				char *exit_code = ft_itoa(*ft_get_status());
+				size_t k = 0;
 				while (exit_code && exit_code[k])
 					result[j++] = exit_code[k++];
 				// free(exit_code);
@@ -260,32 +391,22 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 			}
 			else if (ft_isalpha(str[i]) || str[i] == '_')
 			{
-				size_t	varlen;
-				size_t	k;
-				char	*key;
-				char	*val;
-				size_t	m;
-
-				varlen = 0;
+				size_t varlen = 0;
 				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
 					varlen++;
-				key = ft_malloc(varlen + 1);
-				if (!key)
-				{
-					// free(result);
-					return (NULL);
-				}
-				k = 0;
+				char *key = ft_malloc(varlen + 1);
+				if (!key) return NULL;
+				size_t k = 0;
 				while (k < varlen)
 				{
 					key[k] = str[i + k];
 					k++;
 				}
 				key[varlen] = '\0';
-				val = get_env_value(&env, key);
+				char *val = get_env_value(&env, key);
 				if (val)
 				{
-					m = 0;
+					size_t m = 0;
 					while (val[m])
 						result[j++] = val[m++];
 				}
@@ -309,6 +430,8 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 	result[j] = '\0';
 	return (result);
 }
+
+
 void	expansion_all_tokens(t_token *tokens, t_env *env)
 {
 	t_token	*curr = tokens;
