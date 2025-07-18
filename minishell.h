@@ -260,7 +260,7 @@ char	*get_path(char *cmd, t_env *env_list);
 
 //signals functions
 void	tt(void);
-int 	handle_exit_status(pid_t pid);
+int 	handle_exit_status(pid_t pid, int status);
 void	handel_ctl_c(int sig);
 void	ft_handler_signal(void);
 void	set_default_signals(void);

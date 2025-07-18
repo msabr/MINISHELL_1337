@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:58 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 13:38:23 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/17 13:03:00 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 // 	}
 // 	else if (pid < 0)
 // 	{
-// 		perror("fork");
+// 		perror("minishell");
 // 		close(here->fd_write);
 // 		close(here->fd_read);
 // 		return (-1);
@@ -67,7 +67,7 @@
 // 	here->fd_read = open("/tmp/heredoc_temp", O_RDONLY);
 // 	if (here->fd_write < 0 || here->fd_read < 0)
 // 	{
-// 		perror("open");
+// 		perror("minishell");
 // 		close(here->fd_write);
 // 		close(here->fd_read);
 // 		return (1);

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:33:32 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 13:38:12 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/17 13:02:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ int	**create_pipes(int n)
 	i = 0;
 	pipes = ft_malloc(sizeof(int *) * (n - 1));
 	if (!pipes)
-		return (perror("malloc"), NULL);
+		return (perror("minishell"), NULL);
 	while (i < n - 1)
 	{
 		pipes[i] = ft_malloc(sizeof(int) * 2);
 		if (!pipes[i])
-			return (perror("malloc"), NULL);
+			return (perror("minishell"), NULL);
 		if (pipe(pipes[i]) == -1)
-			return (perror("pipe"), NULL);
+			return (perror("minishell"), NULL);
 		i++;
 	}
 	return (pipes);

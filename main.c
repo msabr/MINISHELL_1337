@@ -13,15 +13,15 @@ char	*ft_readline(const char *prompt)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 		ft_exit(0);
 	}
-	input = ft_strdup(temp);
-	free(temp);
-	if (input && *input)
-		add_history(input);
+	if (temp && *temp)
+		add_history(temp);
 	if (g_status == SIGINT)
 	{
 		ft_set_status(1);
 		g_status = 0;
 	}
+	input = ft_strdup(temp);
+	free(temp);
 	return (input);
 }
 

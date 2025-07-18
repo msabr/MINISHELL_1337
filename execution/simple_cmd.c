@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 16:08:15 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/18 17:35:23 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 			return (perror("minishell"), 126);
 		}
 		*path = ft_strdup(cmds->args[0]);
+		if (!*path)
+			return (perror("minishell"), 1);
 		return (0);
 	}
 	tmp = get_path(cmds->args[0], *env_list);
@@ -110,5 +112,5 @@ int	execve_simple_cmd(t_cmd *cmds, t_env **env_list)
 		return (perror("fork"), 1);
 	else if (pid == 0)
 		exec_child_process(cmds, env_list, path);
-	return (handle_exit_status(pid));
+	return (handle_exit_status(pid, status));
 }

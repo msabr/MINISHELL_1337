@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 15:40:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/18 15:02:08 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	unset(t_cmd *cmd, t_env **env_list)
 	status = 0;
 	while (cmd->args && cmd->args[i])
 	{
-		if (is_valid_key_unset(cmd->args[i]) == false)
+		if (!is_valid_key_unset(cmd->args[i]))
 		{
 			ft_putstr_fd("unset: `", STDERR_FILENO);
 			ft_putstr_fd(cmd->args[i], STDERR_FILENO);
