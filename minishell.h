@@ -279,6 +279,7 @@ int		redirect_stdin(char *file_name);
 int		redirect_overwrite(char *file_name);
 int		redirect_append(char *file_name);
 bool	handle_redirections(t_cmd *cmds, t_env *env);
+int	preprocess_heredocs(t_cmd *cmds, t_env **env);
 //error handling functions
 int		print_dir_error(char *cmd);
 int		print_cmd_not_found_error(char *cmd);

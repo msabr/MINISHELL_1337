@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 20:17:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/17 10:34:09 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/18 23:37:00 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,7 @@ int redirect_heredoc(t_cmd *cmd, t_env *env)
     
     while (current)
     {
+        tt();
         if (current->type == TOKEN_HEREDOC)
         {
             heredoc = current->heredoc;

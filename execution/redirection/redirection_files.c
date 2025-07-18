@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/14 19:44:02 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/18 23:41:03 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ bool	handle_redirections(t_cmd *cmds, t_env *env)
 		else if (current->type == TOKEN_REDIR_APPEND)
 			flag = redirect_append(current->filename);
 		else if (current->type == TOKEN_HEREDOC)
-			flag = redirect_heredoc(cmds, env);
+			flag = preprocess_heredocs(cmds, &env);
 		if (flag)
 			return (false);
 		current = current->next;

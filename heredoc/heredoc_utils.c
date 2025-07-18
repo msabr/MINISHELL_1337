@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 18:01:00 by khalid058r        #+#    #+#             */
-/*   Updated: 2025/07/18 21:42:04 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/18 23:39:48 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-// /* Handler for SIGINT in heredoc */
+/* Handler for SIGINT in heredoc */
 // void	heredoc_sigint_handler(int sig)
 // {
 // 	if (sig == SIGINT)

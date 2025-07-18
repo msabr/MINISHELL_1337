@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 17:45:00 by khalid058r        #+#    #+#             */
-/*   Updated: 2025/07/18 23:30:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/18 23:38:37 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,32 +116,26 @@ int	count_heredocs(t_cmd *cmds)
 
 /* Prépare chaque heredoc et assigne le fd dans la redirection */
 int	handle_heredoc(t_redir *redir, t_env **env)
-{	
-	int	fd;// Pas de redirection, rien à faire
+{
+	int	fd;
+
 	while (redir)
 	{
 		if (redir->type == TOKEN_HEREDOC && redir->heredoc)
 		{
-			redir->heredoc->flag = 0;
-			printf("%s; %p\n", redir->filename, env);
-			fd = heredoc_pipe(redir->filename, env, redir->heredoc->flag);
+			fd = heredoc_pipe(redir->heredoc->delimiter, env, redir->heredoc->flag);
 			if (fd == -1)
 				return (-1);
 			redir->fd_in = fd;
 		}
-		break;
 		redir = redir->next;
 	}
-
-
-
 	return (0);
 }
 
 /* À appeler avant exec pour ouvrir tous les heredocs */
 int	preprocess_heredocs(t_cmd *cmds, t_env **env)
 {
-	tt();
 	if (count_heredocs(cmds) < 0)
 	{
 		fprintf(stderr, "heredoc: maximum here-document count exceeded\n");
