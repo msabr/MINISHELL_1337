@@ -57,7 +57,7 @@ char	*merge_argument(t_token **ptok)
 	return (arg);
 }
 
-static int	count_args(char **args)
+int	count_args(char **args)
 {
 	int	i = 0;
 	if (!args)
@@ -87,21 +87,41 @@ int	add_argument(char ***args, char *new_arg)
 	return (1);
 }
 
-t_redir	*new_redir(t_token_type type, char *filename, char *delimiter_heredoc)
+
+
+t_redir *new_redir(t_token_type type, char *filename, char *delimiter_heredoc)
 {
-	t_redir	*new = ft_malloc(sizeof(t_redir));
-	if (!new)
-		return (NULL);
-	new->type = type;
-	new->filename = filename;
-	new->fd_in = -1;
-	new->fd_out = -1;
-	// new->exit_status = 0;
-	(void)delimiter_heredoc; // Pour éviter l'avertissement si non utilisé
-	// new->delimiter_heredoc = delimiter_heredoc;
-	// new->heredoc_content = NULL;
-	new->next = NULL;
-	return (new);
+    t_redir *new = ft_malloc(sizeof(t_redir));
+    if (!new)
+        return NULL;
+
+    new->type = type;
+    new->filename = filename;
+    new->fd_in = -1;
+    new->fd_out = -1;
+    new->next = NULL;
+
+    if (type == TOKEN_HEREDOC)
+    {
+        new->heredoc = ft_malloc(sizeof(t_heredoc));
+        if (!new->heredoc)
+        {
+            free(new);
+            return NULL;
+        }
+        new->heredoc->delimiter = delimiter_heredoc;
+        new->heredoc->fd_read = -1;
+        new->heredoc->fd_write = -1;
+        new->heredoc->heredoc_num = 0; // À gérer si plusieurs heredocs
+        new->heredoc->index = 0;       // À gérer si besoin
+        new->heredoc->flag = 0;        // À renseigner selon si le heredoc est quoté
+        new->heredoc->env = NULL;      // À remplir si besoin d'environnement
+    }
+    else
+    {
+        new->heredoc = NULL;
+    }
+    return new;
 }
 
 int	add_redirection(t_redir **redir, t_token_type type, char *filename, char *delimiter_heredoc)

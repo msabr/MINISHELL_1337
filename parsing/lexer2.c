@@ -13,21 +13,21 @@
 #include "../minishell.h"
 
 void	add_token(t_token **head, const char *val,
-			t_token_type type, bool space)
+			t_token_type type, bool space,int expneded)
 {
 	t_token	*new;
 
-	new = lst_new_token(val, type, space);
+	new = lst_new_token(val, type, space,expneded);
 	lst_add_back(head, new);
 }
 
 void	add_token_quoted(t_token **head, const char *val,
-			t_token_type type, bool space, int quoted)
+			t_token_type type, bool space, int expneded)
 {
 	t_token	*new;
 
-	new = lst_new_token(val, type, space);
-	new->quoted = quoted;
+	new = lst_new_token(val, type, space,expneded);
+	new->quoted = 1;
 	lst_add_back(head, new);
 }
 
@@ -60,7 +60,7 @@ void	handle_word(const char *input, size_t *i, t_token **head)
 	space = 0;
 	if (input[*i + len] == '\0' || ft_isspace(input[*i + len]))
 		space = 1;
-	add_token(head, val, TOKEN_WORD, space);
+	add_token(head, val, TOKEN_WORD, space,0);
 	// free(val);
 	*i += len;
 }
@@ -152,7 +152,7 @@ void	handle_variable(const char *input, size_t *i, t_token **head)
 	space = 0;
 	if (input[*i + len] == '\0' || ft_isspace(input[*i + len]))
 		space = 1;
-	add_token(head, val, TOKEN_VARIABLE, space);
+	add_token(head, val, TOKEN_VARIABLE, space,1);
 	// free(val);
 	*i += len;
 }
@@ -180,7 +180,7 @@ void	handle_operator(const char *input, size_t *i, t_token **head)
 	space = 0;
 	if (input[*i + len] == '\0' || ft_isspace(input[*i + len]))
 		space = 1;
-	add_token(head, val, type, space);
+	add_token(head, val, type, space,0);
 	// free(val);
 	*i += len;
 }
@@ -214,6 +214,6 @@ t_token	*lexer2(const char *input)
 		else
 			handle_word(input, &i, &head);
 	}
-	add_token(&head, NULL, TOKEN_EOF, 0);
+	add_token(&head, NULL, TOKEN_EOF, 0,0);
 	return (head);
 }

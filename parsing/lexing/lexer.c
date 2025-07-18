@@ -48,7 +48,7 @@ static void	handle_word(const char *input, size_t *i, t_token **head)
 	else
 		space = 0;
 	if (val && val[0] != '\0')
-		add_token(head, val, TOKEN_WORD, space);
+		add_token(head, val, TOKEN_WORD, space,0);
 	// free(val);
 	*i += len;
 }
@@ -124,7 +124,7 @@ static void	handle_variable(const char *input, size_t *i, t_token **head)
 		space = 1;
 	else
 		space = 0;
-	add_token(head, val, TOKEN_VARIABLE, space);
+	add_token(head, val, TOKEN_VARIABLE, space,1);
 	// free(val);
 	*i += len;
 }
@@ -146,7 +146,7 @@ static void	handle_operator(const char *input, size_t *i, t_token **head)
 		space = 1;
 	else
 		space = 0;
-	add_token(head, val, type, space);
+	add_token(head, val, type, space,0);
 	// free(val);
 	*i += len;
 }
@@ -178,6 +178,6 @@ t_token	*lexer(const char *input)
 		else
 			handle_word(input, &i, &head);
 	}
-	add_token(&head, "", TOKEN_EOF, 0);
+	add_token(&head, "", TOKEN_EOF, 0,0);
 	return (head);
 }
