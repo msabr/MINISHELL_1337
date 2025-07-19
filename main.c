@@ -11,7 +11,7 @@ char	*ft_readline(const char *prompt)
 	if (!temp)
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-		ft_exit(0);
+		ft_exit(*ft_get_status());
 	}
 	if (temp && *temp)
 		add_history(temp);
@@ -75,7 +75,7 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 	char	*input;
 	t_cmd	*cmds;
 
-	status = 0;
+	status = *ft_get_status();
 	// ft_set_status(0);
 	while (true)
 	{
