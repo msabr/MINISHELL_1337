@@ -40,7 +40,7 @@ SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c \
 SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
 				execution/redirection/redirect_heredoc.c\
-				heredoc/heredoc.c heredoc/heredoc_utils.c
+				# heredoc/heredoc.c heredoc/heredoc_utils.c
 		
 SRC_PAR = parsing/dubaging.c parsing/lexer2.c \
 	parsing/lexing/lexer.c parsing/lexing/lexer_handlers.c \

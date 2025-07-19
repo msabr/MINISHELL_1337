@@ -11,6 +11,7 @@ bash-3.2$ echo $?
 bash-3.2$ ^D
 bash-3.2$ echo $?
 last_exit_status
+and is exit wthout arguments should exit with last status 
 ---------------------------------------------
 bash-3.2$ >>>>
 bash: syntax error near unexpected token `>>'
