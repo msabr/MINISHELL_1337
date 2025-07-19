@@ -272,7 +272,7 @@ void	set_default_signals(void);
 int		*ft_get_status(void);
 void	ft_set_status(int status);
 void	ft_exit(int status);
-void	set_and_exit(int status);
+void	ft_set_and_exit(int status);
 
 //redirection functions
 bool	is_redirection(t_cmd *cmds);

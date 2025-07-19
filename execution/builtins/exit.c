@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 15:47:12 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/19 15:49:56 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,5 @@ void	exit_shell(t_cmd *cmd)
 	if (cmd->args[1] && cmd->args[2])
 		return (ft_putstr_fd("minishell: exit: too many arguments\n", 2));
 	ft_free();
-	set_and_exit(status);
+	ft_set_and_exit(status);
 }

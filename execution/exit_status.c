@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 15:43:13 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 15:45:09 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/19 15:49:56 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_exit(int status)
     exit(status);
 }
 
-void	set_and_exit(int status)
+void	ft_set_and_exit(int status)
 {
 	ft_set_status(status);
 	ft_exit(status);
