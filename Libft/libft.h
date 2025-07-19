@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 21:29:34 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 14:27:59 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/19 15:44:07 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ t_gc	**ft_env_gc(void);
 int		ft_atoi(const char *str);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t n, size_t size);
-void	ft_exit(int status);
 void	ft_free(void);
 bool	ft_is_number(const char *str);
 bool	ft_isalnum(int c);

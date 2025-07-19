@@ -190,8 +190,6 @@ t_token			*lexer2(const char *input);
 size_t			parse_quote(const char *input, size_t i, t_token **head); 
 int				check_syntax_errors(t_token *tokens, const char *input);
 void			syntax_error(const char *msg);
-void			ft_set_status(int status);
-int				*ft_get_status(void);
 int				ft_s_ret(int set);
 
 // char	*ft_strncpy(char *dest, const char *src, size_t n);
@@ -269,6 +267,12 @@ int 	handle_exit_status(pid_t pid, int status);
 void	handel_ctl_c(int sig);
 void	ft_handler_signal(void);
 void	set_default_signals(void);
+
+//exit status functions
+int		*ft_get_status(void);
+void	ft_set_status(int status);
+void	ft_exit(int status);
+void	set_and_exit(int status);
 
 //redirection functions
 bool	is_redirection(t_cmd *cmds);

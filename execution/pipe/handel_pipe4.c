@@ -6,17 +6,13 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 15:48:57 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 16:06:29 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/19 15:44:45 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe.h"
 
-void	set_and_exit(int status)
-{
-	ft_set_status(status);
-	ft_exit(status);
-}
+
 
 void	exec_child(t_cmd *cur, t_execargs *args, int i)
 {
