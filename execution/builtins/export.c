@@ -23,26 +23,29 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 	add_env_value(env_list, new_key, value);
 }
 
-static void	print_error_export(char *arg)
+static void	print_error_export(char *arg, int *status)
 {
 	ft_putstr_fd("export: `", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+	*status = 1;
 }
 
-void	export(t_cmd *cmd, t_env **env_list)
+int	export(t_cmd *cmd, t_env **env_list)
 {
 	int		i ;
 	char	*key;
 	char	*value;
+	int		status;
 
 	i = 1;
+	status = 0;
 	if (!cmd->args || !cmd->args[i])
-		return (export_withot_args(*env_list));
+		return (export_withot_args(*env_list), status);
 	while (cmd->args[i])
 	{
 		if (!is_valid_key_export(cmd->args[i]))
-			print_error_export(cmd->args[i]);
+			print_error_export(cmd->args[i], &status);
 		else if (ft_strchr(cmd->args[i], '=') != NULL)
 		{
 			key = set_key(cmd->args[i]);
@@ -56,6 +59,7 @@ void	export(t_cmd *cmd, t_env **env_list)
 			add_temporary_env_value(env_list, cmd->args[i]);
 		i++;
 	}
+	return (status);
 }
 
 
