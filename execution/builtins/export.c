@@ -31,41 +31,41 @@ static void	print_error_export(char *arg, int *status)
 	*status = 1;
 }
 
+void	loop_export(char *arg, t_env **env_list, int *status)
+{
+	char	*key;
+	char	*value;
+
+	if (!is_valid_key_export(arg))
+		print_error_export(arg, status);
+	else if (ft_strchr(arg, '=') != NULL)
+	{
+		key = set_key(arg);
+		value = ft_strchr(arg, '=') + 1;
+		if (ft_strstr(arg, "+="))
+			append_env_value(env_list, key, value);
+		else
+			add_env_value(env_list, key, value);
+	}
+	else
+		add_temporary_env_value(env_list, arg);
+}
+
 int	export(t_cmd *cmd, t_env **env_list)
 {
 	int		i ;
-	char	*key;
-	char	*value;
 	int		status;
 
 	i = 1;
-	status = 0;
 	if (!cmd->args || !cmd->args[i])
 		return (export_withot_args(*env_list), status);
 	while (cmd->args[i])
 	{
-		if (!is_valid_key_export(cmd->args[i]))
-			print_error_export(cmd->args[i], &status);
-		else if (ft_strchr(cmd->args[i], '=') != NULL)
-		{
-			key = set_key(cmd->args[i]);
-			value = ft_strchr(cmd->args[i], '=') + 1;
-			if (ft_strstr(cmd->args[i], "+="))
-				append_env_value(env_list, key, value);
-			else
-				add_env_value(env_list, key, value);
-		}
-		else
-			add_temporary_env_value(env_list, cmd->args[i]);
+		loop_export(cmd->args[i], env_list, &status);
 		i++;
 	}
 	return (status);
 }
-
-
-
-
-
 
 
 // #include "../../minishell.h"
