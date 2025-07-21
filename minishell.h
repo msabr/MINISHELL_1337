@@ -159,7 +159,7 @@ int		is_arg_token(t_token *tok);
 int		is_redir(t_token_type t);
 char	*merge_argument(t_token **ptok);
 int		add_argument(char ***args, char *new_arg);
-int		add_redirection(t_redir **redir, t_token_type type, char *filename, char *delimiter_heredoc);
+int		add_redirection(t_redir **redir, t_token_type type, char *filename);
 int		add_command(t_cmd **cmds, t_cmd *new);
 t_cmd	*new_command(void);
 void	free_cmd_list(t_cmd *cmds); // Gestion mémoire
