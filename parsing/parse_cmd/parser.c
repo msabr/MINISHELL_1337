@@ -15,9 +15,9 @@ static int	handle_redir(t_cmd *cmd, t_token **tok)
 	if (!filename)
 		return (0);
 	if ((*tok)->type == TOKEN_HEREDOC)
-		add_redirection(&cmd->redirs, (*tok)->type, NULL, filename);
+		add_redirection(&cmd->redirs, (*tok)->type, filename);
 	else
-		add_redirection(&cmd->redirs, (*tok)->type, filename, NULL);
+		add_redirection(&cmd->redirs, (*tok)->type, filename);
 	*tok = target;
 	return (1);
 }

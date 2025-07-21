@@ -89,7 +89,7 @@ int	add_argument(char ***args, char *new_arg)
 
 
 
-t_redir *new_redir(t_token_type type, char *filename, char *delimiter_heredoc)
+t_redir *new_redir(t_token_type type, char *filename)
 {
     t_redir *new = ft_malloc(sizeof(t_redir));
     if (!new)
@@ -109,7 +109,7 @@ t_redir *new_redir(t_token_type type, char *filename, char *delimiter_heredoc)
             free(new);
             return NULL;
         }
-        new->heredoc->delimiter = delimiter_heredoc;
+        new->heredoc->delimiter = filename;
         new->heredoc->fd_read = -1;
         new->heredoc->fd_write = -1;
         new->heredoc->heredoc_num = 0; // À gérer si plusieurs heredocs
@@ -124,9 +124,9 @@ t_redir *new_redir(t_token_type type, char *filename, char *delimiter_heredoc)
     return new;
 }
 
-int	add_redirection(t_redir **redir, t_token_type type, char *filename, char *delimiter_heredoc)
+int	add_redirection(t_redir **redir, t_token_type type, char *filename)
 {
-	t_redir	*new = new_redir(type, filename, delimiter_heredoc);
+	t_redir	*new = new_redir(type, filename);
 	t_redir	*tmp;
 
 	if (!new)
@@ -200,7 +200,7 @@ void	remove_empty_token(t_token **tokens)
 {
 	t_token	*curr;
 	t_token	*prev;
-	t_token	*to_free;
+	// t_token	*to_free;
 
 	prev = NULL;
 	curr = *tokens;
@@ -208,7 +208,7 @@ void	remove_empty_token(t_token **tokens)
 	{
 		if (!curr->value || curr->value[0] == '\0')
 		{
-			to_free = curr;
+			// to_free = curr;
 			if (prev)
 				prev->next = curr->next;
 			else
@@ -227,11 +227,11 @@ void	remove_empty_token(t_token **tokens)
 
 void	remove_empty_token_head(t_token **tokens)
 {
-	t_token *tmp;
+	// t_token *tmp;
 
 	while (*tokens && (!(*tokens)->value || (*tokens)->value[0] == '\0'))
 	{
-		tmp = *tokens;
+		// tmp = *tokens;
 		*tokens = (*tokens)->next;
 
 		if (*tokens)
