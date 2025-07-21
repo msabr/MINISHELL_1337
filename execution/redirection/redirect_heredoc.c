@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 20:17:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 14:14:50 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/21 16:04:27 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@
 //     }
 //     return (0);
 // }
-void	heredoc_sigint_handler(int sig)
+void	handel_herdoc(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -283,7 +283,7 @@ int	heredoc_pipe(const char *delim, t_env **env, int quoted)
 	if (pipe(fds) < 0)
 		return (perror("pipe"), -1);
 
-	signal(SIGINT, heredoc_sigint_handler);
+	// signal(SIGINT, heredoc_sigint_handler);
 	while (1)
 	{
 		status = handle_heredoc_line(fds, &heredoc);
@@ -355,7 +355,6 @@ int	preprocess_heredocs(t_cmd *cmds, t_env **env)
 			return (-1);
 		cmds = cmds->next;
 	}
-                tt();
 	return (0);
 }
 #include "../../minishell.h"
@@ -379,11 +378,10 @@ int redirect_heredoc(t_cmd *cmd, t_env *env)
 	}
     while (current)
     {
-        tt();
+		signal(SIGINT, handel_herdoc); // Handle Ctrl+C in heredoc
         if (current->type == TOKEN_HEREDOC)
         {
             heredoc = current->heredoc;
-            tt();
             if (!heredoc || !heredoc->delimiter)
                 return (1); // Error: missing heredoc or delimiter
 

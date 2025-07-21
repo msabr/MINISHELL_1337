@@ -57,6 +57,7 @@ int	export(t_cmd *cmd, t_env **env_list)
 	int		status;
 
 	i = 1;
+	status = 0;
 	if (!cmd->args || !cmd->args[i])
 		return (export_withot_args(*env_list), status);
 	while (cmd->args[i])
