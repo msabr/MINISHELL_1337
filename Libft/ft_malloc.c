@@ -6,11 +6,13 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:24:49 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 15:47:42 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:15:31 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+void	ft_exit(int status);
 
 t_gc	**ft_env_gc(void)
 {
@@ -29,10 +31,10 @@ void	*ft_malloc(size_t size)
 		return (NULL);
 	ptr = malloc(size);
 	if (!ptr)
-		exit(1);
+		ft_exit(1);
 	new = malloc(sizeof(t_gc));
 	if (!new)
-		exit(1);
+		ft_exit(1);
 	gc = ft_env_gc();
 	new->ptr = ptr;
 	if (*gc)

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 14:15:30 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 21:52:53 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,20 @@ bool	is_redirection(t_cmd *cmds)
 	return (false);
 }
 
+static bool valid_filename(const char *filename)
+{
+	int i;
+
+	i = 0;
+	if (!filename)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(filename, STDERR_FILENO);
+		ft_putstr_fd(": ambiguous redirect\n", STDERR_FILENO);
+		return (false);
+	}
+	return (true);
+}
 bool	handle_redirections(t_cmd *cmds, t_env *env)
 {
 	t_redir	*current;
@@ -38,6 +52,8 @@ bool	handle_redirections(t_cmd *cmds, t_env *env)
 	current = cmds->redirs;
 	while (current)
 	{
+		if (!valid_filename(current->filename))
+			return (false);
 		if (current->type == TOKEN_REDIR_IN)
 			flag = redirect_stdin(current->filename);
 		else if (current->type == TOKEN_REDIR_OUT)

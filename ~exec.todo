@@ -83,7 +83,8 @@ minishell> echo "" $PWD
 bash-3.2$  echo "" $PWD
  /mnt/homes/msabr/Desktop/mini4
 ---------------------------------------------
-
+bash-3.2$ > $a
+bash: $a: ambiguous redirect
 ---------------------------------------------
 
 ---------------------------------------------

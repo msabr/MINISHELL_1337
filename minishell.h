@@ -233,7 +233,7 @@ int		execve_builtin(t_cmd *cmd, t_env **env_list);
 int		cd(t_cmd *cmd, t_env **env_list);
 void	echo(t_cmd *cmd);
 void	env_function(t_env *env_list);
-void	exit_shell(t_cmd *cmd);
+int		exit_shell(t_cmd *cmd);
 char	*set_key(const char *arg);
 int		export(t_cmd *cmd, t_env **env_list);
 // void	export(char **args, t_env **env_list);
@@ -288,10 +288,8 @@ int	preprocess_heredocs(t_cmd *cmds, t_env **env);
 void	ft_perror(char *errn);
 int		print_dir_error(char *cmd);
 int		print_cmd_not_found_error(char *cmd);
-int		print_execve_error(char *cmd);
-int		print_execve_permission_error(char *cmd);
 void	print_exit_error(const char *arg);
 //main functions
-void	main_loop(t_env **env_list, struct termios *saved_termios);
+void	main_loop(t_env **env_list);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 15:49:56 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 19:11:41 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static bool	valid_number(const char *str)
 	return (true);
 }
 
-void	exit_shell(t_cmd *cmd)
+int	exit_shell(t_cmd *cmd)
 {
 	int	status;
 
@@ -69,7 +69,8 @@ void	exit_shell(t_cmd *cmd)
 			print_exit_error(cmd->args[1]);
 	}
 	if (cmd->args[1] && cmd->args[2])
-		return (ft_putstr_fd("minishell: exit: too many arguments\n", 2));
+		return (ft_putstr_fd("minishell: exit: too many arguments\n", 2), 1);
 	ft_free();
 	ft_set_and_exit(status);
+	return (status);
 }

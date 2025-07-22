@@ -83,12 +83,12 @@ $(LIBFT): $(SRC_LIB)
 	make -C Libft
 
 clean:
-	$(RM) $(OBJS)
 	make clean -C Libft
+	$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
 	make fclean -C Libft
+	$(RM) $(NAME)
 
 re: fclean all
 

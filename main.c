@@ -17,6 +17,7 @@ char	*ft_readline(const char *prompt)
 		add_history(temp);
 	if (g_status == SIGINT)
 	{
+		rl_catch_signals = 0;
 		ft_set_status(1);
 		g_status = 0;
 	}
@@ -40,16 +41,14 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	{
 		printf("syntax error\n");
 		*status = 258;
-		// free_token_list(tokens);
 		return (NULL);
 	}
 	cmds = parse_tokens_to_cmd2s(tokens);
-	// print_cmds(cmds);
+	print_cmds(cmds);
 	// free_token_list(tokens);
 	if (!cmds)
 	{
 		printf("minishell: parse error\n");
-		// free_cmd_list(cmds);
 		return (NULL);
 	}
 	return (cmds);
@@ -69,14 +68,15 @@ void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 	signal(SIGINT, handel_ctl_c);
 }
 
-void	main_loop(t_env **env_list, struct termios *saved_termios)
+void	main_loop(t_env **env_list)
 {
-	int		status;
-	char	*input;
-	t_cmd	*cmds;
+	int				status;
+	char			*input;
+	t_cmd			*cmds;
+	struct termios	saved_termios;
 
 	status = *ft_get_status();
-	// ft_set_status(0);
+	tcgetattr(STDIN_FILENO, &saved_termios);
 	while (true)
 	{
 		input = ft_readline("minishell$ ");
@@ -87,13 +87,9 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 			if (cmds)
 			{
 				execute_cmds(cmds, env_list, &status);
-				// free_cmd_list(cmds);
 			}
-			// free(input);
 		}
-		// else
-			// free(input);
-		tcsetattr(STDIN_FILENO, TCSANOW, saved_termios);
+		tcsetattr(STDIN_FILENO, TCSANOW, &saved_termios);
 	}
 	rl_clear_history();
 }
@@ -101,17 +97,15 @@ void	main_loop(t_env **env_list, struct termios *saved_termios)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env			*env_list;
-	struct termios	saved_termios;
+	t_env	*env_list;
 
 	// atexit(f);
 	(void)argc;
 	(void)argv;
 	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
 		return (ft_putstr_fd("minishell: not a terminal\n", STDERR_FILENO), 1);
-	tcgetattr(STDIN_FILENO, &saved_termios);
 	configure_environment(&env_list, envp);
 	ft_handler_signal();
-	main_loop(&env_list, &saved_termios);
+	main_loop(&env_list);
 	return (0);
 }

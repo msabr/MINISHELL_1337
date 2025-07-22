@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 20:17:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 18:02:34 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:13:22 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@
 // 		if (is_builtin)
 // 			return (0);
 // 		else
-// 			return (print_execve_error(args ? args[0] : "command"));
+// 			return (perror(""));
 // 	}
 // 	if (cmd->redirs->type == TOKEN_HEREDOC && !cmd->redirs->filename)
 // 	{

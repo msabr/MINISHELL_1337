@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 18:03:32 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:14:04 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 		return (access(cmds->args[0], X_OK), ft_perror(cmds->args[0]), 126);
 	else if (!tmp)
 		return (print_cmd_not_found_error(cmds->args[0]));
-	*path = tmp;
-	return (0);
+	return (*path = tmp, 0);
 }
 
 static void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
