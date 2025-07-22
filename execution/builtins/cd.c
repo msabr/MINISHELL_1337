@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:51:05 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/17 12:47:04 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:03:44 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	cd(t_cmd *cmd, t_env **env_list)
 	else
 		path = cmd->args[1];
 	if (chdir(path) == -1)
-		return (perror("minishell"), 1);
+		return (ft_perror("cd"), 1);
 	add_env_value(env_list, "OLDPWD", get_env_value(env_list, "1PWD"));
 	cwd = ft_getcwd();
 	if (cwd)

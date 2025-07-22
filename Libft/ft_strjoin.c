@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:36:14 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:04:52 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:06:44 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (ft_strdup(s1));
 	len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	s3 = ft_malloc(sizeof(char) * len);
-	if (!s3)
-		return (NULL);
 	ft_strlcpy(s3, s1, len);
 	ft_strlcat(s3, s2, len);
 	return (s3);

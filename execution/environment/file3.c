@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:16:36 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 14:42:18 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:05:21 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,6 @@ t_env	*copy_env(t_env *env_list)
 	while (current)
 	{
 		new_node = ft_malloc(sizeof(t_env));
-		if (!new_node)
-			return (NULL);
 		new_node->key = ft_strdup(current->key);
 		if (current->value)
 			new_node->value = ft_strdup(current->value);

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 12:07:47 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:02:41 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:06:02 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ char	*ft_itoa(int n)
 	num = n;
 	count = count_digit(n);
 	pnt = (char *)ft_malloc(sizeof(char) * (count + 1));
-	if (!pnt)
-		return (NULL);
 	pnt[count] = '\0';
 	if (num < 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/09 15:33:26 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:02:34 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	redirect_append(char *file_name)
 	fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{
-		perror(file_name);
+		ft_perror(file_name);
 		return (-1);
 	}
 	if (dup2(fd, STDOUT_FILENO) < 0)

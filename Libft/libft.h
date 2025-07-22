@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 21:29:34 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 15:44:07 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 17:59:32 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ typedef struct s_gc
 	void		*ptr;
 	struct s_gc	*next;
 }	t_gc;
-
 
 t_gc	**ft_env_gc(void);
 int		ft_atoi(const char *str);
@@ -67,7 +66,6 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_strrchr(const char *str, int c);
 char	*ft_strrev(char *str);
 char	*ft_strstr(const char *haystack, const char *needle);
-char	*ft_strtok(char *str, const char *delim);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_tolower(int c);

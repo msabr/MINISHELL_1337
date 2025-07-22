@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 17:45:00 by khalid058r        #+#    #+#             */
-/*   Updated: 2025/07/18 23:38:37 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:02:34 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	heredoc_pipe(const char *delim, t_env **env, int quoted)
 	heredoc.fd_write = -1;
 
 	if (pipe(fds) < 0)
-		return (perror("pipe"), -1);
+		return (ft_perror("pipe"), -1);
 
 	signal(SIGINT, heredoc_sigint_handler);
 

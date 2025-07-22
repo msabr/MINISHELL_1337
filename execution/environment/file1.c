@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:56:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/06 01:00:06 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:05:06 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ static t_env	*create_env_node(char *env_entry)
 	t_env	*new_node;
 
 	new_node = ft_malloc(sizeof(t_env));
-	if (!new_node)
-		return (NULL);
 	new_node->key = ft_strdup(set_key(env_entry));
 	if (!new_node->key)
 		return (NULL);
@@ -76,8 +74,6 @@ char	**list_to_env(t_env *env_list)
 
 	count = size_of_env_list(env_list);
 	env_array = (char **)ft_malloc(sizeof(char *) * (count + 1));
-	if (!env_array)
-		return (NULL);
 	traverser = env_list;
 	count = 0;
 	while (traverser)

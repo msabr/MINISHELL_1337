@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 10:49:20 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/01 18:04:37 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:06:33 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	pnt = (char **)ft_malloc(sizeof(char *) * (count_words(s, c) + 1));
-	if (!pnt)
-		return (NULL);
 	i = 0;
 	index = 0;
 	while (index < count_words(s, c))
@@ -73,8 +71,6 @@ char	**ft_split(char const *s, char c)
 		while (s[i] && s[i] != c)
 			i++;
 		pnt[index] = (char *)ft_malloc(sizeof(char) * (i - start + 1));
-		if (!pnt[index])
-			return (NULL);
 		fill_word(pnt[index++], s, start, c);
 	}
 	pnt[count_words(s, c)] = NULL;

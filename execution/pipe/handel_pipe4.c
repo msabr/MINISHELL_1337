@@ -6,13 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 15:48:57 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 15:49:56 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:02:34 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe.h"
-
-
 
 void	exec_child(t_cmd *cur, t_execargs *args, int i)
 {
@@ -36,7 +34,7 @@ void	exec_child(t_cmd *cur, t_execargs *args, int i)
 			ft_set_and_exit(status);
 		execve(path, cur->args, list_to_env(*args->env_list));
 	}
-	perror("minishell");
+	ft_perror("minishell");
 	ft_set_and_exit(1);
 }
 
@@ -74,7 +72,7 @@ int	fork_and_exec(t_cmd *cmds, pid_t *pids, t_execargs *args)
 		if (pids[i] < 0)
 		{
 			kill_all_pids(pids, i);
-			perror("fork");
+			ft_perror("fork");
 			return (-1);
 		}
 		if (pids[i] == 0)

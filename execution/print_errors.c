@@ -6,11 +6,17 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:51:42 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 13:38:00 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:07:53 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	ft_perror(char *errn)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	perror(errn);
+}
 
 int	print_dir_error(char *cmd)
 {

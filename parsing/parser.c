@@ -31,8 +31,6 @@ char	*merge_argument(t_token **ptok)
 
 	len = arg_total_len(*ptok);
 	arg = ft_malloc(len + 1);
-	if (!arg)
-		return (NULL);
 	arg[0] = 0;
 	tok = *ptok;
 	while (is_arg_token(tok))
@@ -69,8 +67,6 @@ void	add_argument(char ***args, char *new_arg)
 
 	argc = count_args(*args);
 	new_args = ft_malloc(sizeof(char *) * (argc + 2));
-	if (!new_args)
-		return ;
 	i = 0;
 	while (i < argc)
 	{

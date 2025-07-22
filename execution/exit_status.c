@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 15:43:13 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 15:49:56 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:07:47 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	ft_set_status(int status)
 
 void	ft_exit(int status)
 {
-    ft_free();
-    rl_clear_history();
-    exit(status);
+	ft_free();
+	rl_clear_history();
+	exit(status);
 }
 
 void	ft_set_and_exit(int status)

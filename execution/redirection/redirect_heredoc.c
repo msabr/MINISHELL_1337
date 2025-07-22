@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 20:17:55 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/21 16:04:27 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:02:34 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@
 //             heredoc = current->heredoc;
 //             if (pipe(pipe_fd) == -1)
 //             {
-//                 perror("minishell: pipe");
+//                 ft_perror("minishell: pipe");
 //                 return (1);
 //             }
 //             while (1)
@@ -208,7 +208,7 @@
 //             close(pipe_fd[1]);
 //             if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 //             {
-//                 perror("minishell: dup2");
+//                 ft_perror("minishell: dup2");
 //                 close(pipe_fd[0]);
 //                 return (1);
 //             }
@@ -281,7 +281,7 @@ int	heredoc_pipe(const char *delim, t_env **env, int quoted)
 	heredoc.fd_write = -1;
 
 	if (pipe(fds) < 0)
-		return (perror("pipe"), -1);
+		return (ft_perror("pipe"), -1);
 
 	// signal(SIGINT, heredoc_sigint_handler);
 	while (1)

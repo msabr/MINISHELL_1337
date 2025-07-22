@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 14:23:11 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:03:32 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,17 @@ int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 		if (access(cmds->args[0], X_OK) == -1)
 		{
 			if (errno == ENOENT)
-				return (perror("minishell"), 127);
-			return (perror("minishell"), 126);
+				return (ft_perror(cmds->args[0]), 127);
+			return (ft_perror(cmds->args[0]), 126);
 		}
 		*path = ft_strdup(cmds->args[0]);
 		if (!*path)
-			return (perror("minishell"), 1);
+			return (ft_perror(cmds->args[0]), 1);
 		return (0);
 	}
 	tmp = get_path(cmds->args[0], *env_list);
 	if (!tmp && ft_aid(cmds->args[0], env_list))
-		return (access(cmds->args[0], X_OK), perror("minishell"), 126);
+		return (access(cmds->args[0], X_OK), ft_perror(cmds->args[0]), 126);
 	else if (!tmp)
 		return (print_cmd_not_found_error(cmds->args[0]));
 	*path = tmp;
@@ -74,7 +74,7 @@ static void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 		ft_exit(EXIT_FAILURE);
 	execve(path, cmds->args, list_to_env(*env_list));
 	if (!path || !*path)
-		perror("minishell");
+		ft_perror(cmds->args[0]);
 	ft_exit(EXIT_FAILURE);
 }
 
@@ -109,7 +109,7 @@ int	execve_simple_cmd(t_cmd *cmds, t_env **env_list)
 		return (status);
 	pid = fork();
 	if (pid < 0)
-		return (perror("fork"), 1);
+		return (ft_perror("fork"), 1);
 	else if (pid == 0)
 		exec_child_process(cmds, env_list, path);
 	return (handle_exit_status(pid, status));

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 21:10:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/05 15:18:50 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 18:06:37 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ char	*ft_strdup(const char *s)
 
 	len = ft_strlen(s);
 	dup = (char *)ft_malloc((len + 1) * sizeof(char));
-	if (!dup)
-		return (NULL);
 	i = 0;
 	while (s && s[i])
 	{
