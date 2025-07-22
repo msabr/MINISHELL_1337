@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 21:52:53 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/22 22:07:28 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ bool	is_redirection(t_cmd *cmds)
 
 static bool valid_filename(const char *filename)
 {
-	int i;
-
-	i = 0;
 	if (!filename)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
