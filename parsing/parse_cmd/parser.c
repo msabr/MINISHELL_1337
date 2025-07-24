@@ -120,7 +120,27 @@ static int is_only_spaces(const char *str) {
 // 	return (1);
 // }
 
-
+static void remove_empty_word_tokens(t_token **tokens)
+{
+    t_token *curr = *tokens, *prev = NULL, *next;
+    while (curr)
+    {
+        next = curr->next;
+        if (curr->type == TOKEN_WORD && (!curr->value || curr->value[0] == '\0'))
+        {
+            // Détache le token de la liste
+            if (prev)
+                prev->next = next;
+            else
+                *tokens = next;
+            // Libère curr si tu gères la mémoire
+            // free_token(curr); // à adapter à ta gestion mémoire
+        }
+        else
+            prev = curr;
+        curr = next;
+    }
+}
 static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 {
 	t_cmd	*current = NULL;
@@ -201,7 +221,7 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 t_cmd	*parse_tokens_to_cmd2s(t_token *tokens)
 {
 	t_cmd	*cmds = NULL;
-
+	remove_empty_word_tokens(&tokens);
 	// remove_empty_token_head(&tokens);
 	if (!tokens || (tokens->type == TOKEN_EOF && !tokens->next))
 		return (NULL);
