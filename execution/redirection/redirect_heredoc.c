@@ -358,9 +358,7 @@ int	preprocess_heredocs(t_cmd *cmds, t_env **env)
 	return (0);
 }
 #include "../../minishell.h"
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
+
 
 int redirect_heredoc(t_cmd *cmd, t_env *env)
 {

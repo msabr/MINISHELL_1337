@@ -82,7 +82,7 @@ void print_cmds(t_cmd *cmds)
         print_redirs(cmds->redirs);
         // print_heredocs(cmds->redirs);
         if (cmds->next)
-            printf("|\n");
+            printf("\n");
         cmds = cmds->next;
         i++;
     }
