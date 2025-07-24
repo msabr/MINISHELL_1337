@@ -132,6 +132,7 @@ int	is_in_heredoc(t_token *token)
 // }
 
 
+
 /*
 ** Cas 1 : handle un token dans un heredoc
 */
@@ -446,6 +447,8 @@ void	expansion_all_tokens(t_token *tokens, t_env *env)
 		if (is_in_heredoc(curr))
 		{
 			expansion_handle_heredoc(curr);
+			if ((curr ->type == TOKEN_WORD ) && (ft_strcmp(curr->value,"<<") == 0))
+				curr->type = TOKEN_HEREDOC;
 			curr = curr->next;
 			continue;
 		}
