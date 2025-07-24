@@ -17,7 +17,6 @@ char	*ft_readline(const char *prompt)
 		add_history(temp);
 	if (g_status == SIGINT)
 	{
-		rl_catch_signals = 0;
 		ft_set_status(1);
 		g_status = 0;
 	}
@@ -32,10 +31,10 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	t_cmd	*cmds;
 
 	tokens = lexer(input);
-	print_token_list(tokens);
+	// print_token_list(tokens);
 	expansion_all_tokens(tokens, env_list);
 	// printf(".................apres l expension .................\n");
-	print_token_list(tokens);
+	// print_token_list(tokens);
 	// remove_empty_token(&tokens);
 	merge_collapsed_tokens(tokens);
 	if (check_syntax_errors(tokens, input))
