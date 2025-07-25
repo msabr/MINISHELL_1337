@@ -449,6 +449,8 @@ void	expansion_all_tokens(t_token *tokens, t_env *env)
 			expansion_handle_heredoc(curr);
 			if ((curr ->type == TOKEN_WORD ) && (ft_strcmp(curr->value,"<<") == 0))
 				curr->type = TOKEN_HEREDOC;
+			if ((curr ->type == TOKEN_WORD ) && (ft_strcmp(curr->value,"|") == 0))
+				curr->type = TOKEN_PIPE;
 			curr = curr->next;
 			continue;
 		}
