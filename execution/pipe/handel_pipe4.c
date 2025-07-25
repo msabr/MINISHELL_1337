@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 15:48:57 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 19:20:06 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/24 19:52:12 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	exec_child(t_cmd *cur, t_execargs *args, int i)
 	ft_set_and_exit(1);
 }
 
-int	handle_fork_error(pid_t *pids, t_execargs *args)
+int	handle_fork_error(t_execargs *args)
 {
-	free(pids);
+	// free(pids);
 	if (args->pipes)
 		close_pipes(args->pipes, args->n);
 	return (1);

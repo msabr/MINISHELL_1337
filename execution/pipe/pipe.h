@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:32:29 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/19 15:49:56 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/24 19:52:23 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_signal(int sig, int *flag);
 int		wait_all(pid_t *pids, int n);
 void	ft_set_and_exit(int status);
 void	exec_child(t_cmd *cur, t_execargs *args, int i);
-int		handle_fork_error(pid_t *pids, t_execargs *args);
+int		handle_fork_error(t_execargs *args);
 void	kill_all_pids(pid_t *pids, int n);
 int		fork_and_exec(t_cmd *cmds, pid_t *pids, t_execargs *args);
 
