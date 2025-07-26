@@ -13,5 +13,5 @@ void    number_before_dollar(t_token *token);
 void    expand_env_dollar(t_token *token, t_env *env);
 char    *remove_dquotes(char *str);
 char    *remove_squotes(char *str);
-char	*expand_variables_in_word(char *str, t_env *env);
+// char	*expand_variables_in_word(char *str, t_env *env);
 #endif

@@ -50,7 +50,7 @@ SRC_PAR = parsing/dubaging.c parsing/lexer2.c \
 	parsing/expansion/expand_utils.c parsing/expansion/expander.c \
 	parsing/parse_cmd/parser.c parsing/parse_cmd/parser_helper.c \
 	parsing/expension2/expend_helper.c parsing/expension2/expension.c\
-	parsing/parse_cmd/export_parse.c  
+	parsing/parse_cmd/export_parse.c  parsing/expension2/expend_herdoc.c
 			#parsing/token_utils.c parsing/parser.c
 		
 			
