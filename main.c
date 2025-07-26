@@ -31,10 +31,10 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	t_cmd	*cmds;
 
 	tokens = lexer(input);
-	// print_token_list(tokens);
+	print_token_list(tokens);
 	expansion_all_tokens(tokens, env_list);
-	// printf(".................apres l expension .................\n");
-	// print_token_list(tokens);
+	printf(".................apres l expension .................\n");
+	print_token_list(tokens);
 	// remove_empty_token(&tokens);
 	merge_collapsed_tokens(tokens);
 	if (check_syntax_errors(tokens, input))

@@ -432,7 +432,27 @@ char	*expand_variables_in_string(const char *str, t_env *env)
 	return (result);
 }
 
-
+static void	fix_token_types_after_expansion(t_token *tokens)
+{
+	t_token *curr = tokens;
+	while (curr)
+	{
+		if (curr->type == TOKEN_WORD)
+		{
+			if (ft_strcmp(curr->value, "<<") == 0)
+				curr->type = TOKEN_HEREDOC;
+			else if (ft_strcmp(curr->value, "<") == 0)
+				curr->type = TOKEN_REDIR_IN;
+			else if (ft_strcmp(curr->value, ">>") == 0)
+				curr->type = TOKEN_REDIR_APPEND;
+			else if (ft_strcmp(curr->value, ">") == 0)
+				curr->type = TOKEN_REDIR_OUT;
+			else if (ft_strcmp(curr->value, "|") == 0)
+				curr->type = TOKEN_PIPE;
+		}
+		curr = curr->next;
+	}
+}
 void	expansion_all_tokens(t_token *tokens, t_env *env)
 {
 	t_token	*curr = tokens;
@@ -447,13 +467,11 @@ void	expansion_all_tokens(t_token *tokens, t_env *env)
 		if (is_in_heredoc(curr))
 		{
 			expansion_handle_heredoc(curr);
-			if ((curr ->type == TOKEN_WORD ) && (ft_strcmp(curr->value,"<<") == 0))
-				curr->type = TOKEN_HEREDOC;
-			if ((curr ->type == TOKEN_WORD ) && (ft_strcmp(curr->value,"|") == 0))
-				curr->type = TOKEN_PIPE;
+			fix_token_types_after_expansion(tokens);
 			curr = curr->next;
 			continue;
 		}
+		
         if ((curr->type == TOKEN_WORD || curr->type == TOKEN_VARIABLE) && curr->value)
 		{
 			char *expanded = expand_variables_in_string(curr->value, env);
