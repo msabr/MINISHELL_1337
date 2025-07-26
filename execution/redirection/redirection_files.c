@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/26 22:21:47 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/26 23:25:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool	is_redirection(t_cmd *cmds)
 	return (false);
 }
 
-static bool valid_filename(const char *filename)
+static bool	valid_filename(const char *filename)
 {
 	if (!filename)
 	{
@@ -40,7 +40,8 @@ static bool valid_filename(const char *filename)
 	}
 	return (true);
 }
-int	count_heredocs(t_cmd *cmds)
+
+void	check_nbr_heredocs(t_cmd *cmds)
 {
 	int		count;
 	t_redir	*redir;
@@ -57,35 +58,35 @@ int	count_heredocs(t_cmd *cmds)
 		}
 		cmds = cmds->next;
 	}
-	return (count);
+	if (count > MAX_HEREDOCS)
+	{
+		ft_putstr_fd("heredoc: maximum here-document count exceeded\n", 2);
+		exit(2);
+	}
 }
-int handel_heredoc(t_redir *redirs, t_env *env)
-{
-    t_redir *curr = redirs;
-    int last_heredoc_fd = -1;
 
-    while (curr)
-    {
-        if (curr->type == TOKEN_HEREDOC)
-        {
-            // Prompt and write heredoc content to temp file
-            int ret = redirect_heredoc(curr, env);
-            if (ret != 0)
-            {
-                // Cleanup all temp files created so far!
-                return 1;
-            }
-            last_heredoc_fd = curr->heredoc->fd_read; // Save last fd
-        }
-        curr = curr->next;
-    }
-    // Only dup2 the last heredoc temp file as stdin
-    if (last_heredoc_fd != -1)
-    {
-        dup2(last_heredoc_fd, STDIN_FILENO);
-        // do not close here, but after exec!
-    }
-    return 0;
+int	handel_heredoc(t_redir *redirs, t_env *env)
+{
+	int		ret;
+	int		last_heredoc_fd;
+	t_redir	*curr;
+
+	curr = redirs;
+	last_heredoc_fd = -1;
+	while (curr)
+	{
+		if (curr->type == TOKEN_HEREDOC)
+		{
+			ret = redirect_heredoc(curr, env);
+			if (ret != 0)
+				return (1);
+			last_heredoc_fd = curr->heredoc->fd_read;
+		}
+		curr = curr->next;
+	}
+	if (last_heredoc_fd != -1)
+		dup2(last_heredoc_fd, STDIN_FILENO);
+	return (0);
 }
 
 bool	handle_redirections(t_cmd *cmds, t_env *env)
@@ -94,11 +95,7 @@ bool	handle_redirections(t_cmd *cmds, t_env *env)
 	int		flag;
 
 	flag = 0;
-	if (count_heredocs(cmds) > MAX_HEREDOCS)
-	{
-		ft_putstr_fd("heredoc: maximum here-document count exceeded\n", STDERR_FILENO);
-		exit(2);
-	}
+	check_nbr_heredocs(cmds);
 	current = cmds->redirs;
 	if (handel_heredoc(current, env))
 		return (false);
@@ -118,24 +115,4 @@ bool	handle_redirections(t_cmd *cmds, t_env *env)
 		current = current->next;
 	}
 	return (true);
-}
-
-void	save_std_fds(t_cmd *cmds)
-{
-	if (cmds->redirs)
-	{
-		cmds->redirs->fd_in = dup(STDIN_FILENO);
-		cmds->redirs->fd_out = dup(STDOUT_FILENO);
-	}
-}
-
-void	restore_std_fds(t_cmd *cmds)
-{
-	if (cmds->redirs)
-	{
-		dup2(cmds->redirs->fd_in, STDIN_FILENO);
-		dup2(cmds->redirs->fd_out, STDOUT_FILENO);
-		close(cmds->redirs->fd_in);
-		close(cmds->redirs->fd_out);
-	}
 }
