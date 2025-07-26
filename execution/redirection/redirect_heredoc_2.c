@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:32 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 22:26:16 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/26 21:56:58 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ void	handel_herdoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_status = 130; // convention bash pour Ctrl+C
+        ioctl(STDOUT_FILENO, TIOCSTI, "\n"); // Simulate a newline in the terminal
+		g_status = 130; // Set status to 130 for SIGINT
+        rl_replace_line("", 0); // Clear the current line in readline
+        rl_redisplay(); // Redisplay the prompt
 		close(0);
 	}
 }
@@ -87,31 +90,10 @@ int	heredoc_pipe(const char *delim, t_env *env, int quoted)
 }
 
 /* Compte les heredocs de toutes les commandes, limite à 16 */
-int	count_heredocs(t_cmd *cmds)
-{
-	int		count = 0;
-	t_redir	*redir;
 
-	while (cmds)
-	{
-		redir = cmds->redirs;
-		while (redir)
-		{
-			if (redir->type == TOKEN_HEREDOC)
-			{
-				count++;
-				if (count > 16)
-					return (-1);
-			}
-			redir = redir->next;
-		}
-		cmds = cmds->next;
-	}
-	return count;
-}
 
 /* Prépare chaque heredoc et assigne le fd dans la redirection */
-int	handle_heredoc(t_redir *redir, t_env *env)
+int	redirect_heredoc(t_redir *redir, t_env *env)
 {
 	int	fd;
 
@@ -130,21 +112,3 @@ int	handle_heredoc(t_redir *redir, t_env *env)
 	return (0);
 }
 
-/* À appeler avant exec pour ouvrir tous les heredocs */
-int	redirect_heredoc(t_cmd *cmds, t_env *env)
-{
-	if (count_heredocs(cmds) < 0)
-	{
-		fprintf(stderr, "heredoc: maximum here-document count exceeded\n");
-		g_status = 2;
-		return (2);
-	}
-	while (cmds)
-	{
-		if (handle_heredoc(cmds->redirs, env) == -1)
-			return (0);
-		cmds = cmds->next;
-	}
-	tt();
-	return (0);
-}

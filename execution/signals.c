@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 08:43:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 18:39:08 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/26 16:04:41 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_handler_signal(void)
 	signal(SIGINT, handel_ctl_c);
 	signal(SIGQUIT, SIG_IGN);
 }
-
+//  ioctl(int fd, int request, ...);  
 int	handle_exit_status(pid_t pid, int status)
 {
 	signal(SIGINT, SIG_IGN);

@@ -15,9 +15,12 @@
 # include <readline/history.h>
 
 # include <termios.h>
+ #include <sys/ioctl.h>
 // # include "parsing/expension2/expansion.h"
 
 extern int	g_status;
+
+# define MAX_HEREDOCS 16
 
 typedef enum e_token_type
 {
@@ -276,7 +279,8 @@ void	ft_set_and_exit(int status);
 
 //redirection functions
 bool	is_redirection(t_cmd *cmds);
-int		redirect_heredoc(t_cmd *cmd, t_env *env_list);
+// int		redirect_heredoc(t_cmd *cmd, t_env *env_list);
+int	redirect_heredoc(t_redir *redirs, t_env *env);
 void	save_std_fds(t_cmd *cmds);
 void	restore_std_fds(t_cmd *cmds);
 int		redirect_stdin(char *file_name);

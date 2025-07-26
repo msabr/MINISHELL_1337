@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 22:07:28 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/26 22:21:47 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,68 @@ static bool valid_filename(const char *filename)
 	}
 	return (true);
 }
+int	count_heredocs(t_cmd *cmds)
+{
+	int		count;
+	t_redir	*redir;
+
+	count = 0;
+	while (cmds)
+	{
+		redir = cmds->redirs;
+		while (redir)
+		{
+			if (redir->type == TOKEN_HEREDOC)
+				count++;
+			redir = redir->next;
+		}
+		cmds = cmds->next;
+	}
+	return (count);
+}
+int handel_heredoc(t_redir *redirs, t_env *env)
+{
+    t_redir *curr = redirs;
+    int last_heredoc_fd = -1;
+
+    while (curr)
+    {
+        if (curr->type == TOKEN_HEREDOC)
+        {
+            // Prompt and write heredoc content to temp file
+            int ret = redirect_heredoc(curr, env);
+            if (ret != 0)
+            {
+                // Cleanup all temp files created so far!
+                return 1;
+            }
+            last_heredoc_fd = curr->heredoc->fd_read; // Save last fd
+        }
+        curr = curr->next;
+    }
+    // Only dup2 the last heredoc temp file as stdin
+    if (last_heredoc_fd != -1)
+    {
+        dup2(last_heredoc_fd, STDIN_FILENO);
+        // do not close here, but after exec!
+    }
+    return 0;
+}
+
 bool	handle_redirections(t_cmd *cmds, t_env *env)
 {
 	t_redir	*current;
 	int		flag;
 
 	flag = 0;
+	if (count_heredocs(cmds) > MAX_HEREDOCS)
+	{
+		ft_putstr_fd("heredoc: maximum here-document count exceeded\n", STDERR_FILENO);
+		exit(2);
+	}
+	current = cmds->redirs;
+	if (handel_heredoc(current, env))
+		return (false);
 	current = cmds->redirs;
 	while (current)
 	{
@@ -57,12 +113,8 @@ bool	handle_redirections(t_cmd *cmds, t_env *env)
 			flag = redirect_overwrite(current->filename);
 		else if (current->type == TOKEN_REDIR_APPEND)
 			flag = redirect_append(current->filename);
-		else if (current->type == TOKEN_HEREDOC)
-			flag = redirect_heredoc(cmds, env);
-		// (void)env; // Suppress unused variable warning
 		if (flag)
 			return (false);
-		
 		current = current->next;
 	}
 	return (true);

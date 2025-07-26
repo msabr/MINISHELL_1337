@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:03:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 16:05:43 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/26 22:15:06 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ char	*get_env_value(t_env **env_list, const char *key)
 {
 	t_env	*current;
 
+	if (!env_list || !key || !*env_list)
+		return (NULL);
 	current = *env_list;
 	while (current)
 	{

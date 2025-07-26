@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/25 20:33:45 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/26 16:04:26 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,12 @@ int	redirect_heredoc(t_cmd *cmd, t_env *env_list)
 	int status;
 	int last_fd = -1;
 	int eof_encountered = 0;
+	int exit_code;
 
 	while (current && !eof_encountered)
 	{
 		if (current->type == TOKEN_HEREDOC)
 		{
-			heredoc = current->heredoc;
-			if (!heredoc || !heredoc->delimiter)
-				return (1);
 			if (pipe(pipe_fd) < 0)
 				return (1);
 
@@ -53,6 +51,9 @@ int	redirect_heredoc(t_cmd *cmd, t_env *env_list)
 			}
 			if (pid == 0) // Child process
 			{
+				heredoc = current->heredoc;
+				if (!heredoc || !heredoc->delimiter)
+					return (1);
 				signal(SIGINT, SIG_DFL);
 				signal(SIGQUIT, SIG_IGN);
 				close(pipe_fd[0]);
@@ -68,6 +69,7 @@ int	redirect_heredoc(t_cmd *cmd, t_env *env_list)
 					if (strcmp(line, heredoc->delimiter) == 0)
 					{
 						free(line);
+						exit_code = 42;
 						break; // Exit loop on delimiter match
 					}
 					if (heredoc->flag == 0)
@@ -77,10 +79,6 @@ int	redirect_heredoc(t_cmd *cmd, t_env *env_list)
 						{
 							ft_putstr_fd(expanded, pipe_fd[1]);
 							free(expanded);
-						}
-						else
-						{
-							ft_putstr_fd(line, pipe_fd[1]);
 						}
 					}
 					else
@@ -117,7 +115,8 @@ int	redirect_heredoc(t_cmd *cmd, t_env *env_list)
 			}
 			else if (WIFEXITED(status))
 			{
-				int exit_code = WEXITSTATUS(status);
+				if (exit_code != 42)
+					exit_code = WEXITSTATUS(status);
 				if (exit_code == 42) // EOF detected
 				{
 					eof_encountered = 1;
