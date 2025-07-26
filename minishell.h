@@ -159,12 +159,12 @@ int		is_arg_token(t_token *tok);
 int		is_redir(t_token_type t);
 char	*merge_argument(t_token **ptok);
 int		add_argument(char ***args, char *new_arg);
-int		add_redirection(t_redir **redir, t_token_type type, char *filename);
+int		add_redirection(t_redir **redir, t_token_type type, char *filename,int quoted_name);
 int		add_command(t_cmd **cmds, t_cmd *new);
 t_cmd	*new_command(void);
 void	free_cmd_list(t_cmd *cmds); // Gestion mémoire
 void	remove_empty_token_head(t_token **tokens);
-t_redir *new_redir(t_token_type type, char *filename);
+t_redir *new_redir(t_token_type type, char *filename,int quoted_name);
 //..................................................*/
 // token utils
 t_token*		lst_new_token(const char *value, t_token_type type, bool space_after,int expended);

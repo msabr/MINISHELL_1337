@@ -89,7 +89,7 @@ int	add_argument(char ***args, char *new_arg)
 
 
 
-t_redir *new_redir(t_token_type type, char *filename)
+t_redir *new_redir(t_token_type type, char *filename,int quoted_name)
 {
     t_redir *new = ft_malloc(sizeof(t_redir));
     if (!new)
@@ -114,7 +114,7 @@ t_redir *new_redir(t_token_type type, char *filename)
         new->heredoc->fd_write = -1;
         new->heredoc->heredoc_num = 0; // À gérer si plusieurs heredocs
         new->heredoc->index = 0;       // À gérer si besoin
-        new->heredoc->flag = 0;        // À renseigner selon si le heredoc est quoté
+        new->heredoc->flag = quoted_name;        // À renseigner selon si le heredoc est quoté
         new->heredoc->env = NULL;      // À remplir si besoin d'environnement
     }
     else
@@ -124,9 +124,9 @@ t_redir *new_redir(t_token_type type, char *filename)
     return new;
 }
 
-int	add_redirection(t_redir **redir, t_token_type type, char *filename)
+int	add_redirection(t_redir **redir, t_token_type type, char *filename,int quoted_name)
 {
-	t_redir	*new = new_redir(type, filename);
+	t_redir	*new = new_redir(type, filename,quoted_name);
 	t_redir	*tmp;
 
 	if (!new)

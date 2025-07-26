@@ -4,6 +4,7 @@ static int	handle_redir(t_cmd *cmd, t_token **tok)
 {
 	t_token	*target;
 	char	*filename;
+	int quoted = 0;
 
 	target = (*tok)->next;
 	if (!target || !is_arg_token(target))
@@ -11,13 +12,15 @@ static int	handle_redir(t_cmd *cmd, t_token **tok)
 		error_syntax("newline");
 		return (0);
 	}
+	 if (target)
+        quoted = target->quoted;
 	filename = merge_argument(&target);
 	if (!filename)
 		return (0);
 	if ((*tok)->type == TOKEN_HEREDOC)
-		add_redirection(&cmd->redirs, (*tok)->type, filename);
+		add_redirection(&cmd->redirs, (*tok)->type, filename,quoted);
 	else
-		add_redirection(&cmd->redirs, (*tok)->type, filename);
+		add_redirection(&cmd->redirs, (*tok)->type, filename,quoted);
 	*tok = target;
 	return (1);
 }
@@ -145,37 +148,37 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 {
 	t_cmd	*current = NULL;
 	char	*arg;
-	t_redir	*pending_heredoc = NULL;
+	// t_redir	*pending_heredoc = NULL;
 
 	while (tok && tok->type != TOKEN_EOF)
 	{
-		// if (!current)
-		// {
-		// 	current = new_command();
-		// 	if (!add_command(cmds, current))
-		// 		return (0);
-		// }
 		if (!current)
-			{
-				current = new_command();
-				if (!add_command(cmds, current))
-					return (0);
-				// Si heredoc stocké, on l'associe à cette commande
-				if (pending_heredoc) {
-					add_redirection(&current->redirs, pending_heredoc->type, pending_heredoc->filename);
-					pending_heredoc = NULL;
-				}
-			}
-		if (is_redir(tok->type) && tok->type == TOKEN_HEREDOC && !current) {
-			t_token *target = tok->next;
-			char *filename = merge_argument(&target);
-			if (!filename)
+		{
+			current = new_command();
+			if (!add_command(cmds, current))
 				return (0);
-			// Stocke le heredoc en attente
-			pending_heredoc = new_redir(TOKEN_HEREDOC, filename);
-			tok = target;
-			continue;
 		}
+		// if (!current)
+		// 	{
+		// 		current = new_command();
+		// 		if (!add_command(cmds, current))
+		// 			return (0);
+		// 		// Si heredoc stocké, on l'associe à cette commande
+		// 		if (pending_heredoc) {
+		// 			add_redirection(&current->redirs, pending_heredoc->type, pending_heredoc->filename);
+		// 			pending_heredoc = NULL;
+		// 		}
+		// 	}
+		// if (is_redir(tok->type) && tok->type == TOKEN_HEREDOC && !current) {
+		// 	t_token *target = tok->next;
+		// 	char *filename = merge_argument(&target);
+		// 	if (!filename)
+		// 		return (0);
+		// 	// Stocke le heredoc en attente
+		// 	pending_heredoc = new_redir(TOKEN_HEREDOC, filename);
+		// 	tok = target;
+		// 	continue;
+		// }
 		if (is_arg_token(tok))
 		{
 			int was_quoted = tok->quoted;

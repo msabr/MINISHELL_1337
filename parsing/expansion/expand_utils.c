@@ -113,12 +113,7 @@ char *expand_dollars(const char *input, t_env **env)
     }
     return result;
 }
-char *expand_heredoc_content(const char *str, t_env **env, int last_status, const char *delimiter)
-{
-    if (strchr(delimiter, '\'') || strchr(delimiter, '"'))  // PATCH: quoted delimiter
-        return strdup(str);
-    return expand_unquoted_string(str, env, last_status);
-}
+
 int count_dollars(const char *str, int index)
 {
     int count = 0;
