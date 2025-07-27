@@ -69,7 +69,7 @@ int	export(t_cmd *cmd, t_env **env_list)
 }
 
 
-// #include "../../minishell.h"
+// #include "../execution.h"
 
 // // Helper: check if a variable name is a valid identifier
 // static int is_valid_identifier(const char *key) 

@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 12:48:33 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:23:59 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "redirection.h"
 
 bool	is_redirection(t_cmd *cmds)
 {
@@ -29,7 +29,7 @@ bool	is_redirection(t_cmd *cmds)
 	return (false);
 }
 
-static bool	valid_filename(const char *filename)
+bool	valid_filename(const char *filename)
 {
 	if (!filename)
 	{
@@ -39,56 +39,6 @@ static bool	valid_filename(const char *filename)
 		return (false);
 	}
 	return (true);
-}
-
-void	check_nbr_heredocs(t_cmd *cmds)
-{
-	int		count;
-	t_redir	*redir;
-
-	count = 0;
-	while (cmds)
-	{
-		redir = cmds->redirs;
-		while (redir)
-		{
-			if (redir->type == TOKEN_HEREDOC)
-				count++;
-			redir = redir->next;
-		}
-		cmds = cmds->next;
-	}
-	if (count > MAX_HEREDOCS)
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd("maximum here-document count exceeded\n", STDERR_FILENO);
-		exit(2);
-	}
-}
-
-int	handel_heredoc(t_cmd *cmds, t_env *env)
-{
-	t_cmd		*current_cmd;
-	t_redir	*curr;
-	int		ret;
-	
-	current_cmd = cmds;
-	while (current_cmd)
-	{
-		curr = current_cmd->redirs;
-		while (curr)
-		{
-			if (curr->type == TOKEN_HEREDOC)
-			{
-				ret = redirect_heredoc(curr, env);
-				if (ret != 0)
-					return (ret);
-			}
-			curr = curr->next;
-		}
-		current_cmd = current_cmd->next;
-	}
-	return (0);
 }
 
 bool	handle_redirections(t_cmd *cmds)

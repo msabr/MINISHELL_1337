@@ -6,17 +6,17 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 12:43:29 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:23:48 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "redirection.h"
 
 char	*get_temp_filename(void)
 {
 	char	*file_name;
 	int		n;
-	
+
 	file_name = ft_itoa((int)&n);
 	file_name = ft_strjoin(file_name, "heredoc");
 	return (file_name);
@@ -39,10 +39,9 @@ int	redirect_heredoc(t_redir *redirs, t_env *env)
 	char		*tmp_file;
 	char		*expanded;
 	t_heredoc	*heredoc;
-	g_status = 0;
+
 	heredoc = redirs->heredoc;
 	tmp_file = get_temp_filename();
-
 	if (!tmp_file)
 		return (1);
 	heredoc->fd_write = open(tmp_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);

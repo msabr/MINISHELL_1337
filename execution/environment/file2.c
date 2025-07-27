@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:03:04 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/26 22:15:06 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:05:49 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../execution.h"
 
 char	*get_env_value(t_env **env_list, const char *key)
 {

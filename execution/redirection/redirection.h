@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_status.c                                      :+:      :+:    :+:   */
+/*   redirection.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/19 15:43:13 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 13:05:14 by msabr            ###   ########.fr       */
+/*   Created: 2025/07/27 13:10:33 by msabr             #+#    #+#             */
+/*   Updated: 2025/07/27 13:16:30 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execution.h"
+#ifndef REDIRECTION_H
+# define REDIRECTION_H
 
-int	*ft_get_status(void)
-{
-	static int	status;
+# include "../execution.h"
 
-	return (&status);
-}
+bool	valid_filename(const char *filename);
+int		redirect_stdin(char *file_name);
+int		redirect_overwrite(char *file_name);
+int		redirect_append(char *file_name);
+int		redirect_heredoc(t_redir *redirs, t_env *env);
+void	check_nbr_heredocs(t_cmd *cmds);
+char	*get_temp_filename(void);
+void	handle_heredoc_signal(int sig);
 
-void	ft_set_status(int status)
-{
-	int	*ptr;
-
-	ptr = ft_get_status();
-	*ptr = status;
-}
-
-void	ft_exit(int status)
-{
-	ft_free();
-	rl_clear_history();
-	exit(status);
-}
-
-void	ft_set_and_exit(int status)
-{
-	ft_set_status(status);
-	ft_exit(status);
-}
+#endif

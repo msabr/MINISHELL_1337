@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:09:38 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 18:02:34 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:23:40 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "redirection.h"
 
 int	redirect_append(char *file_name)
 {

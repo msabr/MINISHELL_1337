@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 08:43:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 12:02:54 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:05:14 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "execution.h"
 
 void	handel_ctl_c(int sig)
 {

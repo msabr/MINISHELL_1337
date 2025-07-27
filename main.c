@@ -2,28 +2,6 @@
 
 int	g_status = 0;
 
-char	*ft_readline(const char *prompt)
-{
-	char	*temp;
-	char	*input;
-
-	temp = readline(prompt);
-	if (!temp)
-	{
-		ft_putstr_fd("exit\n", STDERR_FILENO);
-		ft_exit(*ft_get_status());
-	}
-	if (temp && *temp)
-		add_history(temp);
-	if (g_status == SIGINT)
-	{
-		ft_set_status(1);
-		g_status = 0;
-	}
-	input = ft_strdup(temp);
-	free(temp);
-	return (input);
-}
 
 t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 {
@@ -56,71 +34,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 }
 //execution phase: save standard fds
 // Execution phase: run commands, handle status, restore fds
-void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
-{
-	// print_cmds(cmds);
 
-	save_std_fds(cmds);
-	if (cmds->next)
-		*status = exec_multiple_pipes(cmds, env_list);
-	else
-		*status = execve_simple_cmd(cmds, env_list);
-	restore_std_fds(cmds);
-	ft_set_status(*status);
-	signal(SIGINT, handel_ctl_c);
-}
-bool is_heredoc(t_cmd *cmds)
-{
-	t_redir	*redir;
-
-	while (cmds)
-	{
-		redir = cmds->redirs;
-		while (redir)
-		{
-			if (redir->type == TOKEN_HEREDOC)
-				return (true);
-			redir = redir->next;
-		}
-		cmds = cmds->next;
-	}
-	return (false);
-}
-void	main_loop(t_env **env_list)
-{
-	int				status;
-	char			*input;
-	t_cmd			*cmds;
-	struct termios	saved_termios;
-
-	status = *ft_get_status();
-	tcgetattr(STDIN_FILENO, &saved_termios);
-	while (true)
-	{
-		ft_handler_signal();
-		input = ft_readline("minishell$ ");
-		handel_ctl_c(g_status);
-		if (input[0] != '\0')
-		{
-			cmds = parse_input(input, *env_list, &status);
-			// print_cmds(cmds);
-			if (is_heredoc(cmds))
-			{
-				if (handel_heredoc(cmds, *env_list) != 0)
-				{
-					continue;
-				}
-			}
-			// print_cmds(cmds);
-			if (cmds)
-			{
-				execute_cmds(cmds, env_list, &status);
-			}
-		}
-		tcsetattr(STDIN_FILENO, TCSANOW, &saved_termios);
-	}
-	rl_clear_history();
-}
 
 // void f(){system("leaks minishell");}
 

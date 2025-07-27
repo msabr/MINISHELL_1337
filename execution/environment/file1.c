@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:56:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 18:05:06 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:05:49 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../execution.h"
 
 static t_env	*create_env_node(char *env_entry)
 {
