@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 22:07:28 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:23:59 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "redirection.h"
 
 bool	is_redirection(t_cmd *cmds)
 {
@@ -29,7 +29,7 @@ bool	is_redirection(t_cmd *cmds)
 	return (false);
 }
 
-static bool valid_filename(const char *filename)
+bool	valid_filename(const char *filename)
 {
 	if (!filename)
 	{
@@ -40,7 +40,8 @@ static bool valid_filename(const char *filename)
 	}
 	return (true);
 }
-bool	handle_redirections(t_cmd *cmds, t_env *env)
+
+bool	handle_redirections(t_cmd *cmds)
 {
 	t_redir	*current;
 	int		flag;
@@ -58,32 +59,13 @@ bool	handle_redirections(t_cmd *cmds, t_env *env)
 		else if (current->type == TOKEN_REDIR_APPEND)
 			flag = redirect_append(current->filename);
 		else if (current->type == TOKEN_HEREDOC)
-			flag = redirect_heredoc(cmds, env);
-		// (void)env; // Suppress unused variable warning
+		{
+			dup2(current->heredoc->fd_read, STDIN_FILENO);
+			close(current->heredoc->fd_read);
+		}
 		if (flag)
 			return (false);
-		
 		current = current->next;
 	}
 	return (true);
-}
-
-void	save_std_fds(t_cmd *cmds)
-{
-	if (cmds->redirs)
-	{
-		cmds->redirs->fd_in = dup(STDIN_FILENO);
-		cmds->redirs->fd_out = dup(STDOUT_FILENO);
-	}
-}
-
-void	restore_std_fds(t_cmd *cmds)
-{
-	if (cmds->redirs)
-	{
-		dup2(cmds->redirs->fd_in, STDIN_FILENO);
-		dup2(cmds->redirs->fd_out, STDOUT_FILENO);
-		close(cmds->redirs->fd_in);
-		close(cmds->redirs->fd_out);
-	}
 }

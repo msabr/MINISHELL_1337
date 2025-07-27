@@ -15,9 +15,12 @@
 # include <readline/history.h>
 
 # include <termios.h>
+ #include <sys/ioctl.h>
 // # include "parsing/expension2/expansion.h"
 
 extern int	g_status;
+
+# define MAX_HEREDOCS 16
 
 typedef enum e_token_type
 {
@@ -227,70 +230,14 @@ char	*expand_heredoc_content(const char *str, t_env **env, int last_status, cons
 int		count_dollars(const char *str, int index);
 char	*reduce_odd_dollars_and_handle_edge(const char *str);
 // ---------------------------------------
+t_cmd	*parse_input(char *input, t_env *env_list, int *status);
 
-//built-in functions
-bool	is_builtin(char *cmd);
-int		execve_builtin(t_cmd *cmd, t_env **env_list);
-int		cd(t_cmd *cmd, t_env **env_list);
-void	echo(t_cmd *cmd);
-void	env_function(t_env *env_list);
-int		exit_shell(t_cmd *cmd);
-char	*set_key(const char *arg);
-int		export(t_cmd *cmd, t_env **env_list);
-// void	export(char **args, t_env **env_list);
-void	pwd(t_env **env_list);
-int		unset(t_cmd *cmd, t_env **env_list);
-char	*ft_getcwd(void);
-
-//environment functions
-t_env	*env_to_list(char **env);
-char	**list_to_env(t_env *env_list);
-t_env	*find_env_node(char *search_key, t_env *list_head);
-char	*get_env_value(t_env **env_list, const char *key);
-void	add_env_value(t_env **env_list, char *key, char *value);
-void	add_temporary_env_value(t_env **env_list, char *key);
-void	remove_env_variable(t_env **env_list, const char *key);
-void	configure_environment(t_env **env_list, char **env_array);
-int		size_of_env_list(t_env *env_list);
-void	free_env_list(t_env *env_list);
-t_env	*copy_env(t_env *env_list);
-
-// execution functions
-bool	 is_directory(const char *path);
-int		exec_multiple_pipes(t_cmd *cmds, t_env **env_list);
-int		get_exec_path(t_cmd *cmds, t_env **env_list, char **path);
-int		execve_simple_cmd(t_cmd *cmds, t_env **env_list);
-char	*get_path(char *cmd, t_env *env_list);
-
-//signals functions
-void	tt(void);
-int 	handle_exit_status(pid_t pid, int status);
-void	handel_ctl_c(int sig);
-void	ft_handler_signal(void);
-void	set_default_signals(void);
-
-//exit status functions
-int		*ft_get_status(void);
-void	ft_set_status(int status);
-void	ft_exit(int status);
-void	ft_set_and_exit(int status);
-
-//redirection functions
-bool	is_redirection(t_cmd *cmds);
-int		redirect_heredoc(t_cmd *cmd, t_env *env_list);
-void	save_std_fds(t_cmd *cmds);
-void	restore_std_fds(t_cmd *cmds);
-int		redirect_stdin(char *file_name);
-int		redirect_overwrite(char *file_name);
-int		redirect_append(char *file_name);
-bool	handle_redirections(t_cmd *cmds, t_env *env);
-int	preprocess_heredocs(t_cmd *cmds, t_env **env);
-//error handling functions
-void	ft_perror(char *errn);
-int		print_dir_error(char *cmd);
-int		print_cmd_not_found_error(char *cmd);
-void	print_exit_error(const char *arg);
 //main functions
 void	main_loop(t_env **env_list);
+void	configure_environment(t_env **env_list, char **env_array);
 
+char	*get_env_value(t_env **env_list, const char *key);
+
+int		*ft_get_status(void);
+void	ft_set_status(int status);
 #endif

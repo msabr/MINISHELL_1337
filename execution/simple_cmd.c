@@ -6,11 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 18:14:04 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:05:14 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "execution.h"
 
 static bool	ft_aid(char *cmd, t_env **env_list)
 {
@@ -83,7 +83,7 @@ static int	handle_redir_and_builtin(t_cmd *cmds, t_env **env_list)
 		return (1);
 	if (is_redirection(cmds))
 	{
-		if (!handle_redirections(cmds, *env_list))
+		if (!handle_redirections(cmds))
 			return (1);
 	}
 	if (!cmds->args || !cmds->args[0])

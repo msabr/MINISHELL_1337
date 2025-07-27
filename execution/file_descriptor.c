@@ -1,41 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_status.c                                      :+:      :+:    :+:   */
+/*    file_descriptor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/19 15:43:13 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 13:05:14 by msabr            ###   ########.fr       */
+/*   Created: 2025/07/26 22:49:19 by msabr             #+#    #+#             */
+/*   Updated: 2025/07/27 13:14:16 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	*ft_get_status(void)
+void	save_std_fds(t_cmd *cmds)
 {
-	static int	status;
-
-	return (&status);
+	if (cmds->redirs)
+	{
+		cmds->redirs->fd_in = dup(STDIN_FILENO);
+		cmds->redirs->fd_out = dup(STDOUT_FILENO);
+	}
 }
 
-void	ft_set_status(int status)
+void	restore_std_fds(t_cmd *cmds)
 {
-	int	*ptr;
-
-	ptr = ft_get_status();
-	*ptr = status;
-}
-
-void	ft_exit(int status)
-{
-	ft_free();
-	rl_clear_history();
-	exit(status);
-}
-
-void	ft_set_and_exit(int status)
-{
-	ft_set_status(status);
-	ft_exit(status);
+	if (cmds->redirs)
+	{
+		dup2(cmds->redirs->fd_in, STDIN_FILENO);
+		dup2(cmds->redirs->fd_out, STDOUT_FILENO);
+		close(cmds->redirs->fd_in);
+		close(cmds->redirs->fd_out);
+	}
 }

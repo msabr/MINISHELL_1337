@@ -39,8 +39,7 @@ SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c \
 
 SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
-				execution/redirection/redirect_heredoc_1.c\
-				# heredoc/heredoc.c heredoc/heredoc_utils.c
+				execution/redirection/redirect_heredoc.c execution/redirection/redirect_heredoc_1.c
 		
 SRC_PAR = parsing/dubaging.c parsing/lexer2.c \
 	parsing/lexing/lexer.c parsing/lexing/lexer_handlers.c \
@@ -50,25 +49,33 @@ SRC_PAR = parsing/dubaging.c parsing/lexer2.c \
 	parsing/expansion/expand_utils.c parsing/expansion/expander.c \
 	parsing/parse_cmd/parser.c parsing/parse_cmd/parser_helper.c \
 	parsing/expension2/expend_helper.c parsing/expension2/expension.c\
-	parsing/parse_cmd/export_parse.c  parsing/expension2/expend_herdoc.c
+	parsing/parse_cmd/export_parse.c  parsing/expension2/expend_herdoc.c\
 			#parsing/token_utils.c parsing/parser.c
 		
 			
 
 
-SRC_EXE = execution/path_functions.c\
-			main.c\
+SRC_EXE =	execution/path_functions.c\
 			execution/signals.c\
 			execution/simple_cmd.c\
 			execution/print_errors.c\
-			execution/exit_status.c
+			execution/exit_status.c\
+			execution/file_descriptor.c\
+			execution/main_loop.c\
 
-SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_PAR) $(SRC_ENV) $(SRC_PIPE) $(SRC_EXE)
+
+SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_PAR) $(SRC_ENV) $(SRC_PIPE) $(SRC_EXE) main.c\
 		
 
 OBJS = $(SRCS:.c=.o)
 
-HEADERS = Libft/libft.h minishell.h execution/pipe/pipe.h execution/builtins/builtins.h #parsing/expansion/expander.h
+HEADERS =	Libft/libft.h\
+ 			minishell.h\
+			execution/execution.h\
+			execution/pipe/pipe.h \
+			execution/builtins/builtins.h\
+			execution/redirection/redirection.h\
+
 
 all: check-readline $(NAME)
 

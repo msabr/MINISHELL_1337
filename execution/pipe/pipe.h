@@ -6,14 +6,14 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:32:29 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/24 19:52:23 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:16:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPE_H
 # define PIPE_H
 
-# include "../../minishell.h"
+# include "../execution.h"
 
 typedef struct s_execargs
 {
