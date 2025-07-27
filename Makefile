@@ -68,8 +68,6 @@ SRC_PAR =	parsing/dubaging.c \
 			$(SRC_PARSE_CMD)
 		
 			
-
-
 SRC_EXE =	execution/path_functions.c\
 			execution/signals.c\
 			execution/simple_cmd.c\
