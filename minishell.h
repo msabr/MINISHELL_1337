@@ -286,8 +286,9 @@ void	restore_std_fds(t_cmd *cmds);
 int		redirect_stdin(char *file_name);
 int		redirect_overwrite(char *file_name);
 int		redirect_append(char *file_name);
-bool	handle_redirections(t_cmd *cmds, t_env *env);
+bool	handle_redirections(t_cmd *cmds);
 int	preprocess_heredocs(t_cmd *cmds, t_env **env);
+int	handel_heredoc(t_cmd *cmds, t_env *env);
 //error handling functions
 void	ft_perror(char *errn);
 int		print_dir_error(char *cmd);

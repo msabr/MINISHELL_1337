@@ -32,7 +32,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 
 	tokens = lexer(input);
 	// print_token_list(tokens);
-	// expansion_all_tokens(tokens, env_list);
+	expansion_all_tokens(tokens, env_list);
 	// printf(".................apres l expension .................\n");
 	// print_token_list(tokens);
 	// remove_empty_token(&tokens);
@@ -49,16 +49,17 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	// free_token_list(tokens);
 	if (!cmds)
 	{
-		printf("minishell: parse error\n");
+		// printf("minishell: parse error\n");
 		return (NULL);
 	}
 	return (cmds);
 }
-
+//execution phase: save standard fds
 // Execution phase: run commands, handle status, restore fds
 void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 {
 	// print_cmds(cmds);
+
 	save_std_fds(cmds);
 	if (cmds->next)
 		*status = exec_multiple_pipes(cmds, env_list);
@@ -68,7 +69,23 @@ void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 	ft_set_status(*status);
 	signal(SIGINT, handel_ctl_c);
 }
+bool is_heredoc(t_cmd *cmds)
+{
+	t_redir	*redir;
 
+	while (cmds)
+	{
+		redir = cmds->redirs;
+		while (redir)
+		{
+			if (redir->type == TOKEN_HEREDOC)
+				return (true);
+			redir = redir->next;
+		}
+		cmds = cmds->next;
+	}
+	return (false);
+}
 void	main_loop(t_env **env_list)
 {
 	int				status;
@@ -80,11 +97,21 @@ void	main_loop(t_env **env_list)
 	tcgetattr(STDIN_FILENO, &saved_termios);
 	while (true)
 	{
+		ft_handler_signal();
 		input = ft_readline("minishell$ ");
 		handel_ctl_c(g_status);
 		if (input[0] != '\0')
 		{
 			cmds = parse_input(input, *env_list, &status);
+			// print_cmds(cmds);
+			if (is_heredoc(cmds))
+			{
+				if (handel_heredoc(cmds, *env_list) != 0)
+				{
+					continue;
+				}
+			}
+			// print_cmds(cmds);
 			if (cmds)
 			{
 				execute_cmds(cmds, env_list, &status);
@@ -94,6 +121,7 @@ void	main_loop(t_env **env_list)
 	}
 	rl_clear_history();
 }
+
 // void f(){system("leaks minishell");}
 
 int	main(int argc, char **argv, char **envp)
@@ -106,7 +134,6 @@ int	main(int argc, char **argv, char **envp)
 	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
 		return (ft_putstr_fd("minishell: not a terminal\n", STDERR_FILENO), 1);
 	configure_environment(&env_list, envp);
-	ft_handler_signal();
 	main_loop(&env_list);
 	return (0);
 }

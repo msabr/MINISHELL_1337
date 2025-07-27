@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 08:43:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/26 22:43:01 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 12:02:54 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	handel_ctl_c(int sig)
 
 void	ft_handler_signal(void)
 {
+	g_status = 0;
 	rl_catch_signals = 0;
 	signal(SIGINT, handel_ctl_c);
 	signal(SIGQUIT, SIG_IGN);

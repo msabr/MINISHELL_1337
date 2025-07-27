@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/26 23:28:35 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 12:43:29 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,12 @@
 
 char	*get_temp_filename(void)
 {
-	char		*file_name;
-	char		*str;
-	static int	n;
-
-	while (1)
-	{
-		str = ft_itoa(n);
-		if (!str)
-			break ;
-		file_name = ft_strjoin("/tmp/herdoc", str);
-		if (!file_name)
-			break ;
-		if (access(file_name, F_OK))
-			return (file_name);
-		n++;
-	}
-	return (NULL);
+	char	*file_name;
+	int		n;
+	
+	file_name = ft_itoa((int)&n);
+	file_name = ft_strjoin(file_name, "heredoc");
+	return (file_name);
 }
 
 void	handle_heredoc_signal(int sig)
@@ -50,20 +39,29 @@ int	redirect_heredoc(t_redir *redirs, t_env *env)
 	char		*tmp_file;
 	char		*expanded;
 	t_heredoc	*heredoc;
-
+	g_status = 0;
 	heredoc = redirs->heredoc;
 	tmp_file = get_temp_filename();
+
 	if (!tmp_file)
 		return (1);
 	heredoc->fd_write = open(tmp_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (heredoc->fd_write < 0)
-		return (ft_perror(tmp_file), 1);
+	heredoc->fd_read = open(tmp_file, O_RDONLY);
+	unlink(tmp_file);
+	if (heredoc->fd_write < 0 || heredoc->fd_read < 0)
+	{
+		ft_perror(tmp_file);
+		return (1);
+	}
 	signal(SIGINT, handle_heredoc_signal);
 	while (1)
 	{
 		line = readline("> ");
 		if (g_status == 130)
-			return (close(heredoc->fd_write), unlink(tmp_file), 1);
+		{
+			close(heredoc->fd_write);
+			return (unlink(tmp_file), 1);
+		}
 		if (!line || ft_strcmp(line, heredoc->delimiter) == 0)
 			break ;
 		if (heredoc->flag == 0)
@@ -78,8 +76,7 @@ int	redirect_heredoc(t_redir *redirs, t_env *env)
 			ft_putstr_fd(line, heredoc->fd_write);
 		ft_putstr_fd("\n", heredoc->fd_write);
 	}
-	heredoc->fd_read = open(tmp_file, O_RDONLY);
-	if (heredoc->fd_read < 0)
-		return (ft_perror(tmp_file), unlink(tmp_file), close(heredoc->fd_write), 1);
-	return (signal(SIGINT, SIG_DFL), 0);
+	close(heredoc->fd_write);
+	unlink(tmp_file);
+	return (0);
 }

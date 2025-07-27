@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/26 23:25:52 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 12:48:33 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,45 +60,43 @@ void	check_nbr_heredocs(t_cmd *cmds)
 	}
 	if (count > MAX_HEREDOCS)
 	{
-		ft_putstr_fd("heredoc: maximum here-document count exceeded\n", 2);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd("maximum here-document count exceeded\n", STDERR_FILENO);
 		exit(2);
 	}
 }
 
-int	handel_heredoc(t_redir *redirs, t_env *env)
+int	handel_heredoc(t_cmd *cmds, t_env *env)
 {
-	int		ret;
-	int		last_heredoc_fd;
+	t_cmd		*current_cmd;
 	t_redir	*curr;
-
-	curr = redirs;
-	last_heredoc_fd = -1;
-	while (curr)
+	int		ret;
+	
+	current_cmd = cmds;
+	while (current_cmd)
 	{
-		if (curr->type == TOKEN_HEREDOC)
+		curr = current_cmd->redirs;
+		while (curr)
 		{
-			ret = redirect_heredoc(curr, env);
-			if (ret != 0)
-				return (1);
-			last_heredoc_fd = curr->heredoc->fd_read;
+			if (curr->type == TOKEN_HEREDOC)
+			{
+				ret = redirect_heredoc(curr, env);
+				if (ret != 0)
+					return (ret);
+			}
+			curr = curr->next;
 		}
-		curr = curr->next;
+		current_cmd = current_cmd->next;
 	}
-	if (last_heredoc_fd != -1)
-		dup2(last_heredoc_fd, STDIN_FILENO);
 	return (0);
 }
 
-bool	handle_redirections(t_cmd *cmds, t_env *env)
+bool	handle_redirections(t_cmd *cmds)
 {
 	t_redir	*current;
 	int		flag;
 
 	flag = 0;
-	check_nbr_heredocs(cmds);
-	current = cmds->redirs;
-	if (handel_heredoc(current, env))
-		return (false);
 	current = cmds->redirs;
 	while (current)
 	{
@@ -110,6 +108,11 @@ bool	handle_redirections(t_cmd *cmds, t_env *env)
 			flag = redirect_overwrite(current->filename);
 		else if (current->type == TOKEN_REDIR_APPEND)
 			flag = redirect_append(current->filename);
+		else if (current->type == TOKEN_HEREDOC)
+		{
+			dup2(current->heredoc->fd_read, STDIN_FILENO);
+			close(current->heredoc->fd_read);
+		}
 		if (flag)
 			return (false);
 		current = current->next;
