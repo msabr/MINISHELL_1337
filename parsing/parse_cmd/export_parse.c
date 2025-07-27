@@ -1,138 +1,96 @@
 #include "../../minishell.h"
 
-/*
-** Helper : Trouver le token associé à la valeur (quotes, etc.)
-** Ici, tu relies la valeur (après =) au token correct via comparaison de la valeur
-*/
-// t_token *find_token_for_value(t_token *tokens, const char *value)
-// {
-// 	t_token *curr = tokens;
-// 	while (curr)
-// 	{
-// 		if (curr->value && value && ft_strcmp(curr->value, value) == 0)
-// 			return curr;
-// 		curr = curr->next;
-// 	}
-// 	return NULL;
-// }
+void	lst_remove_token(t_token **head, t_token *node)
+{
+	if (!node)
+		return ;
+	if (node->prev)
+		node->prev->next = node->next;
+	else
+		*head = node->next;
+	if (node->next)
+		node->next->prev = node->prev;
+}
 
-/*
-** Helper : Compte le nombre d'arguments
-// */
-//  int	count_args(char **args)
-// {
-// 	int	i = 0;
-// 	if (!args)
-// 		return (0);
-// 	while (args[i])
-// 		i++;
-// 	return (i);
-// }
+void	lst_insert_before(t_token **head, t_token *node, t_token *new_token)
+{
+	if (!node || !new_token)
+		return ;
+	new_token->next = node;
+	new_token->prev = node->prev;
+	if (node->prev)
+		node->prev->next = new_token;
+	else
+		*head = new_token;
+	node->prev = new_token;
+}
 
-/*
-** Handler robuste de préparation des arguments export (norme 42)
-** - Gère quotes, append, expansion, word splitting
-** - Modifie cmd->args pour que export ne fasse que l'exécution
-*/
-// void	parse_export_handler(t_token *tokens, t_cmd *cmd, t_env *env)
-// {
-// 	int		i = 1;
-// 	int		new_argc = 1;
-// 	int		w;
-// 	char	**new_args;
-// 	char	*arg;
-// 	char	*equal;
-// 	int		append;
-// 	char	*key;
-// 	char	*value;
-// 	char	*expanded;
-// 	char	*final_arg;
-// 	t_token	*val_token;
-// 	char	**words;
+int	is_assignment_word(const char *str)
+{
+	int	i;
 
-// 	new_args = ft_calloc(count_args(cmd->args) * 4 + 4, sizeof(char *));
-// 	if (!new_args)
-// 		return ;
-// 	new_args[0] = ft_strdup(cmd->args[0]); // "export"
+	if (!str || !ft_isalpha(str[0]))
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=' && !(str[i] == '+' && str[i + 1] == '='))
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+		i++;
+	}
+	if (str[i] == '=')
+		return (1);
+	if (str[i] == '+' && str[i + 1] == '=')
+		return (1);
+	return (0);
+}
 
-// 	while (cmd->args[i])
-// 	{
-// 		arg = cmd->args[i];
-// 		equal = ft_strchr(arg, '=');
-// 		append = 0;
-// 		key = NULL;
-// 		value = NULL;
+static t_token	*split_and_insert(t_token **tokens, t_token *current)
+{
+	char		**split;
+	int			i;
+	t_token		*new_token;
+	t_token		*tmp;
 
-// 		if (equal && equal > arg && equal[-1] == '+')
-// 			key = ft_substr(arg, 0, (equal - arg) - 1), append = 1;
-// 		else if (equal)
-// 			key = ft_substr(arg, 0, (equal - arg));
-// 		else
-// 			key = ft_strdup(arg);
-// 		value = equal ? equal + 1 : NULL;
+	if (ft_strchr(current->value, ' '))
+		split = ft_split(current->value, ' ');
+	else
+		split = ft_split(current->value, '\t');
+	if (!split)
+		return (NULL);
+	i = 0;
+	while (split[i])
+	{
+		new_token = lst_new_token(ft_strdup(split[i]),TOKEN_WORD,true,0);
+		if (!new_token)
+			return (NULL);
+		lst_insert_before(tokens, current, new_token);
+		i++;
+	}
+	tmp = current;
+	current = current->next;
+	lst_remove_token(tokens, tmp);
+	return (current);
+}
 
-// 		val_token = find_token_for_value(tokens, value);
+void	field_split_tokens(t_token **tokens)
+{
+	t_token	*current;
 
-// 		if (value)
-// 		{
-// 			if (val_token && val_token->type == TOKEN_SQUOTE)
-// 			{
-// 				final_arg = ft_strjoin(key, append ? "+=" : "=");
-// 				final_arg = strjoin_and_free(final_arg, value);
-// 				new_args[new_argc++] = final_arg;
-// 			}
-// 			else if (val_token && val_token->type == TOKEN_DQUOTE)
-// 			{
-// 				expanded = expand_variables_in_word(value, env);
-// 				final_arg = ft_strjoin(key, append ? "+=" : "=");
-// 				final_arg = strjoin_and_free(final_arg, expanded);
-// 				free(expanded);
-// 				new_args[new_argc++] = final_arg;
-// 			}
-// 			else
-// 			{
-// 				expanded = expand_variables_in_word(value, env);
-// 				if (has_special_chars(expanded))
-// 				{
-// 					words = split_words(expanded);
-// 					w = 0;
-// 					while (words && words[w])
-// 					{
-// 						final_arg = ft_strjoin(key, append ? "+=" : "=");
-// 						final_arg = strjoin_and_free(final_arg, words[w]);
-// 						new_args[new_argc++] = final_arg;
-// 						w++;
-// 					}
-// 					free_words(words);
-// 				}
-// 				else
-// 				{
-// 					final_arg = ft_strjoin(key, append ? "+=" : "=");
-// 					final_arg = strjoin_and_free(final_arg, expanded);
-// 					new_args[new_argc++] = final_arg;
-// 				}
-// 				free(expanded);
-// 			}
-// 		}
-// 		else
-// 			new_args[new_argc++] = ft_strdup(key);
+	current = *tokens;
+	while (current)
+	{
+		if (current->type == TOKEN_WORD
+			&& current->value
+			&& current->quoted == 0
+			&& !is_assignment_word(current->value)
+			&& (ft_strchr(current->value, ' ')
+				|| ft_strchr(current->value, '\t')))
+		{
+			current = split_and_insert(tokens, current);
+			continue ;
+		}
+		current = current->next;
+	}
+}
 
-// 		free(key);
-// 		i++;
-// 	}
-// 	new_args[new_argc] = NULL;
-// 	free_words(cmd->args);
-// 	cmd->args = new_args;
-// }
-
-// /*
-// ** Helper : concatène et libère s1 (norme 42 : pas de leaks !)
-// */
-// char	*strjoin_and_free(char *s1, const char *s2)
-// {
-// 	char	*joined;
-
-// 	joined = ft_strjoin(s1, s2);
-// 	free(s1);
-// 	return (joined);
-// }

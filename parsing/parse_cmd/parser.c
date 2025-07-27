@@ -144,6 +144,8 @@ static void remove_empty_word_tokens(t_token **tokens)
         curr = next;
     }
 }
+
+
 static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 {
 	t_cmd	*current = NULL;
@@ -202,11 +204,24 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 				}
 				arg = NULL;
 			}
-			else if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0) {
+			if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0 && was_quoted == 0) {
 				if (!add_argument(&current->args, arg)) {
 					return (0);
 				}
 				arg = NULL;
+			}
+			else if (current->args && current->args[0]
+				&& strcmp(current->args[0], "export") == 0)
+			{
+				// on fait comme export a=$a -> word split autorisé
+				char **split_args = ft_split(arg, ' ');
+				int idx = 0;
+				while (split_args && split_args[idx])
+				{
+					if (!add_argument(&current->args, split_args[idx]))
+						return (0);
+					idx++;
+				}
 			}
 			else {
 				char **split_args = ft_split(arg, ' ');
@@ -247,6 +262,7 @@ t_cmd	*parse_tokens_to_cmd2s(t_token *tokens)
 {
 	t_cmd	*cmds = NULL;
 	remove_empty_word_tokens(&tokens);
+
 	// remove_empty_token_head(&tokens);
 	if (!tokens || (tokens->type == TOKEN_EOF && !tokens->next))
 		return (NULL);
