@@ -11,6 +11,8 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	tokens = lexer(input);
 	// print_token_list(tokens);
 	expansion_all_tokens(tokens, env_list);
+	field_split_tokens(&tokens);
+	// export_key_quote_split(&tokens);
 	// printf(".................apres l expension .................\n");
 	// print_token_list(tokens);
 	// remove_empty_token(&tokens);

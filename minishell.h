@@ -117,7 +117,8 @@ char    *strjoin_and_free(char *s1, char *s2);
 t_cmd	*parse_tokens_to_cmd2s(t_token *tokens);
 // t_cmd	*parse_tokens_to_cmd2s(t_token *tokens, t_env *env);
 void	parse_export_handler(t_token *tokens, t_cmd *cmd, t_env *env);
-
+void	field_split_tokens(t_token **tokens);
+// void export_key_quote_split(t_token **head);
 // Supprime les tokens vides de la liste chainée
 void	remove_empty_token(t_token **tokens);
 
