@@ -32,9 +32,6 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	}
 	return (cmds);
 }
-//execution phase: save standard fds
-// Execution phase: run commands, handle status, restore fds
-
 
 // void f(){system("leaks minishell");}
 

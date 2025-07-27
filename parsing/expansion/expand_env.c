@@ -4,7 +4,7 @@
 char *expand_env_variable(const char *str, int *index, t_env **env)
 {
     int start = ++(*index);
-    while (str[*index] && (isalnum(str[*index]) || str[*index] == '_'))
+    while (str[*index] && (ft_isalnum(str[*index]) || str[*index] == '_'))
         (*index)++;
     char *var = strndup(str + start, *index - start);
     char *val = get_env_value(env, var);

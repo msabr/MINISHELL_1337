@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:01:53 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 13:23:45 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 19:40:22 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	check_nbr_heredocs(t_cmd *cmds)
 	}
 }
 
-void	handel_heredoc(t_cmd *cmds, t_env *env)
+bool	handel_heredoc(t_cmd *cmds, t_env *env)
 {
 	t_cmd	*current_cmd;
 	t_redir	*curr;
@@ -67,9 +67,11 @@ void	handel_heredoc(t_cmd *cmds, t_env *env)
 		while (curr)
 		{
 			if (curr->type == TOKEN_HEREDOC)
-				redirect_heredoc(curr, env);
+				if (redirect_heredoc(curr, env))
+					return (false);
 			curr = curr->next;
 		}
 		current_cmd = current_cmd->next;
 	}
+	return (true);
 }

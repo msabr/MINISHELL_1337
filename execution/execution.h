@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:10 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 13:36:36 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 20:02:02 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 # define EXECUTION_H
 
 # include "../minishell.h"
+
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <signal.h>
+# include <errno.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <termios.h>
 
 //built-in functions
 bool	is_builtin(char *cmd);
@@ -55,7 +64,7 @@ void	ft_set_and_exit(int status);
 
 //redirection functions
 bool	is_heredoc(t_cmd *cmds);
-void	handel_heredoc(t_cmd *cmds, t_env *env);
+bool	handel_heredoc(t_cmd *cmds, t_env *env);
 bool	is_redirection(t_cmd *cmds);
 bool	handle_redirections(t_cmd *cmds);
 

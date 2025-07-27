@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 13:23:59 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/27 19:49:23 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ bool	handle_redirections(t_cmd *cmds)
 			flag = redirect_append(current->filename);
 		else if (current->type == TOKEN_HEREDOC)
 		{
-			dup2(current->heredoc->fd_read, STDIN_FILENO);
+			if (dup2(current->heredoc->fd_read, STDIN_FILENO) < 0)
+				return (false);
 			close(current->heredoc->fd_read);
 		}
 		if (flag)
