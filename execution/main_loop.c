@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 20:22:54 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/28 17:25:33 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	is_redirection2(t_cmd *cmds)
 }
 void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 {
-	print_cmds(cmds);
+	// print_cmds(cmds);
 	save_std_fds(cmds);
 	if (is_heredoc(cmds))
 	{
