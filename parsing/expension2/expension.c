@@ -1,7 +1,5 @@
 # include "../../minishell.h"
-/*
-** Vérifie si un token était originellement quoté (simple ou double quote)
-*/
+
 int	was_originally_quoted(t_token *token)
 {
 	if (!token)
@@ -9,9 +7,6 @@ int	was_originally_quoted(t_token *token)
 	return (token->quoted && (token->type == TOKEN_SQUOTE || token->type == TOKEN_DQUOTE));
 }
 
-/*
-** Vérifie si le token est dans un heredoc (en regardant derrière les espaces)
-*/
 int	is_in_heredoc(t_token *token)
 {
 	t_token	*prev = token->prev;
@@ -24,118 +19,7 @@ int	is_in_heredoc(t_token *token)
 	return (0);
 }
 
-/*
-** Expansion principale à appeler sur chaque liste de tokens (hors export)
-*/
 
-// void	expansion_all_tokens(t_token *tokens, t_env *env)
-// {
-// 	t_token	*curr = tokens;
-//     fix_dollar_doublequote_tokens(&tokens);
-//     merge_variable_tokens(tokens); // <--- ajoute ceci !
-
-// 	while (curr)
-// 	{
-// 		if (is_in_heredoc(curr))
-// 		{
-// 			if (curr->type == TOKEN_DQUOTE)
-// 				curr->value = remove_dquotes(curr->value);
-// 			else if (curr->type == TOKEN_SQUOTE)
-// 				curr->value = remove_squotes(curr->value);
-// 			curr->type = TOKEN_WORD;
-// 			curr = curr->next;
-// 			continue;
-// 		}
-// 		if (curr->type == TOKEN_VARIABLE && curr->value && curr->value[0] == '$')
-// 		{
-//             char *expanded = expand_many_dollars(curr->value, env);			
-//             free(curr->value);
-// 			curr->value = expanded;
-// 			curr->type = TOKEN_WORD;
-// 		}
-// 		else if (curr->type == TOKEN_DQUOTE)
-// 			expand_dquote_token(curr, env);
-// 		else if (curr->type == TOKEN_SQUOTE)
-// 			expand_squote_token(curr);
-// 		curr = curr->next;
-// 	}
-// }
-
-
-
-// void expansion_all_tokens(t_token *tokens, t_env *env)
-// {
-//     t_token *curr = tokens;
-//     fix_dollar_doublequote_tokens(&tokens);
-//     merge_variable_tokens(tokens); // IMPORTANT : voir la discussion précédente
-
-//     while (curr)
-//     {
-//         if (is_in_heredoc(curr))
-//         {
-//             if (curr->type == TOKEN_DQUOTE)
-//                 curr->value = remove_dquotes(curr->value);
-//             else if (curr->type == TOKEN_SQUOTE)
-//                 curr->value = remove_squotes(curr->value);
-//             curr->type = TOKEN_WORD;
-//             curr = curr->next;
-//             continue;
-//         }
-//         if (curr->type == TOKEN_VARIABLE && curr->value && curr->value[0] == '$')
-//         {
-//             // Expansion directe pair/impair
-//             int i = 0;
-//             int dollar_count = 0;
-//             while (curr->value[i] == '$')
-//             {
-//                 dollar_count++;
-//                 i++;
-//             }
-//             const char *var_name = curr->value + i;
-//             char *expanded = NULL;
-//             if (var_name[0])
-//             {
-//                 if (dollar_count % 2 == 1) // impair : expansion
-//                 {
-//                     char *val = get_env_value(&env, var_name);
-//                     if (val)
-//                         expanded = ft_strdup(val);
-//                     else
-//                         expanded = ft_strdup("");
-//                 }
-//                 else // pair : littéral
-//                 {
-//                     expanded = ft_strdup(var_name);
-//                 }
-//             }
-//             else
-//             {
-//                 expanded = ft_strdup(curr->value);
-//             }
-//             free(curr->value);
-//             curr->value = expanded;
-//             curr->type = TOKEN_WORD;
-//         }
-//         else if (curr->type == TOKEN_DQUOTE)
-//             expand_dquote_token(curr, env);
-//         else if (curr->type == TOKEN_SQUOTE)
-//             expand_squote_token(curr);
-//         else if (curr->type == TOKEN_WORD)
-// 		{
-// 			char *expanded = expand_variables_in_word(curr->value, env);
-//             // printf("hi");
-// 			free(curr->value);
-// 			curr->value = expanded;
-// 		}
-//         curr = curr->next;
-//     }
-// }
-
-
-
-/*
-** Cas 1 : handle un token dans un heredoc
-*/
 static void	expansion_handle_heredoc(t_token *curr)
 {
 	// Utilise le champ quoted pour savoir si le token était quoté à l'origine
@@ -149,9 +33,6 @@ static void	expansion_handle_heredoc(t_token *curr)
 	curr->type = TOKEN_WORD;
 }
 
-/*
-** Cas 2 : handle un token VARIABLE (seulement $... au début)
-*/
 static void	expansion_handle_variable(t_token *curr, t_env *env)
 {
 	int		i = 0;
@@ -193,22 +74,15 @@ static void	expansion_handle_variable(t_token *curr, t_env *env)
 		expanded = ft_strdup(curr->value);
 		curr->expended = 0;
 	}
-	// free(curr->value);
 	curr->value = expanded;
 	curr->type = TOKEN_WORD;
 }
 
-/*
-** Cas 3 : handle un token DQUOTE
-*/
 static void	expansion_handle_dquote(t_token *curr, t_env *env)
 {
 	expand_dquote_token(curr, env);
 }
 
-/*
-** Cas 4 : handle un token SQUOTE
-*/
 static void	expansion_handle_squote(t_token *curr)
 {
 	expand_squote_token(curr);
@@ -220,97 +94,8 @@ static void	expansion_handle_squote(t_token *curr)
 static void	expansion_handle_word(t_token *curr, t_env *env)
 {
 	char *expanded = expand_variables_in_word(curr->value, env);
-	// free(curr->value);
 	curr->value = expanded;
 }
-
-/*
-** Fonction principale d'expansion
-*/
-
-
-// char	*expand_variables_in_string(const char *str, t_env *env)
-// {
-// 	size_t	i;
-// 	size_t	j;
-// 	size_t	len;
-// 	char	*result;
-
-// 	i = 0;
-// 	j = 0;
-// 	len = ft_strlen(str);
-// 	result = ft_malloc(len * 4 + 32);
-// 	if (!result)
-// 		return (NULL);
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '$')
-// 		{
-// 			i++;
-// 			if (str[i] == '?')
-// 			{
-// 				char	*exit_code;
-// 				size_t	k;
-
-// 				exit_code = ft_itoa(*ft_get_status());
-// 				k = 0;
-// 				while (exit_code && exit_code[k])
-// 					result[j++] = exit_code[k++];
-// 				// free(exit_code);
-// 				i++;
-// 			}
-// 			else if (ft_isalpha(str[i]) || str[i] == '_')
-// 			{
-// 				size_t	varlen;
-// 				size_t	k;
-// 				char	*key;
-// 				char	*val;
-// 				size_t	m;
-
-// 				varlen = 0;
-// 				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
-// 					varlen++;
-// 				key = ft_malloc(varlen + 1);
-// 				if (!key)
-// 				{
-// 					// free(result);
-// 					return (NULL);
-// 				}
-// 				k = 0;
-// 				while (k < varlen)
-// 				{
-// 					key[k] = str[i + k];
-// 					k++;
-// 				}
-// 				key[varlen] = '\0';
-// 				val = get_env_value(&env, key);
-// 				if (val)
-// 				{
-// 					m = 0;
-// 					while (val[m])
-// 						result[j++] = val[m++];
-// 				}
-// 				// free(key);
-// 				i += varlen;
-// 			}
-//             else if (ft_isdigit(str[i]))
-//             {
-//                 i++;
-//             }
-// 			else
-// 			{
-// 				result[j++] = '$';
-// 				if (str[i])
-// 					result[j++] = str[i++];
-// 			}
-// 		}
-// 		else
-// 			result[j++] = str[i++];
-// 	}
-// 	result[j] = '\0';
-// 	return (result);
-// }
-
 
 char	*expand_variables_in_string(const char *str, t_env *env)
 {
@@ -459,7 +244,6 @@ void	expansion_all_tokens(t_token *tokens, t_env *env)
 
 	fix_dollar_doublequote_tokens(&tokens);
 	merge_variable_tokens(tokens);
-	// remove_empty_token(&tokens);
 	curr = tokens;
 
 	while (curr)
@@ -471,11 +255,9 @@ void	expansion_all_tokens(t_token *tokens, t_env *env)
 			curr = curr->next;
 			continue;
 		}
-		
         if ((curr->type == TOKEN_WORD || curr->type == TOKEN_VARIABLE) && curr->value)
 		{
 			char *expanded = expand_variables_in_string(curr->value, env);
-			// free(curr->value);
 			curr->value = expanded;
 			curr->type = TOKEN_WORD;
 		}

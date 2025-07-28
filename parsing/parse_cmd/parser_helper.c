@@ -42,7 +42,6 @@ char	*merge_argument(t_token **ptok)
 			&& tok->value[0] == 0 && tok->space_after)
 		{
 			*ptok = tok->next;
-			// free(arg);
 			return (ft_strdup(""));
 		}
 		ft_strlcat(arg, tok->value, len + 1);
@@ -82,7 +81,6 @@ int	add_argument(char ***args, char *new_arg)
 	}
 	new_args[argc] = new_arg;
 	new_args[argc + 1] = NULL;
-	// free(*args);
 	*args = new_args;
 	return (1);
 }
@@ -166,41 +164,11 @@ int	add_command(t_cmd **cmds, t_cmd *new)
 	return (1);
 }
 
-// void	free_cmd_list(t_cmd *cmds)
-// {
-// 	t_cmd	*tmp;
-// 	t_redir	*rtmp;
-// 	int		i;
-
-// 	while (cmds)
-// 	{
-// 		tmp = cmds->next;
-// 		i = 0;
-// 		if (cmds->args)
-// 		{
-// 			while (cmds->args[i])
-// 				free(cmds->args[i++]);
-// 			free(cmds->args);
-// 		}
-// 		while (cmds->redirs)
-// 		{
-// 			rtmp = cmds->redirs->next;
-// 			free(cmds->redirs->filename);
-// 			// free(cmds->redirs->delimiter_heredoc);
-// 			free(cmds->redirs);
-// 			cmds->redirs = rtmp;
-// 		}
-// 		free(cmds);
-// 		cmds = tmp;
-// 	}
-// }
-
 // Supprime tous les tokens vides (value == NULL ou value[0] == 0) de la liste chainée
 void	remove_empty_token(t_token **tokens)
 {
 	t_token	*curr;
 	t_token	*prev;
-	// t_token	*to_free;
 
 	prev = NULL;
 	curr = *tokens;
@@ -214,30 +182,12 @@ void	remove_empty_token(t_token **tokens)
 			else
 				*tokens = curr->next;
 			curr = curr->next;
-			// free(to_free->value);
-			// free(to_free);
+
 		}
 		else
 		{
 			prev = curr;
 			curr = curr->next;
 		}
-	}
-}
-
-void	remove_empty_token_head(t_token **tokens)
-{
-	// t_token *tmp;
-
-	while (*tokens && (!(*tokens)->value || (*tokens)->value[0] == '\0'))
-	{
-		// tmp = *tokens;
-		*tokens = (*tokens)->next;
-
-		if (*tokens)
-			(*tokens)->prev = NULL;
-
-		// free(tmp->value);
-		// free(tmp);
 	}
 }

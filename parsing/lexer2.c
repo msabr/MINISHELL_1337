@@ -12,24 +12,7 @@
 
 #include "../minishell.h"
 
-void	add_token(t_token **head, const char *val,
-			t_token_type type, bool space,int expneded)
-{
-	t_token	*new;
 
-	new = lst_new_token(val, type, space,expneded);
-	lst_add_back(head, new);
-}
-
-void	add_token_quoted(t_token **head, const char *val,
-			t_token_type type, bool space, int expneded)
-{
-	t_token	*new;
-
-	new = lst_new_token(val, type, space,expneded);
-	new->quoted = 1;
-	lst_add_back(head, new);
-}
 
 size_t	word_length(const char *input, size_t i)
 {

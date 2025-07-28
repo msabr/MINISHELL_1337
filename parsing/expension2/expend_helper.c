@@ -88,7 +88,6 @@ static char	*replace_number(char *str, int index)
 	char	*prefix = ft_substr(str, 0, index);
 	char	*suffix = ft_substr(str, index + 2, ft_strlen(str) - (index + 2));
 	char	*new_str = ft_strjoin(prefix, suffix);
-	//free(prefix); free(suffix);
 	return (new_str);
 }
 
@@ -102,13 +101,9 @@ static char	*replace_dollar(char *str, int index, t_env *env)
 	char	*suffix = ft_strdup(&str[index + ft_strlen(key_val) + 1]);
 	char	*temp = ft_strjoin(prefix, val);
 	char	*new_str = ft_strjoin(temp, suffix);
-	//free(key_val); free(prefix); free(suffix); free(temp);
 	return (new_str);
 }
 
-/*
-** Expansion dans les doubles quotes (gère $VAR, $?, $1 etc.)
-*/
 void	expand_dquote_token(t_token *token, t_env *env)
 {
 	char *result = remove_dquotes(token->value);
@@ -127,11 +122,9 @@ void	expand_dquote_token(t_token *token, t_env *env)
 	}
 	while ((index = find_dollar(result)) != -1)
 	{
-		// char *tmp = result;
 		result = replace_dollar(result, index, env);
 		// free(tmp);
-	}
-	// free(token->value);
+	};
 	token->value = result;
 	token->type = TOKEN_WORD;
 }
@@ -173,7 +166,6 @@ void	convert_exit_code(t_token *token)
 
 void	number_before_dollar(t_token *token)
 {
-	// free(token->value);
 	token->value = strdup("");
 	token->expended = 1;
 }

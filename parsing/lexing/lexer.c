@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/08 19:00:00 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/16 13:34:44 by msabr            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 static int	is_quote_closed(const char *input, size_t i, char quote)
@@ -49,27 +37,18 @@ static void	handle_word(const char *input, size_t *i, t_token **head)
 		space = 0;
 	if (val && val[0] != '\0')
 		add_token(head, val, TOKEN_WORD, space,0);
-	// free(val);
 	*i += len;
 }
 
-static void	handle_quote(const char *input, size_t *i, t_token **head)
-{
-	char	quote;
-	size_t	start;
-	char	*val;
-	bool	space;
-	t_token_type type;
 
-	quote = input[*i];
-	(*i)++;
+static void	handle_quote_token(const char *input, size_t *i, char quote, t_token **head)
+{
+	size_t			start;
+	char			*val;
+	bool			space;
+	t_token_type	type;
+
 	start = *i;
-	
-	if (!is_quote_closed(input, start, quote))
-	{
-		error_syntax("unclosed quote");
-		return ;
-	}
 	while (input[*i] && input[*i] != quote)
 	{
 		if (quote == '"' && input[*i] == '\\' && input[*i + 1])
@@ -87,11 +66,23 @@ static void	handle_quote(const char *input, size_t *i, t_token **head)
 	else
 		type = TOKEN_DQUOTE;
 	add_token_quoted(head, val, type, space, 1);
-	// free(val);
 	if (input[*i])
 		(*i)++;
 }
 
+static void	handle_quote(const char *input, size_t *i, t_token **head)
+{
+	char	quote;
+
+	quote = input[*i];
+	(*i)++;
+	if (!is_quote_closed(input, *i, quote))
+	{
+		error_syntax("unclosed quote");
+		return ;
+	}
+	handle_quote_token(input, i, quote, head);
+}
 static size_t	variable_length(const char *input, size_t i)
 {
 	size_t	len;
@@ -125,7 +116,6 @@ static void	handle_variable(const char *input, size_t *i, t_token **head)
 	else
 		space = 0;
 	add_token(head, val, TOKEN_VARIABLE, space,1);
-	// free(val);
 	*i += len;
 }
 
@@ -147,7 +137,6 @@ static void	handle_operator(const char *input, size_t *i, t_token **head)
 	else
 		space = 0;
 	add_token(head, val, type, space,0);
-	// free(val);
 	*i += len;
 }
 
@@ -168,11 +157,7 @@ t_token	*lexer(const char *input)
 		else if (is_operator(input[i]))
 			handle_operator(input, &i, &head);
 		else if (input[i] == '\'' || input[i] == '"')
-		{
 			handle_quote(input, &i, &head);
-			// printf("gg");
-
-		}
 		else if (input[i] == '$')
 			handle_variable(input, &i, &head);
 		else

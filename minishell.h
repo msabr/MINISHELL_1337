@@ -89,25 +89,6 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }   t_cmd;
 
-/**..................................................
-t_token	*lexer(const char *input);
-// Lexing main API
-t_token	*lexer(const char *input);
-
-// Helpers & handlers
-int			is_whitespace(char c);
-bool		is_operator(char c);
-t_token_type	get_operator_type(const char *s);
-char		*ft_strndup(const char *src, size_t n);
-
-void		add_token(t_token **head, const char *val, t_token_type type, bool space);
-void		add_token_quoted(t_token **head, const char *val, t_token_type type, bool space, int quoted);
-t_token		*lst_new_token(const char *value, t_token_type type, bool space_after);
-void		lst_add_back(t_token **list, t_token *new);
-
-void		error_syntax(const char *token);
-
-//..................................................*/
 int		check_syntax_errors(t_token *tokens, const char *input);
 void	error_syntax(const char *token);
 int     count_args(char **args);
@@ -159,7 +140,6 @@ int		add_redirection(t_redir **redir, t_token_type type, char *filename,int quot
 int		add_command(t_cmd **cmds, t_cmd *new);
 t_cmd	*new_command(void);
 void	free_cmd_list(t_cmd *cmds); // Gestion mémoire
-void	remove_empty_token_head(t_token **tokens);
 t_redir *new_redir(t_token_type type, char *filename,int quoted_name);
 //..................................................*/
 // token utils
