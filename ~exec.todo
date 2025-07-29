@@ -137,7 +137,17 @@ minishell: lsk: command not found
 minishell: 127: command not found
 minishell$ 
 ---------------------------------------------
+minishell$ export PATH=
 
+minishell$ Libft
+minishell: Libft: command not found
+minishell$ $?
+minishell: 127: command not found
+
+bash-3.2$ Libft
+bash: Libft: is a directory
+bash-3.2$ $?
+bash: 126: No such file or directory
 ---------------------------------------------
 
 ---------------------------------------------
