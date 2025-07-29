@@ -9,7 +9,7 @@
 
 extern int	g_status;
 
-# define MAX_HEREDOCS 16
+
 
 typedef enum e_token_type
 {

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:10 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 06:38:27 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 17:32:34 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	add_env_value(t_env **env_list, char *key, char *value);
 void	add_temporary_env_value(t_env **env_list, char *key);
 void	remove_env_variable(t_env **env_list, const char *key);
 int		size_of_env_list(t_env *env_list);
-void	free_env_list(t_env *env_list);
 t_env	*copy_env(t_env *env_list);
 
 // execution functions
@@ -75,6 +74,5 @@ void	restore_std_fds(t_cmd *cmds);
 void	ft_perror(char *errn);
 int		print_dir_error(char *cmd);
 int		print_cmd_not_found_error(char *cmd);
-void	print_exit_error(const char *arg);
 
 #endif

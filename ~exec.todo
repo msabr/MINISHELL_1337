@@ -70,21 +70,31 @@ minishell: 1: command not found
 ------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------
+bash-3.2$ rm -rf 1
+bash-3.2$ mkdir -p a/b/c/d
+bash-3.2$ cd a/b/c/d
+bash-3.2$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/a/b/c/d
+bash-3.2$ cd ..
+bash: cd: ..: No such file or directory
+bash-3.2$ cd ..
+cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+bash-3.2$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/a/b/c/d/..
+bash-3.2$ 
 
-minishell> mkdir -p 1/2/3/4
-minishell> pwd
-/mnt/homes/msabr/Desktop/minishell
-minishell> cd 1/2/3/4/
-minishell> unset PWD OLDPWD
-minishell> ls
-minishell> pwd
-/mnt/homes/msabr/Desktop/minishell/1/2/3/4
-minishell> pwd
-getcwd: No such file or directory
-minishell> cd ..
-minishell> pwd
-getcwd: No such file or directory
-minishell> 
+minishell$ mkdir -p 1/2/3/4
+minishell$ cd 1/2/3/4
+minishell$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/1/2/3/4
+minishell$ cd ..
+minishell: cd: No such file or directory
+minishell$ cd ..
+minishell$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/1/2/3/4
+minishell$ cd ..
+minishell$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/1/2/3/4
 ---------------------------------------------
 minishell> echo $val $PWD
  /mnt/homes/msabr/Desktop/mini4
@@ -98,44 +108,6 @@ bash-3.2$  echo "" $PWD
 ---------------------------------------------
 bash-3.2$ > $a
 bash: $a: ambiguous redirect
----------------------------------------------
-➜  mini4 git:(master) ✗ env -i ./minishell 
-minishell$ cp /bin/ls .
-minishell$ unset PATH
-minishell$ ls
-execution/path_functions.c:66:7: runtime error: load of null pointer of type 'char'
-SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior execution/path_functions.c:66:7 in 
-AddressSanitizer:DEADLYSIGNAL
-=================================================================
-==54831==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x00010be56729 bp 0x7ffee3dc4a30 sp 0x7ffee3dc4940 T0)
-==54831==The signal is caused by a READ memory access.
-==54831==Hint: address points to the zero page.
-    #0 0x10be56729 in get_exec_path+0x399 (/mnt/homes/msabr/Desktop/mini4/./minishell:x86_64+0x10001b729)
-    #1 0x10be58752 in execve_simple_cmd+0x142 (/mnt/homes/msabr/Desktop/mini4/./minishell:x86_64+0x10001d752)
-    #2 0x10be55823 in execute_cmds+0x463 (/mnt/homes/msabr/Desktop/mini4/./minishell:x86_64+0x10001a823)
-    #3 0x10be55d1e in main_loop+0x37e (/mnt/homes/msabr/Desktop/mini4/./minishell:x86_64+0x10001ad1e)
-    #4 0x10be7c501 in main+0x141 (/mnt/homes/msabr/Desktop/mini4/./minishell:x86_64+0x100041501)
-    #5 0x7fff6d601cc8 in start+0x0 (/usr/lib/system/libdyld.dylib:x86_64+0x1acc8)
-
-==54831==Register values:
-rax = 0x0000000000000000  rbx = 0x00007ffee3dc4a80  rcx = 0x0000100000000000  rdx = 0x0000000000000000  
-rdi = 0x0000000000000000  rsi = 0x000000010cc18da0  rbp = 0x00007ffee3dc4a30  rsp = 0x00007ffee3dc4940  
- r8 = 0x000000010c126640   r9 = 0x00007ffee3dc3c10  r10 = 0x0000000000000000  r11 = 0x0000000000000206  
-r12 = 0x0000000000000000  r13 = 0x0000000000000000  r14 = 0x0000000000000000  r15 = 0x0000000000000000  
-AddressSanitizer can not provide additional info.
-SUMMARY: AddressSanitizer: SEGV (/mnt/homes/msabr/Desktop/mini4/./minishell:x86_64+0x10001b729) in get_exec_path+0x399
-==54831==ABORTING
-[1]    54831 abort      env -i ./minishell
----------------------------------------------
-minishell$ lsk
-minishell: lsk: command not found
-minishell$ $? | $?
-minishell: 127: command not found
-minishell: 127: command not found
-minishell$ lsk | $?
-minishell: lsk: command not found
-minishell: 127: command not found
-minishell$ 
 ---------------------------------------------
 minishell$ export PATH=
 

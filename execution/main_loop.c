@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 14:59:38 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 17:50:21 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ char	*ft_readline(const char *prompt)
 	char	*input;
 
 	temp = readline(prompt);
+	if (g_status == SIGINT)
+	{
+		ft_set_status(1);
+		g_status = 0;
+	}
 	if (!temp)
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
@@ -25,11 +30,6 @@ char	*ft_readline(const char *prompt)
 	}
 	if (temp && *temp)
 		add_history(temp);
-	if (g_status == SIGINT)
-	{
-		ft_set_status(1);
-		g_status = 0;
-	}
 	input = ft_strdup(temp);
 	free(temp);
 	return (input);

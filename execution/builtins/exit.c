@@ -6,11 +6,21 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 06:28:16 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 17:32:29 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+void	print_exit_error(const char *arg)
+{
+	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+	ft_free();
+	ft_set_status(255);
+	ft_exit(255);
+}
 
 static int	get_sign(const char *str, int *i)
 {
