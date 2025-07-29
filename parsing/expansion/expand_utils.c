@@ -132,7 +132,7 @@ int count_dollars(const char *str, int index)
 char *reduce_odd_dollars_and_handle_edge(const char *str)
 {
     int i = 0;
-    char *result = strdup("");
+    char *result = ft_strdup("");
     while (str[i])
     {
         // Edge case $"USER"
@@ -144,7 +144,7 @@ char *reduce_odd_dollars_and_handle_edge(const char *str)
                 j++;
             if (str[j] == '"')
             {
-                char *content = strndup(str + start, j - start);
+                char *content = ft_strndup(str + start, j - start);
                 result = strjoin_and_free(result, content);
                 i = j + 1;
                 continue;
@@ -154,14 +154,14 @@ char *reduce_odd_dollars_and_handle_edge(const char *str)
         {
             int count = count_dollars(str, i);
             if (count % 2 == 1)
-                result = strjoin_and_free(result, strdup("$"));
+                result = strjoin_and_free(result, ft_strdup("$"));
             // sinon on ne met rien
             i += count;
         }
         else
         {
             char tmp[2] = { str[i], 0 };
-            result = strjoin_and_free(result, strdup(tmp));
+            result = strjoin_and_free(result, ft_strdup(tmp));
             i++;
         }
     }

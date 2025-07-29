@@ -174,7 +174,7 @@ void	convert_exit_code(t_token *token)
 void	number_before_dollar(t_token *token)
 {
 	// free(token->value);
-	token->value = strdup("");
+	token->value = ft_strdup("");
 	token->expended = 1;
 }
 
@@ -184,12 +184,12 @@ void	expand_env_dollar(t_token *token, t_env *env)
 	int		i = 1, len = 0;
 	while (token->value[i] && (ft_isalnum(token->value[i]) || token->value[i] == '_'))
 		len++, i++;
-	key_val = strndup(token->value + 1, len);
+	key_val = ft_strndup(token->value + 1, len);
 	while (env)
 	{
 		if (ft_strcmp(env->key, key_val) == 0)
 		{
-			val = strdup(env->value);
+			val = ft_strdup(env->value);
 			break;
 		}
 		env = env->next;
@@ -197,7 +197,7 @@ void	expand_env_dollar(t_token *token, t_env *env)
 	// free(token->value);
 	if (!val)
 	{
-		token->value = strdup("");
+		token->value = ft_strdup("");
 		token->expended = 1;
 	}
 	else

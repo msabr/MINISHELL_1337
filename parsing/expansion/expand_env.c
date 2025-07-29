@@ -6,12 +6,12 @@ char *expand_env_variable(const char *str, int *index, t_env **env)
     int start = ++(*index);
     while (str[*index] && (ft_isalnum(str[*index]) || str[*index] == '_'))
         (*index)++;
-    char *var = strndup(str + start, *index - start);
+    char *var = ft_strndup(str + start, *index - start);
     char *val = get_env_value(env, var);
     // free(var);
     if (!val)
-        return strdup("");
-    return strdup(val);
+        return ft_strdup("");
+    return ft_strdup(val);
 }
 
 char *expand_braced_variable(const char *str, int *index, t_env **env, int last_status)
@@ -21,13 +21,13 @@ char *expand_braced_variable(const char *str, int *index, t_env **env, int last_
     (void)last_status; 
     while (str[end] && str[end] != '}')
         end++;
-    char *var = strndup(str + start, end - start);
+    char *var = ft_strndup(str + start, end - start);
     char *val = get_env_value(env, var);
     (*index) = end + 1;
     // free(var);
     if (!val)
-        return strdup("");
-    return strdup(val);
+        return ft_strdup("");
+    return ft_strdup(val);
 }
 
 // $?
@@ -36,7 +36,7 @@ char *expand_exit_status(int last_status)
     char buf[12];
 
     ft_putstr_fd(ft_itoa(last_status), 1);
-    return strdup(buf);
+    return ft_strdup(buf);
 }
 
 // Expansion d'un $ dans une chaîne
@@ -56,13 +56,13 @@ char *handle_dollar_expansion(const char *str, int *index, t_env **env, int last
              (str[*index + 1] == '\'' && str[*index + 2] == '\''))
     {
         *index += 3;
-        return strdup("");
+        return ft_strdup("");
     }
     // PATCH: $[digit] (expansion vide, saute le $ et le chiffre)
     else if (ft_isdigit(str[*index + 1]))
     {
         *index += 2;
-        return strdup("");
+        return ft_strdup("");
     }
     else if (ft_isalpha(str[*index + 1]) || str[*index + 1] == '_')
     {

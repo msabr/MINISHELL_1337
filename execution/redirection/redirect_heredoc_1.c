@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:01:53 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 19:40:22 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 14:31:23 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ void	check_nbr_heredocs(t_cmd *cmds)
 		while (redir)
 		{
 			if (redir->type == TOKEN_HEREDOC)
+			{
 				count++;
+			}
 			redir = redir->next;
 		}
 		cmds = cmds->next;
@@ -61,6 +63,7 @@ bool	handel_heredoc(t_cmd *cmds, t_env *env)
 	t_redir	*curr;
 
 	current_cmd = cmds;
+	check_nbr_heredocs(current_cmd);
 	while (current_cmd)
 	{
 		curr = current_cmd->redirs;
@@ -74,4 +77,25 @@ bool	handel_heredoc(t_cmd *cmds, t_env *env)
 		current_cmd = current_cmd->next;
 	}
 	return (true);
+}
+
+char	*get_temp_filename(void)
+{
+	char	*file_name;
+	int		n;
+
+	file_name = ft_itoa((int)&n);
+	file_name = ft_strjoin(file_name, "heredoc");
+	return (file_name);
+}
+
+void	handle_heredoc_signal(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ioctl(STDOUT_FILENO, TIOCSTI, "\n");
+		rl_replace_line("", 0);
+		rl_redisplay();
+		g_status = 1;
+	}
 }

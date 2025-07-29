@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 20:22:54 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 06:31:15 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	*ft_readline(const char *prompt)
 	free(temp);
 	return (input);
 }
+
 bool	is_redirection2(t_cmd *cmds)
 {
 	t_redir		*current;
@@ -49,6 +50,7 @@ bool	is_redirection2(t_cmd *cmds)
 	}
 	return (false);
 }
+
 void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 {
 	print_cmds(cmds);
@@ -97,6 +99,7 @@ void	main_loop(t_env **env_list)
 			if (cmds)
 				execute_cmds(cmds, env_list, &status);
 		}
+		close_heredoc(cmds);
 		tcsetattr(STDIN_FILENO, TCSANOW, &saved_termios);
 	}
 	rl_clear_history();

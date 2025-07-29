@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:24:49 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/26 21:59:29 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 05:35:38 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,10 @@ void	*ft_malloc(size_t size)
 		return (NULL);
 	ptr = malloc(size);
 	if (!ptr)
-	{
-		ft_putstr_fd("Memory allocation failed\n", STDERR_FILENO);
 		ft_exit(1);
-	}
 	new = malloc(sizeof(t_gc));
 	if (!new)
-	{
-		ft_putstr_fd("Memory allocation failed-------------------1\n", STDERR_FILENO);
 		ft_exit(1);
-	}
 	gc = ft_env_gc();
 	new->ptr = ptr;
 	if (*gc)

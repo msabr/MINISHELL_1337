@@ -3,7 +3,7 @@
 // Retire les quotes d'une string (simple ou double)
 char *remove_quotes(const char *str, char quote_char)
 {
-    size_t len = strlen(str);
+    size_t len = ft_strlen(str);
     char *result = ft_malloc(len + 1);
     size_t j = 0;
     for (size_t i = 0; i < len; i++)
@@ -17,7 +17,7 @@ char *remove_quotes(const char *str, char quote_char)
 char *expand_quoted_string(const char *str, t_env **env, int last_status)
 {
     int i = 0;
-    char *result = strdup("");
+    char *result = ft_strdup("");
     while (str[i])
     {
         if (str[i] == '\\' && (str[i + 1] == '$' || str[i + 1] == '\"'))
@@ -37,7 +37,7 @@ char *expand_quoted_string(const char *str, t_env **env, int last_status)
             size_t start = i;
             while (str[i] && str[i] != '$' && str[i] != '\\')
                 i++;
-            char *tmp = strndup(str + start, i - start);
+            char *tmp = ft_strndup(str + start, i - start);
             char *joined = strjoin_and_free(result, tmp);
             result = joined;
         }
@@ -49,7 +49,7 @@ char *expand_quoted_string(const char *str, t_env **env, int last_status)
 char *expand_unquoted_string(const char *str, t_env **env, int last_status)
 {
     int i = 0;
-    char *result = strdup("");
+    char *result = ft_strdup("");
     while (str[i])
     {
         if (str[i] == '\\')
@@ -69,7 +69,7 @@ char *expand_unquoted_string(const char *str, t_env **env, int last_status)
             size_t start = i;
             while (str[i] && str[i] != '$' && str[i] != '\\')
                 i++;
-            char *tmp = strndup(str + start, i - start);
+            char *tmp = ft_strndup(str + start, i - start);
             char *joined = strjoin_and_free(result, tmp);
             result = joined;
         }

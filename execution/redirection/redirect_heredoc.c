@@ -6,78 +6,84 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 20:30:16 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 06:37:54 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "redirection.h"
 
-char	*get_temp_filename(void)
+char	*ft_readline_heredoc(const char *prompt)
 {
-	char	*file_name;
-	int		n;
+	char	*temp;
+	char	*input;
 
-	file_name = ft_itoa((int)&n);
-	file_name = ft_strjoin(file_name, "heredoc");
-	return (file_name);
+	temp = readline(prompt);
+	if (!temp)
+		return (NULL);
+	input = ft_strdup(temp);
+	free(temp);
+	return (input);
 }
 
-void	handle_heredoc_signal(int sig)
+int	heredoc_file_setup(t_heredoc *heredoc)
 {
-	if (sig == SIGINT)
+	heredoc->tmp_file = get_temp_filename();
+	if (!*heredoc->tmp_file)
+		return (1);
+	heredoc->fd_write = open(heredoc->tmp_file,
+			O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	heredoc->fd_read = open(heredoc->tmp_file, O_RDONLY);
+	unlink(heredoc->tmp_file);
+	if (heredoc->fd_write < 0 || heredoc->fd_read < 0)
+		return (ft_perror(heredoc->tmp_file), 1);
+	return (0);
+}
+
+void	heredoc_content_handler(t_heredoc *heredoc, char *line)
+{
+	char	*expanded;
+
+	if (heredoc->flag == 0)
 	{
-		ioctl(STDOUT_FILENO, TIOCSTI, "\n");
-		rl_replace_line("", 0);
-		rl_redisplay();
-		g_status = 1;
+		expanded = expand_heredoc_content(line, heredoc->env,
+				g_status, heredoc->delimiter);
+		if (expanded)
+			ft_putstr_fd(expanded, heredoc->fd_write);
+		else
+			ft_putstr_fd(line, heredoc->fd_write);
 	}
+	else
+		ft_putstr_fd(line, heredoc->fd_write);
+	ft_putstr_fd("\n", heredoc->fd_write);
+}
+
+int	heredoc_signal_and_prompt(t_heredoc *heredoc)
+{
+	char	*line;
+
+	signal(SIGINT, handle_heredoc_signal);
+	while (1)
+	{
+		line = ft_readline_heredoc("> ");
+		if (g_status == 1)
+			return (1);
+		if (!line || ft_strcmp(line, heredoc->delimiter) == 0)
+			break ;
+		heredoc_content_handler(heredoc, line);
+	}
+	return (0);
 }
 
 int	redirect_heredoc(t_redir *redirs, t_env *env)
 {
-	char		*line;
-	char		*tmp_file;
-	char		*expanded;
 	t_heredoc	*heredoc;
+	int			result;
 
 	heredoc = redirs->heredoc;
-	tmp_file = get_temp_filename();
-	if (!tmp_file)
+	heredoc->env = &env;
+	result = heredoc_file_setup(heredoc);
+	if (result)
 		return (1);
-	heredoc->fd_write = open(tmp_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	heredoc->fd_read = open(tmp_file, O_RDONLY);
-	unlink(tmp_file);
-	if (heredoc->fd_write < 0 || heredoc->fd_read < 0)
-	{
-		ft_perror(tmp_file);
-		return (1);
-	}
-	signal(SIGINT, handle_heredoc_signal);
-	while (1)
-	{
-		line = readline("> ");
-		if (g_status == 1)
-		{
-			close(heredoc->fd_write);
-			return (unlink(tmp_file), 1);
-		}
-		if (!line || ft_strcmp(line, heredoc->delimiter) == 0)
-		{
-			break ;
-		}
-		if (heredoc->flag == 0)
-		{
-			expanded = expand_heredoc_content(line, &env, g_status, heredoc->delimiter);
-			if (expanded)
-				ft_putstr_fd(expanded, heredoc->fd_write);
-			else
-				ft_putstr_fd(line, heredoc->fd_write);
-		}
-		else
-			ft_putstr_fd(line, heredoc->fd_write);
-		ft_putstr_fd("\n", heredoc->fd_write);
-	}
-	close(heredoc->fd_write);
-	unlink(tmp_file);
-	return (0);
+	result = heredoc_signal_and_prompt(heredoc);
+	return (result);
 }

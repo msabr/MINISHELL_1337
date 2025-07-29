@@ -4,7 +4,7 @@ RM = rm -f
 
 CC = cc
 
-CFLAGS = -Wall -Wextra  -g3 -fsanitize=address,undefined #-Werror
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address,undefined 
 
 LIBFT = Libft/libft.a
 
@@ -26,21 +26,6 @@ SRC_LIB= Libft/ft_atoi.c Libft/ft_itoa.c Libft/ft_bzero.c Libft/ft_calloc.c Libf
 		Libft/ft_strlcpy.c Libft/ft_strcpy.c\
 		Libft/ft_strncmp.c Libft/ft_strcmp.c 
 
-SRC_Builtins =	execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c \
-				execution/builtins/export.c execution/builtins/pwd.c execution/builtins/unset.c \
-				execution/builtins/exit.c execution/builtins/external_files.c\
-				execution/builtins/internal_files.c execution/builtins/export_files.c
-
-SRC_ENV =	execution/environment/file1.c execution/environment/file2.c\
-			execution/environment/file3.c
-
-SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c \
-			execution/pipe/handel_pipe3.c execution/pipe/handel_pipe4.c
-
-SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
-				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
-				execution/redirection/redirect_heredoc.c execution/redirection/redirect_heredoc_1.c
-		
 SRC_LEXER =	parsing/lexer2.c \
 			parsing/lexing/lexer.c \
 			parsing/lexing/lexer_handlers.c \
@@ -66,18 +51,38 @@ SRC_PAR =	parsing/dubaging.c \
 			parsing/utils.c \
 			$(SRC_EXPANSION) \
 			$(SRC_PARSE_CMD)
+
+SRC_Builtins =	execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c \
+				execution/builtins/export.c execution/builtins/pwd.c execution/builtins/unset.c \
+				execution/builtins/exit.c execution/builtins/external_files.c\
+				execution/builtins/internal_files.c execution/builtins/export_files.c
+
+SRC_ENV =	execution/environment/file1.c execution/environment/file2.c\
+			execution/environment/file3.c
+
+SRC_PIPE =	execution/pipe/handel_pipe1.c execution/pipe/handel_pipe2.c \
+			execution/pipe/handel_pipe3.c execution/pipe/handel_pipe4.c
+
+SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/redirect_overwrite.c\
+				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
+				execution/redirection/redirect_heredoc.c execution/redirection/redirect_heredoc_1.c
 		
-			
-SRC_EXE =	execution/path_functions.c\
-			execution/signals.c\
-			execution/simple_cmd.c\
-			execution/print_errors.c\
+SRC_EXE =	$(SRC_Builtins)\
+			$(SRC_ENV)\
+			$(SRC_PIPE)\
+			$(SRC_REDIRECT)\
 			execution/exit_status.c\
 			execution/file_descriptor.c\
 			execution/main_loop.c\
+			execution/path_functions_1.c\
+			execution/path_functions.c\
+			execution/print_errors.c\
+			execution/signals.c\
+			execution/simple_cmd.c
 
-
-SRCS = 	$(SRC_Builtins) $(SRC_REDIRECT) $(SRC_PAR) $(SRC_ENV) $(SRC_PIPE) $(SRC_EXE) main.c\
+SRCS = 	$(SRC_EXE)\
+		$(SRC_PAR)\
+		main.c
 		
 
 OBJS = $(SRCS:.c=.o)
@@ -87,15 +92,13 @@ HEADERS =	Libft/libft.h\
 			execution/execution.h\
 			execution/pipe/pipe.h \
 			execution/builtins/builtins.h\
-			execution/redirection/redirection.h\
-
+			execution/redirection/redirection.h
 
 all: check-readline $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) $(READLINE_COMPILE) $(OBJS) $(LIBFT) -o $(NAME) $(READLINE_LINK)
 	
-
 %.o: %.c $(HEADERS) $(SRC_LIB)
 	$(CC) $(CFLAGS) $(READLINE_COMPILE) -c $< -o $@
 

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:53:11 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/22 19:11:41 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 06:28:16 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	exit_shell(t_cmd *cmd)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (cmd->args[1])
 	{
-		if (valid_number(cmd->args[1]))
+		if (cmd->args[1][0] && valid_number(cmd->args[1]))
 			status = ft_atoi(cmd->args[1]) % 256;
 		else
 			print_exit_error(cmd->args[1]);

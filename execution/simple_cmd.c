@@ -6,65 +6,11 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 16:45:59 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 19:53:21 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 04:39:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
-static bool	ft_aid(char *cmd, t_env **env_list)
-{
-	int		i;
-	char	**paths;
-	char	*path_env;
-	char	*full_path;
-
-	i = 0;
-	path_env = get_env_value(env_list, "PATH");
-	if (!path_env || path_env[0] == '\0')
-		path_env = ":.";
-	paths = ft_split(path_env, ':');
-	if (!paths)
-		return (false);
-	while (paths[i])
-	{
-		full_path = ft_strjoin(paths[i], ft_strjoin("/", cmd));
-		if (! is_directory(full_path) && access(full_path, F_OK) == 0)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
-{
-	char	*tmp;
-
-	if (!cmds || !cmds->args || !cmds->args[0])
-		return (1);
-	if (ft_strchr(cmds->args[0], '/') != NULL
-		|| ft_strlen(get_env_value(env_list, "PATH")) == 0)
-	{
-		if (is_directory(cmds->args[0]))
-			return (print_dir_error(cmds->args[0]));
-		if (access(cmds->args[0], X_OK) == -1)
-		{
-			if (errno == ENOENT)
-				return (ft_perror(cmds->args[0]), 127);
-			return (ft_perror(cmds->args[0]), 126);
-		}
-		*path = ft_strdup(cmds->args[0]);
-		if (!*path)
-			return (ft_perror(cmds->args[0]), 1);
-		return (0);
-	}
-	tmp = get_path(cmds->args[0], *env_list);
-	if (!tmp && ft_aid(cmds->args[0], env_list))
-		return (access(cmds->args[0], X_OK), ft_perror(cmds->args[0]), 126);
-	else if (!tmp)
-		return (print_cmd_not_found_error(cmds->args[0]));
-	return (*path = tmp, 0);
-}
 
 static void	exec_child_process(t_cmd *cmds, t_env **env_list, char *path)
 {

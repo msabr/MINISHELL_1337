@@ -112,8 +112,6 @@ t_redir *new_redir(t_token_type type, char *filename,int quoted_name)
         new->heredoc->delimiter = filename;
         new->heredoc->fd_read = -1;
         new->heredoc->fd_write = -1;
-        new->heredoc->heredoc_num = 0; // À gérer si plusieurs heredocs
-        new->heredoc->index = 0;       // À gérer si besoin
         new->heredoc->flag = quoted_name;        // À renseigner selon si le heredoc est quoté
         new->heredoc->env = NULL;      // À remplir si besoin d'environnement
     }

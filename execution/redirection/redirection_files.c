@@ -6,11 +6,49 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 20:28:39 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 06:44:17 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "redirection.h"
+
+void	close_heredoc(t_cmd *cmds)
+{
+	t_cmd		*current_cmd;
+	t_redir		*current_redir;
+
+	current_cmd = cmds;
+	while (current_cmd)
+	{
+		current_redir = current_cmd->redirs;
+		while (current_redir)
+		{
+			if (current_redir->type == TOKEN_HEREDOC)
+			{
+				if (current_redir->heredoc)
+				{
+					close(current_redir->heredoc->fd_read);
+					close(current_redir->heredoc->fd_write);
+				}
+			}
+			current_redir = current_redir->next;
+		}
+		current_cmd = current_cmd->next;
+	}
+}
+
+bool	is_directory(const char *path)
+{
+	int	fd;
+
+	fd = open(path, O_DIRECTORY);
+	if (fd < 0)
+	{
+		return (false);
+	}
+	close(fd);
+	return (true);
+}
 
 bool	is_redirection(t_cmd *cmds)
 {
@@ -48,7 +86,6 @@ bool	handle_redirections(t_cmd *cmds)
 		{
 			if (dup2(current->heredoc->fd_read, STDIN_FILENO) < 0)
 				return (false);
-			close(current->heredoc->fd_read);
 		}
 		if (flag)
 			return (false);

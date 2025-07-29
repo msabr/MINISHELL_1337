@@ -43,7 +43,7 @@ static int	open_tempfile(char **filename)
 	char template[] = "/tmp/minishell_heredoc_XXXXXX";
 	int fd;
 
-	*filename = strdup(template);
+	*filename = ft_strdup(template);
 	if (!*filename)
 		return (-1);
 	fd = mkstemp(*filename);
@@ -82,7 +82,7 @@ int	open_heredoc_tempfile(t_heredoc *heredoc)
 		}
 		if (heredoc->flag == 0)
 			expand_heredoc_line(&line, heredoc->env);
-		write(fd_write, line, strlen(line));
+		write(fd_write, line, ft_strlen(line));
 		write(fd_write, "\n", 1);
 		free(line);
 	}

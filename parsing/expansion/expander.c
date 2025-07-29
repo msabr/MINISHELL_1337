@@ -47,7 +47,7 @@ bool needs_expansion(t_token *token)
     if (token->quoted && (token->type == TOKEN_SQUOTE || token->type == TOKEN_DQUOTE))
         return true;
         
-    return (strchr(token->value, '$') || strchr(token->value, '\'') || strchr(token->value, '\"'));
+    return (ft_strchr(token->value, '$') || ft_strchr(token->value, '\'') || ft_strchr(token->value, '\"'));
 }
 
 // Expansion d'un token unique

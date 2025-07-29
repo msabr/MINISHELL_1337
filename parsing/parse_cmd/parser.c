@@ -96,14 +96,14 @@ static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 				}
 				arg = NULL;
 			}
-			if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0 && was_quoted == 0) {
+			if (current->args && current->args[0] && ft_strcmp(current->args[0], "export") == 0 && was_quoted == 0) {
 				if (!add_argument(&current->args, arg)) {
 					return (0);
 				}
 				arg = NULL;
 			}
 			else if (current->args && current->args[0]
-				&& strcmp(current->args[0], "export") == 0)
+				&& ft_strcmp(current->args[0], "export") == 0)
 			{
 				// on fait comme export a=$a -> word split autorisé
 				char **split_args = ft_split(arg, ' ');

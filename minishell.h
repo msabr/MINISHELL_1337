@@ -4,9 +4,6 @@
 # include "Libft/libft.h"
 
 # include <stdio.h>
-# include <string.h>
-# include <stdbool.h>
-
 
 // # include "parsing/expension2/expansion.h"
 
@@ -64,9 +61,8 @@ typedef struct s_heredoc
 {
 	char	*delimiter;
 	int		fd_read;
-	int		heredoc_num;
 	int		fd_write;
-	int		index;
+	char	*tmp_file;
 	int		flag; // 1 if the heredoc is quoted, 0 if not
 	t_env	**env;
 }	t_heredoc;

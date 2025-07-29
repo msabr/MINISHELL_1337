@@ -3,7 +3,7 @@
 // Supprime les $[chiffre]
 char *expand_numbers(const char *str)
 {
-    char *res = strdup("");
+    char *res = ft_strdup("");
     int i = 0;
     while (str[i])
     {
