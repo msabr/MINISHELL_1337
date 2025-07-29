@@ -31,23 +31,23 @@ SRC_LEXER =	parsing/lexer2.c \
 			parsing/lexing/lexer_handlers.c \
 			parsing/lexing/token_utils.c
 
-SRC_EXPANSION =	parsing/expansion/expand_env.c \
-				parsing/expansion/expand_escape.c \
-				parsing/expansion/expand_number.c \
-				parsing/expansion/expand_quotes.c \
-				parsing/expansion/expand_utils.c \
-				parsing/expansion/expander.c \
-				parsing/expension2/expend_helper.c \
+
+SRC_EXPANSION =	parsing/expension2/expend_helper.c \
 				parsing/expension2/expension.c \
 				parsing/expension2/expend_herdoc.c
 
+
 SRC_PARSE_CMD =	parsing/parse_cmd/parser.c \
 				parsing/parse_cmd/parser_helper.c \
+				parsing/parse_cmd/parse_utils.c \
+				parsing/parse_cmd/parse_utils2.c \
+				parsing/parse_cmd/parse_utils3.c \
 				parsing/parse_cmd/export_parse.c
 
 SRC_PAR =	parsing/dubaging.c \
 			$(SRC_LEXER) \
-			parsing/syntax_error.c \
+			parsing/check_syntax/syntax_error.c \
+			parsing/check_syntax/syntax_tool.c \
 			parsing/utils.c \
 			$(SRC_EXPANSION) \
 			$(SRC_PARSE_CMD)

@@ -10,59 +10,73 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../parsing.h"
 
-t_token *lst_new_token(const char *value, t_token_type type, bool space_after,int expended)
+t_token	*lst_new_token(const char *val, t_token_type type, bool space, int expd)
 {
-    t_token *tok = ft_malloc(sizeof(t_token));
-    if (!tok) return NULL;
-    tok->value = ft_strdup(value);
-    tok->type = type;
-    tok->space_after = space_after;
-    tok->quoted = 0;
-    tok->expended = expended;
-    tok->next = NULL;
-    tok->prev = NULL;
-    return tok;
+	t_token	*tok;
+
+	tok = ft_malloc(sizeof(t_token));
+	if (!tok)
+		return (NULL);
+	tok->value = ft_strdup(val);
+	tok->type = type;
+	tok->space_after = space;
+	tok->quoted = 0;
+	tok->expended = expd;
+	tok->next = NULL;
+	tok->prev = NULL;
+	return (tok);
 }
-void lst_add_back(t_token **list, t_token *new)
+
+void	lst_add_back(t_token **list, t_token *new)
 {
-    t_token *tmp;
-    if (!*list)
-    {
-        *list = new;
-        return;
-    }
-    tmp = *list; 
-    while (tmp->next)
-        tmp = tmp->next;
-    tmp->next = new;
-    new->prev = tmp;
-}
-bool is_operator(char c) {
-    return (c == '|' || c == '<' || c == '>');
+	t_token	*tmp;
+
+	if (!*list)
+	{
+		*list = new;
+		return ;
+	}
+	tmp = *list;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+	new->prev = tmp;
 }
 
-bool is_double_operator(const char *s) {
-    return (!ft_strncmp(s, ">>", 2) || !ft_strncmp(s, "<<", 2));
+void	remove_hel(t_token **tok, t_token **prev, t_token *curr, t_token *next)
+{
+	if (curr->type == TOKEN_WORD && (!curr->value || curr->value[0] == '\0'))
+	{
+		if (*prev && is_redir((*prev)->type))
+			*prev = curr;
+		if (*prev)
+			(*prev)->next = next;
+		else
+			*tok = next;
+	}
+	else
+		*prev = curr;
 }
 
-t_token_type get_operator_type(const char *s) {
-    if (!ft_strncmp(s, "|", 1)) return TOKEN_PIPE;
-    if (!ft_strncmp(s, ">>", 2)) return TOKEN_REDIR_APPEND;
-    if (!ft_strncmp(s, "<<", 2)) return TOKEN_HEREDOC;
-    if (!ft_strncmp(s, "<", 1)) return TOKEN_REDIR_IN;
-    if (!ft_strncmp(s, ">", 1)) return TOKEN_REDIR_OUT;
-    return TOKEN_WORD;
-}
+void	remove_empty_word_tokens(t_token **tokens)
+{
+	t_token	*curr;
+	t_token	*prev;
+	t_token	*next;
 
-// void free_token_list(t_token *head) {
-//     t_token *tmp;
-//     while (head) {
-//         tmp = head->next;
-//         // if (head->value)
-//         //     free(head->value);
-//         // free(head);
-//         head = tmp;
-//     }
-// }
+	curr = *tokens;
+	prev = NULL;
+	if (curr)
+	{
+		prev = curr;
+		curr = curr->next;
+	}
+	while (curr)
+	{
+		next = curr->next;
+		remove_hel(tokens, &prev, curr, next);
+		curr = next;
+	}
+}

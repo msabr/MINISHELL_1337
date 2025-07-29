@@ -1,132 +1,66 @@
-#include "../../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_helper.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/28 23:55:48 by kabouelf          #+#    #+#             */
+/*   Updated: 2025/07/29 14:36:26 by msabr            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	is_arg_token(t_token *tok)
+#include "../parsing.h"
+
+static t_heredoc	*create_heredoc(char *filename, int quoted_name)
 {
-	return (tok && (tok->type == TOKEN_WORD || tok->type == TOKEN_VARIABLE
-		|| tok->type == TOKEN_DQUOTE || tok->type == TOKEN_SQUOTE));
-}
+	t_heredoc	*heredoc;
 
-// Helper: vérifie si un type est une redirection
-int	is_redir(t_token_type t)
-{
-	return (t == TOKEN_REDIR_IN || t == TOKEN_REDIR_OUT
-		|| t == TOKEN_REDIR_APPEND || t == TOKEN_HEREDOC);
-}
-
-// Helper: fusionne plusieurs tokens d'arguments en une seule string
-static size_t	arg_total_len(t_token *tok)
-{
-	size_t	len = 0;
-	while (is_arg_token(tok) && !tok->space_after)
-	{
-		len += ft_strlen(tok->value);
-		tok = tok->next;
-	}
-	if (is_arg_token(tok))
-		len += ft_strlen(tok->value);
-	return (len);
-}
-
-char	*merge_argument(t_token **ptok)
-{
-	size_t	len = arg_total_len(*ptok);
-	char	*arg = ft_malloc(len + 1);
-	t_token	*tok = *ptok;
-
-	if (!arg)
+	heredoc = ft_malloc(sizeof(t_heredoc));
+	if (!heredoc)
 		return (NULL);
-	arg[0] = 0;
-	while (is_arg_token(tok))
+	heredoc->delimiter = filename;
+	heredoc->fd_read = -1;
+	heredoc->fd_write = -1;
+	heredoc->heredoc_num = 0;
+	heredoc->index = 0;
+	heredoc->flag = quoted_name;
+	heredoc->env = NULL;
+	return (heredoc);
+}
+
+t_redir	*new_redir(t_token_type type, char *filename, int quoted_name)
+{
+	t_redir	*new;
+
+	new = ft_malloc(sizeof(t_redir));
+	if (!new)
+		return (NULL);
+	new->type = type;
+	new->filename = filename;
+	new->fd_in = -1;
+	new->fd_out = -1;
+	new->next = NULL;
+	if (type == TOKEN_HEREDOC)
 	{
-		if ((tok->type == TOKEN_SQUOTE || tok->type == TOKEN_DQUOTE)
-			&& tok->value[0] == 0 && tok->space_after)
+		new->heredoc = create_heredoc(filename, quoted_name);
+		if (!new->heredoc)
 		{
-			*ptok = tok->next;
-			// free(arg);
-			return (ft_strdup(""));
+			free(new);
+			return (NULL);
 		}
-		ft_strlcat(arg, tok->value, len + 1);
-		if (tok->space_after)
-		{
-			*ptok = tok->next;
-			return (arg);
-		}
-		tok = tok->next;
 	}
-	*ptok = tok;
-	return (arg);
+	else
+		new->heredoc = NULL;
+	return (new);
 }
 
-int	count_args(char **args)
+int	add_redirection(t_redir **redir, t_token_type type, char *fname, int q_name)
 {
-	int	i = 0;
-	if (!args)
-		return (0);
-	while (args[i])
-		i++;
-	return (i);
-}
-
-int	add_argument(char ***args, char *new_arg)
-{
-	int	argc = count_args(*args);
-	char	**new_args = ft_malloc(sizeof(char *) * (argc + 2));
-	int	i = 0;
-
-	if (!new_args)
-		return (0);
-	while (i < argc)
-	{
-		new_args[i] = (*args)[i];
-		i++;
-	}
-	new_args[argc] = new_arg;
-	new_args[argc + 1] = NULL;
-	// free(*args);
-	*args = new_args;
-	return (1);
-}
-
-
-
-t_redir *new_redir(t_token_type type, char *filename,int quoted_name)
-{
-    t_redir *new = ft_malloc(sizeof(t_redir));
-    if (!new)
-        return NULL;
-
-    new->type = type;
-    new->filename = filename;
-    new->fd_in = -1;
-    new->fd_out = -1;
-    new->next = NULL;
-
-    if (type == TOKEN_HEREDOC)
-    {
-        new->heredoc = ft_malloc(sizeof(t_heredoc));
-        if (!new->heredoc)
-        {
-            free(new);
-            return NULL;
-        }
-        new->heredoc->delimiter = filename;
-        new->heredoc->fd_read = -1;
-        new->heredoc->fd_write = -1;
-        new->heredoc->flag = quoted_name;        // À renseigner selon si le heredoc est quoté
-        new->heredoc->env = NULL;      // À remplir si besoin d'environnement
-    }
-    else
-    {
-        new->heredoc = NULL;
-    }
-    return new;
-}
-
-int	add_redirection(t_redir **redir, t_token_type type, char *filename,int quoted_name)
-{
-	t_redir	*new = new_redir(type, filename,quoted_name);
+	t_redir	*new;
 	t_redir	*tmp;
 
+	new = new_redir(type, fname, q_name);
 	if (!new)
 		return (0);
 	if (!*redir)
@@ -139,11 +73,6 @@ int	add_redirection(t_redir **redir, t_token_type type, char *filename,int quote
 		tmp->next = new;
 	}
 	return (1);
-}
-
-t_cmd	*new_command(void)
-{
-	return (ft_calloc(1, sizeof(t_cmd)));
 }
 
 int	add_command(t_cmd **cmds, t_cmd *new)
@@ -164,78 +93,30 @@ int	add_command(t_cmd **cmds, t_cmd *new)
 	return (1);
 }
 
-// void	free_cmd_list(t_cmd *cmds)
-// {
-// 	t_cmd	*tmp;
-// 	t_redir	*rtmp;
-// 	int		i;
-
-// 	while (cmds)
-// 	{
-// 		tmp = cmds->next;
-// 		i = 0;
-// 		if (cmds->args)
-// 		{
-// 			while (cmds->args[i])
-// 				free(cmds->args[i++]);
-// 			free(cmds->args);
-// 		}
-// 		while (cmds->redirs)
-// 		{
-// 			rtmp = cmds->redirs->next;
-// 			free(cmds->redirs->filename);
-// 			// free(cmds->redirs->delimiter_heredoc);
-// 			free(cmds->redirs);
-// 			cmds->redirs = rtmp;
-// 		}
-// 		free(cmds);
-// 		cmds = tmp;
-// 	}
-// }
-
-// Supprime tous les tokens vides (value == NULL ou value[0] == 0) de la liste chainée
-void	remove_empty_token(t_token **tokens)
+char	*merge_argument(t_token **ptok)
 {
-	t_token	*curr;
-	t_token	*prev;
-	// t_token	*to_free;
+	size_t	len;
+	char	*arg;
+	t_token	*tok;
 
-	prev = NULL;
-	curr = *tokens;
-	while (curr)
+	len = arg_total_len(*ptok);
+	arg = ft_malloc(len + 1);
+	tok = *ptok;
+	if (!arg)
+		return (NULL);
+	arg[0] = 0;
+	while (is_arg_token(tok))
 	{
-		if (!curr->value || curr->value[0] == '\0')
+		if ((tok->type == TOKEN_SQUOTE || tok->type == TOKEN_DQUOTE)
+			&& tok->value[0] == 0 && tok->space_after)
+			return (*ptok = tok->next, ft_strdup(""));
+		ft_strlcat(arg, tok->value, len + 1);
+		if (tok->space_after)
 		{
-			// to_free = curr;
-			if (prev)
-				prev->next = curr->next;
-			else
-				*tokens = curr->next;
-			curr = curr->next;
-			// free(to_free->value);
-			// free(to_free);
+			*ptok = tok->next;
+			return (arg);
 		}
-		else
-		{
-			prev = curr;
-			curr = curr->next;
-		}
+		tok = tok->next;
 	}
-}
-
-void	remove_empty_token_head(t_token **tokens)
-{
-	// t_token *tmp;
-
-	while (*tokens && (!(*tokens)->value || (*tokens)->value[0] == '\0'))
-	{
-		// tmp = *tokens;
-		*tokens = (*tokens)->next;
-
-		if (*tokens)
-			(*tokens)->prev = NULL;
-
-		// free(tmp->value);
-		// free(tmp);
-	}
+	return (*ptok = tok, arg);
 }

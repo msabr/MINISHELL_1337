@@ -1,0 +1,88 @@
+bash-3.2$ export a=="+=b"
+bash-3.2$ echo $a
+=+=b
+bash-3.2$ 
+
+minishell$ export a=="+=b"
+minishell$ echo $a
+
+minishell$ ç
+---------------------------------------
+
+minishell$ ex'port' a="a b c"
+minishell$ export b="v z r"
+minishell$ export $a=$b
+export: `=v': not a valid identifier
+minishell$ 
+
+-------------------------------------
+minishell$ $qqwe export r=$a v=$b should split
+
+-----------------------------------
+minishell$ export ''w=$b  z=$a
+----------------------------------
+minishell$ $qwertyu
+minishell$ echo $?
+127
+minishell$ 
+
+bash-3.2$ $werty
+bash-3.2$ echo $?
+0
+bash-3.2$ 
+-----------------------------------
+bash-3.2$ rm -rf 1
+bash-3.2$ mkdir -p a/b/c/d
+bash-3.2$ cd a/b/c/d
+bash-3.2$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/a/b/c/d
+bash-3.2$ cd ..
+bash: cd: ..: No such file or directory
+bash-3.2$ cd ..
+cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+bash-3.2$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/a/b/c/d/..
+bash-3.2$ 
+
+minishell$ mkdir -p 1/2/3/4
+minishell$ cd 1/2/3/4
+minishell$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/1/2/3/4
+minishell$ cd ..
+minishell: cd: No such file or directory
+minishell$ cd ..
+minishell$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/1/2/3/4
+minishell$ cd ..
+minishell$ pwd
+/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell/1/2/3/4
+--------------------------------------
+bash-3.2$ env
+PWD=/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell
+SHLVL=1
+_=/usr/bin/env
+bash-3.2$ $_
+
+➜  minishell git:(master) ✗ env -i ./minishell 
+minishell$ env
+PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.
+PWD=/mnt/homes/kabouelf/Desktop/minishellNormVersion/minishell
+SHLVL=1
+minishell$ $_
+minishell$
+--------------------------------------
+minishell$ 
+minishell$ 
+minishell$ 
+minishell$ 
+exit
+➜  minishell git:(master) ✗ $?
+zsh: command not found: 0
+
+ash-3.2$ 
+bash-3.2$ 
+bash-3.2$ 
+bash-3.2$ exit
+➜  minishell git:(master) ✗ $?
+zsh: command not found: 1
+--------------------------------------

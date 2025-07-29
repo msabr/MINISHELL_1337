@@ -9,14 +9,10 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	t_cmd	*cmds;
 
 	tokens = lexer(input);
-	// print_token_list(tokens);
 	expansion_all_tokens(tokens, env_list);
 	field_split_tokens(&tokens);
-	// export_key_quote_split(&tokens);
-	// printf(".................apres l expension .................\n");
-	// print_token_list(tokens);
-	// remove_empty_token(&tokens);
-	(void)env_list; // Unused parameter, can be removed if not needed
+
+	(void)env_list;
 	merge_collapsed_tokens(tokens);
 	if (check_syntax_errors(tokens, input))
 	{
@@ -26,10 +22,8 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 	}
 	cmds = parse_tokens_to_cmd2s(tokens);
 	// print_cmds(cmds);
-	// free_token_list(tokens);
 	if (!cmds)
 	{
-		// printf("minishell: parse error\n");
 		return (NULL);
 	}
 	return (cmds);
