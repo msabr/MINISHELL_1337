@@ -6,7 +6,7 @@
 /*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 13:01:27 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/29 13:54:31 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:15:51 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,17 +141,23 @@ void	expand_dquote_token(t_token *token, t_env *env)
 	int		index;
 
 	result = remove_dquotes(token->value);
-	while ((index = find_question(result)) != -1)
+	index = find_question(result);
+	while (index != -1)
 	{
 		result = replace_question(result, index);
+		index = find_question(result);
 	}
-	while ((index = find_number(result)) != -1)
+	index = find_number(result);
+	while (index != -1)
 	{
 		result = replace_number(result, index);
+		index = find_number(result);
 	}
-	while ((index = find_dollar(result)) != -1)
+	index = find_dollar(result);
+	while (index != -1)
 	{
 		result = replace_dollar(result, index, env);
+		index = find_dollar(result);
 	}
 	token->value = result;
 	token->type = TOKEN_WORD;
@@ -190,10 +196,11 @@ void	expand_squote_token(t_token *token)
 	token->type = TOKEN_WORD;
 }
 
-
 void	convert_exit_code(t_token *token)
 {
-	char	*exit_code = ft_itoa(g_status);;
+	char	*exit_code;
+
+	exit_code = ft_itoa(g_status);
 	token->value = exit_code;
 }
 
@@ -213,7 +220,8 @@ void	expand_env_dollar(t_token *token, t_env *env)
 	val = NULL;
 	i = 1;
 	len = 0;
-	while (token->value[i] && (ft_isalnum(token->value[i]) || token->value[i] == '_'))
+	while (token->value[i]
+		&& (ft_isalnum(token->value[i]) || token->value[i] == '_'))
 	{
 		len++;
 		i++;
@@ -224,7 +232,7 @@ void	expand_env_dollar(t_token *token, t_env *env)
 		if (ft_strcmp(env->key, key_val) == 0)
 		{
 			val = strdup(env->value);
-			break;
+			break ;
 		}
 		env = env->next;
 	}
@@ -267,7 +275,6 @@ char	*remove_dquotes(char *str)
 	return (str);
 }
 
-
 void	fix_dollar_doublequote_tokens(t_token **head)
 {
 	t_token	*token;
@@ -298,8 +305,8 @@ void	fix_dollar_doublequote_tokens(t_token **head)
 
 char	*expand_many_dollars(const char *str, t_env *env)
 {
-	int		i;
-	int		dollar_count;
+	int			i;
+	int			dollar_count;
 	const char	*var_name;
 	char		*val;
 
@@ -341,7 +348,8 @@ void	merge_variable_tokens(t_token *tokens)
 		if (curr->type == TOKEN_VARIABLE)
 		{
 			next = curr->next;
-			while (next && next->type == TOKEN_VARIABLE && curr->space_after == 0)
+			while (next && next->type == TOKEN_VARIABLE
+				&& curr->space_after == 0)
 			{
 				tmp = ft_strjoin(curr->value, next->value);
 				curr->value = tmp;
@@ -393,7 +401,8 @@ char	*expand_variables_in_word(char *str, t_env *env)
 			else if (ft_isalpha(str[i]) || str[i] == '_')
 			{
 				varlen = 0;
-				while (str[i + varlen] && (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
+				while (str[i + varlen]
+					&& (ft_isalnum(str[i + varlen]) || str[i + varlen] == '_'))
 					varlen++;
 				key = ft_malloc(varlen + 1);
 				k = 0;
@@ -440,7 +449,8 @@ void	merge_collapsed_tokens(t_token *tokens)
 	while (curr && curr->next)
 	{
 		if ((curr->type == TOKEN_WORD || curr->type == TOKEN_VARIABLE)
-			&& (curr->next->type == TOKEN_WORD || curr->next->type == TOKEN_VARIABLE)
+			&& (curr->next->type == TOKEN_WORD
+				|| curr->next->type == TOKEN_VARIABLE)
 			&& curr->space_after == 0)
 		{
 			tmp = ft_strjoin(curr->value, curr->next->value);
@@ -455,4 +465,3 @@ void	merge_collapsed_tokens(t_token *tokens)
 		}
 	}
 }
-
