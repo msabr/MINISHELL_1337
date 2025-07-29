@@ -152,11 +152,33 @@ minishell$ << '' cat
 minishell: syntax error near unexpected token `newline'
 syntax error
 ---------------------------------------------
-
+minishell$ cat << $$"a" 
+> $$a // khass tkherej hna
+> a
+> $a
+$$
 ---------------------------------------------
+minishell$ export a="           "
+minishell$ $a
+minishell$ $a""
+minishell: $a: command not found // makhashach ttle3
+minishell$ 
 
+minishell$ export a="           ls              -la     "
+minishell$ """"""$a""""""
+minishell: : command not found
 ---------------------------------------------
+declare -x a="ls la"
+declare -x la
+declare -x q="ls la"
+minishell$ e""xport q=$a
 
+declare -x exp="export"
+declare -x la
+declare -x q="ls la"
+minishell$ $exp q=$a
+
+khass tsplita
 ---------------------------------------------
 
 ---------------------------------------------

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:13:27 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 05:13:44 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 15:58:28 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	get_exec_path(t_cmd *cmds, t_env **env_list, char **path)
 	if (!cmds || !cmds->args || !cmds->args[0])
 		return (1);
 	if (ft_strchr(cmds->args[0], '/')
-		|| !*get_env_value(env_list, "PATH"))
+		|| !get_env_value(env_list, "PATH"))
 		return (handle_path_and_errors(cmds, path));
 	tmp = get_path(cmds->args[0], *env_list);
 	if (!tmp && ft_aid(cmds->args[0], env_list))
