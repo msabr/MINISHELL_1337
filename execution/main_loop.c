@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 14:33:29 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 14:59:38 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 			ft_set_status(0);
 		else
 		{
+			restore_std_fds(cmds);
 			ft_set_status(1);
 			return ;
 		}
