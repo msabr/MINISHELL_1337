@@ -1,47 +1,18 @@
-#include "../../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/29 11:28:59 by kabouelf          #+#    #+#             */
+/*   Updated: 2025/07/29 11:40:44 by kabouelf         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	is_quote_closed(const char *input, size_t i, char quote)
-{
-	while (input[i])
-	{
-		if (input[i] == quote)
-			return (1);
-		if (quote == '"' && input[i] == '\\' && input[i + 1])
-			i += 2;
-		else
-			i++;
-	}
-	return (0);
-}
+#include "../parsing.h"
 
-static void	handle_word(const char *input, size_t *i, t_token **head)
-{
-	size_t	len;
-	char	*val;
-	bool	space;
-
-	len = 0;
-	while (input[*i + len] && !is_operator(input[*i + len])
-		&& input[*i + len] != '\'' && input[*i + len] != '"'
-		&& !is_whitespace(input[*i + len]))
-	{
-		if (input[*i + len] == '\\' && input[*i + len + 1])
-			len += 2;
-		else
-			len++;
-	}
-	val = ft_strndup(input + *i, len);
-	if (input[*i + len] == '\0' || is_whitespace(input[*i + len]))
-		space = 1;
-	else
-		space = 0;
-	if (val && val[0] != '\0')
-		add_token(head, val, TOKEN_WORD, space,0);
-	*i += len;
-}
-
-
-static void	handle_quote_token(const char *input, size_t *i, char quote, t_token **head)
+void	handle_quote_token(const char *inpt, size_t *i, char qte, t_token **hd)
 {
 	size_t			start;
 	char			*val;
@@ -49,24 +20,24 @@ static void	handle_quote_token(const char *input, size_t *i, char quote, t_token
 	t_token_type	type;
 
 	start = *i;
-	while (input[*i] && input[*i] != quote)
+	while (inpt[*i] && inpt[*i] != qte)
 	{
-		if (quote == '"' && input[*i] == '\\' && input[*i + 1])
+		if (qte == '"' && inpt[*i] == '\\' && inpt[*i + 1])
 			*i += 2;
 		else
 			(*i)++;
 	}
-	val = ft_strndup(input + start, *i - start);
-	if (input[*i + 1] == '\0' || is_whitespace(input[*i + 1]))
+	val = ft_strndup(inpt + start, *i - start);
+	if (inpt[*i + 1] == '\0' || is_whitespace(inpt[*i + 1]))
 		space = 1;
 	else
 		space = 0;
-	if (quote == '\'')
+	if (qte == '\'')
 		type = TOKEN_SQUOTE;
 	else
 		type = TOKEN_DQUOTE;
-	add_token_quoted(head, val, type, space, 1);
-	if (input[*i])
+	add_token_quoted(hd, val, type, space, 1);
+	if (inpt[*i])
 		(*i)++;
 }
 
@@ -83,25 +54,6 @@ static void	handle_quote(const char *input, size_t *i, t_token **head)
 	}
 	handle_quote_token(input, i, quote, head);
 }
-static size_t	variable_length(const char *input, size_t i)
-{
-	size_t	len;
-
-	len = 1;
-	if (input[i + 1] == '?')
-		return (2);
-	while (input[i + len])
-	{
-		if ((input[i + len] >= 'a' && input[i + len] <= 'z')
-			|| (input[i + len] >= 'A' && input[i + len] <= 'Z')
-			|| (input[i + len] >= '0' && input[i + len] <= '9')
-			|| input[i + len] == '_')
-			len++;
-		else
-			break ;
-	}
-	return (len);
-}
 
 static void	handle_variable(const char *input, size_t *i, t_token **head)
 {
@@ -115,15 +67,15 @@ static void	handle_variable(const char *input, size_t *i, t_token **head)
 		space = 1;
 	else
 		space = 0;
-	add_token(head, val, TOKEN_VARIABLE, space,1);
+	add_token(head, val, TOKEN_VARIABLE, space, 1);
 	*i += len;
 }
 
 static void	handle_operator(const char *input, size_t *i, t_token **head)
 {
-	size_t	len;
-	char	*val;
-	bool	space;
+	size_t			len;
+	char			*val;
+	bool			space;
 	t_token_type	type;
 
 	type = get_operator_type(input + *i);
@@ -136,7 +88,7 @@ static void	handle_operator(const char *input, size_t *i, t_token **head)
 		space = 1;
 	else
 		space = 0;
-	add_token(head, val, type, space,0);
+	add_token(head, val, type, space, 0);
 	*i += len;
 }
 
@@ -163,6 +115,6 @@ t_token	*lexer(const char *input)
 		else
 			handle_word(input, &i, &head);
 	}
-	add_token(&head, "", TOKEN_EOF, 0,0);
+	add_token(&head, "", TOKEN_EOF, 0, 0);
 	return (head);
 }

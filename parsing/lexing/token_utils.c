@@ -10,59 +10,56 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../parsing.h"
 
-t_token	*lst_new_token(const char *value, t_token_type type, bool space_after, int expended)
+t_token	*lst_new_token(const char *val, t_token_type type, bool space, int expd)
 {
 	t_token	*tok;
 
 	tok = ft_malloc(sizeof(t_token));
 	if (!tok)
 		return (NULL);
-	tok->value = ft_strdup(value);
+	tok->value = ft_strdup(val);
 	tok->type = type;
-	tok->space_after = space_after;
+	tok->space_after = space;
 	tok->quoted = 0;
-	tok->expended = expended;
+	tok->expended = expd;
 	tok->next = NULL;
 	tok->prev = NULL;
 	return (tok);
 }
-void lst_add_back(t_token **list, t_token *new)
-{
-    t_token *tmp;
 
-    if (!*list)
-    {
-        *list = new;
-        return;
-    }
-    tmp = *list; 
-    while (tmp->next)
-        tmp = tmp->next;
-    tmp->next = new;
-    new->prev = tmp;
+void	lst_add_back(t_token **list, t_token *new)
+{
+	t_token	*tmp;
+
+	if (!*list)
+	{
+		*list = new;
+		return ;
+	}
+	tmp = *list;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+	new->prev = tmp;
 }
 
-
-void	add_token(t_token **head, const char *val,
-			t_token_type type, bool space,int expneded)
+void	remove_hel(t_token **tok, t_token **prev, t_token *curr, t_token *next)
 {
-	t_token	*new;
-
-	new = lst_new_token(val, type, space,expneded);
-	lst_add_back(head, new);
+	if (curr->type == TOKEN_WORD && (!curr->value || curr->value[0] == '\0'))
+	{
+		if (*prev && is_redir((*prev)->type))
+			*prev = curr;
+		if (*prev)
+			(*prev)->next = next;
+		else
+			*tok = next;
+	}
+	else
+		*prev = curr;
 }
 
-void	add_token_quoted(t_token **head, const char *val,
-			t_token_type type, bool space, int expneded)
-{
-	t_token	*new;
-
-	new = lst_new_token(val, type, space,expneded);
-	new->quoted = 1;
-	lst_add_back(head, new);
-}
 void	remove_empty_word_tokens(t_token **tokens)
 {
 	t_token	*curr;
@@ -79,18 +76,7 @@ void	remove_empty_word_tokens(t_token **tokens)
 	while (curr)
 	{
 		next = curr->next;
-		if (curr->type == TOKEN_WORD
-			&& (!curr->value || curr->value[0] == '\0'))
-		{
-			if (prev && is_redir(prev->type))
-				prev = curr;
-			if (prev)
-				prev->next = next;
-			else
-				*tokens = next;
-		}
-		else
-			prev = curr;
+		remove_hel(tokens, &prev, curr, next);
 		curr = next;
 	}
 }

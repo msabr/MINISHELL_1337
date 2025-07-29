@@ -41,10 +41,11 @@ SRC_REDIRECT =	execution/redirection/redirect_append.c execution/redirection/red
 				execution/redirection/redirect_stdin.c execution/redirection/redirection_files.c \
 				execution/redirection/redirect_heredoc.c execution/redirection/redirect_heredoc_1.c
 		
-SRC_LEXER =	parsing/lexer2.c \
-			parsing/lexing/lexer.c \
+SRC_LEXER =	parsing/lexing/lexer.c \
+			parsing/lexing/lexer_utils.c \
 			parsing/lexing/lexer_handlers.c \
 			parsing/lexing/token_utils.c
+
 
 SRC_EXPANSION =	parsing/expension2/expend_helper.c \
 				parsing/expension2/expension.c \
@@ -55,6 +56,7 @@ SRC_PARSE_CMD =	parsing/parse_cmd/parser.c \
 				parsing/parse_cmd/parser_helper.c \
 				parsing/parse_cmd/parse_utils.c \
 				parsing/parse_cmd/parse_utils2.c \
+				parsing/parse_cmd/parse_utils3.c \
 				parsing/parse_cmd/export_parse.c
 
 SRC_PAR =	parsing/dubaging.c \

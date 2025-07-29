@@ -1,4 +1,16 @@
-#include "../../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_handlers.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/29 11:26:57 by kabouelf          #+#    #+#             */
+/*   Updated: 2025/07/29 11:41:17 by kabouelf         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../parsing.h"
 
 int	is_whitespace(char c)
 {
@@ -25,12 +37,14 @@ char	*ft_strndup(const char *src, size_t n)
 	return (dst);
 }
 
-bool is_operator(char c) {
-    return (c == '|' || c == '<' || c == '>');
+bool	is_operator(char c)
+{
+	return (c == '|' || c == '<' || c == '>');
 }
 
-bool is_double_operator(const char *s) {
-    return (!ft_strncmp(s, ">>", 2) || !ft_strncmp(s, "<<", 2));
+bool	is_double_operator(const char *s)
+{
+	return (!ft_strncmp(s, ">>", 2) || !ft_strncmp(s, "<<", 2));
 }
 
 t_token_type	get_operator_type(const char *s)

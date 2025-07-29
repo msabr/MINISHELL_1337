@@ -6,7 +6,7 @@
 /*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 02:20:53 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/29 02:22:01 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/29 11:07:36 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_cmd	*new_command(void)
 	return (ft_calloc(1, sizeof(t_cmd)));
 }
 
-static int	handle_redir(t_cmd *cmd, t_token **tok)
+int	handle_redir(t_cmd *cmd, t_token **tok)
 {
 	t_token	*target;
 	char	*filename;
@@ -43,7 +43,7 @@ static int	handle_redir(t_cmd *cmd, t_token **tok)
 	return (1);
 }
 
-static int	is_only_spaces(const char *str)
+int	is_only_spaces(const char *str)
 {
 	int	i;
 
