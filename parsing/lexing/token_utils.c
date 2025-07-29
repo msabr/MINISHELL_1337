@@ -43,28 +43,7 @@ void lst_add_back(t_token **list, t_token *new)
     tmp->next = new;
     new->prev = tmp;
 }
-bool is_operator(char c) {
-    return (c == '|' || c == '<' || c == '>');
-}
 
-bool is_double_operator(const char *s) {
-    return (!ft_strncmp(s, ">>", 2) || !ft_strncmp(s, "<<", 2));
-}
-
-t_token_type	get_operator_type(const char *s)
-{
-	if (!ft_strncmp(s, "|", 1))
-		return (TOKEN_PIPE);
-	if (!ft_strncmp(s, ">>", 2))
-		return (TOKEN_REDIR_APPEND);
-	if (!ft_strncmp(s, "<<", 2))
-		return (TOKEN_HEREDOC);
-	if (!ft_strncmp(s, "<", 1))
-		return (TOKEN_REDIR_IN);
-	if (!ft_strncmp(s, ">", 1))
-		return (TOKEN_REDIR_OUT);
-	return (TOKEN_WORD);
-}
 
 void	add_token(t_token **head, const char *val,
 			t_token_type type, bool space,int expneded)
@@ -83,4 +62,35 @@ void	add_token_quoted(t_token **head, const char *val,
 	new = lst_new_token(val, type, space,expneded);
 	new->quoted = 1;
 	lst_add_back(head, new);
+}
+void	remove_empty_word_tokens(t_token **tokens)
+{
+	t_token	*curr;
+	t_token	*prev;
+	t_token	*next;
+
+	curr = *tokens;
+	prev = NULL;
+	if (curr)
+	{
+		prev = curr;
+		curr = curr->next;
+	}
+	while (curr)
+	{
+		next = curr->next;
+		if (curr->type == TOKEN_WORD
+			&& (!curr->value || curr->value[0] == '\0'))
+		{
+			if (prev && is_redir(prev->type))
+				prev = curr;
+			if (prev)
+				prev->next = next;
+			else
+				*tokens = next;
+		}
+		else
+			prev = curr;
+		curr = next;
+	}
 }

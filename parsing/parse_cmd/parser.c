@@ -1,247 +1,153 @@
-#include "../../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/29 01:56:37 by kabouelf          #+#    #+#             */
+/*   Updated: 2025/07/29 02:56:07 by kabouelf         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	handle_redir(t_cmd *cmd, t_token **tok)
+// #include "../../minishell.h"
+#include "../parsing.h"
+
+static int	process_split_args(t_cmd *current, char *arg)
 {
-	t_token	*target;
-	char	*filename;
-	int quoted = 0;
+	char	**split_args;
+	int		idx;
 
-	target = (*tok)->next;
-	if (!target || !is_arg_token(target))
+	split_args = ft_split_space(arg);
+	idx = 0;
+	while (split_args && split_args[idx])
 	{
-		error_syntax("newline");
-		return (0);
+		if (!add_argument(&current->args, split_args[idx]))
+			return (0);
+		idx++;
 	}
-	 if (target)
-        quoted = target->quoted;
-	filename = merge_argument(&target);
-	if (!filename)
-		return (0);
-	if ((*tok)->type == TOKEN_HEREDOC)
-		add_redirection(&cmd->redirs, (*tok)->type, filename,quoted);
-	else
-		add_redirection(&cmd->redirs, (*tok)->type, filename,quoted);
-	*tok = target;
 	return (1);
 }
 
-static int is_only_spaces(const char *str) {
-    if (!str) return 1;
-    for (int i = 0; str[i]; i++) {
-        if (!ft_isspace(str[i]))
-            return 0;
-    }
-    return 1;
-}
-
-static void remove_empty_word_tokens(t_token **tokens)
+static int	process_export_logic(t_cmd *current, char *arg, int was_quoted)
 {
-    t_token *curr = *tokens, *prev = NULL, *next;
-	if (curr)
-        prev = curr, curr = curr->next;
-    while (curr)
-    {
-        next = curr->next;
-        if (curr->type == TOKEN_WORD && (!curr->value || curr->value[0] == '\0'))
-        {
-			if (prev && is_redir(prev->type))
-            {
-                prev = curr;
-            }
-            if (prev)
-                prev->next = next;
-            else
-                *tokens = next;
-        }
-        else
-            prev = curr;
-        curr = next;
-    }
+	if (current->args && current->args[0]
+		&& strcmp(current->args[0], "export") == 0 && was_quoted == 0)
+	{
+		if (!add_argument(&current->args, arg))
+			return (0);
+		return (1);
+	}
+	else if (current->args && current->args[0]
+		&& strcmp(current->args[0], "export") == 0)
+	{
+		return (process_split_args(current, arg));
+	}
+	return (-1);
 }
 
+int	process_ar_tk_helper(t_token **ptok, t_cmd *curr, char *arg, t_token *tok)
+{
+	if (!tok->quoted && arg[0] == '\0'
+		&& (curr->args == NULL || curr->args[0] == NULL))
+		return (1);
+	if (tok->expended && !tok->quoted && is_only_spaces(arg))
+	{
+		*ptok = tok->next;
+		return (1);
+	}
+	if (tok->quoted || arg[0] == '\0' || is_only_spaces(arg))
+	{
+		if (!add_argument(&curr->args, arg))
+			return (0);
+		return (2);
+	}
+	return (-1);
+}
+
+static int	process_argument_token(t_token **ptok, t_cmd *current)
+{
+	t_token	*tok;
+	char	*arg;
+	int		export_result;
+	int		helper_ret;
+
+	tok = *ptok;
+	arg = merge_argument(ptok);
+	if (!arg)
+		return (0);
+	helper_ret = process_ar_tk_helper(ptok, current, arg, tok);
+	if (helper_ret == 1)
+		return (1);
+	if (helper_ret == 0)
+		return (0);
+	if (helper_ret == 2)
+		arg = NULL;
+	export_result = process_export_logic(current, arg, tok->quoted);
+	if (export_result == 1)
+		return (1);
+	if (export_result == 0)
+		return (0);
+	if (!process_split_args(current, arg))
+		return (0);
+	return (1);
+}
+
+int	parse_tokens_iteration(t_token **ptok, t_cmd **current, t_cmd **cmds)
+{
+	if (!*current)
+	{
+		*current = new_command();
+		if (!add_command(cmds, *current))
+			return (0);
+	}
+	if (is_arg_token(*ptok))
+	{
+		if (!process_argument_token(ptok, *current))
+			return (0);
+		return (2);
+	}
+	if (is_redir((*ptok)->type))
+	{
+		if (!handle_redir(*current, ptok))
+			return (0);
+		return (2);
+	}
+	if ((*ptok)->type == TOKEN_PIPE)
+	{
+		*current = NULL;
+		*ptok = (*ptok)->next;
+		return (2);
+	}
+	return (*ptok = (*ptok)->next, 1);
+}
 
 static int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
 {
-	t_cmd	*current = NULL;
-	char	*arg;
+	t_cmd	*current;
+	int		iter_ret;
 
+	current = NULL;
 	while (tok && tok->type != TOKEN_EOF)
 	{
-		if (!current)
-		{
-			current = new_command();
-			if (!add_command(cmds, current))
-				return (0);
-		}
-
-		if (is_arg_token(tok))
-		{
-			int was_quoted = tok->quoted;
-			int was_expanded = tok->expended;
-			arg = merge_argument(&tok);
-			if (!arg)
-				return (0);
-
-			if (!was_quoted && arg[0] == '\0' && (current->args == NULL || current->args[0] == NULL)) {
-				continue;
-			}
-			if (was_expanded && !was_quoted && is_only_spaces(arg)) {
-				tok = tok ->next;
-				continue;
-			}
-
-			if (was_quoted || arg[0] == '\0' || is_only_spaces(arg))
-			{
-				if (!add_argument(&current->args, arg)) {
-					return (0);
-				}
-				arg = NULL;
-			}
-			if (current->args && current->args[0] && strcmp(current->args[0], "export") == 0 && was_quoted == 0) {
-				if (!add_argument(&current->args, arg)) {
-					return (0);
-				}
-				arg = NULL;
-			}
-			else if (current->args && current->args[0]
-				&& strcmp(current->args[0], "export") == 0)
-			{
-				char **split_args = ft_split(arg, ' ');
-				int idx = 0;
-				while (split_args && split_args[idx])
-				{
-					if (!add_argument(&current->args, split_args[idx]))
-						return (0);
-					idx++;
-				}
-			}
-			else {
-				char **split_args = ft_split(arg, ' ');
-				int idx = 0;
-				while (split_args && split_args[idx]) {
-					if (!add_argument(&current->args, split_args[idx])) {
-						return (0);
-					}
-					idx++;
-				}
-			}
-			continue;
-		}
-		if (is_redir(tok->type))
-		{
-			if (!handle_redir(current, &tok))
-				return (0);
+		iter_ret = parse_tokens_iteration(&tok, &current, cmds);
+		if (iter_ret == 0)
+			return (0);
+		if (iter_ret == 2)
 			continue ;
-		}
-		if (tok->type == TOKEN_PIPE)
-		{
-			current = NULL;
-			tok = tok->next;
-			continue;
-		}
-		tok = tok->next;
 	}
 	return (1);
 }
 
-// static int	split_and_add_args(char *arg, char ***args)
-// {
-// 	char	**split_args;
-// 	int		idx = 0;
-
-// 	split_args = ft_split(arg, ' ');
-// 	if (!split_args)
-// 		return (0);
-// 	while (split_args[idx])
-// 	{
-// 		if (!add_argument(args, split_args[idx]))
-// 			return (0);
-// 		idx++;
-// 	}
-// 	return (1);
-// }
-
-// int	handle_argument_token(t_token **tok, t_cmd *cmd)
-// {
-// 	char	*arg;
-// 	int		quoted = (*tok)->quoted;
-// 	int		expanded = (*tok)->expended;
-
-// 	arg = merge_argument(tok);
-// 	if (!arg)
-// 		return (0);
-// 	if (!quoted && arg[0] == '\0' && (!cmd->args || !cmd->args[0]))
-// 		return (1);
-// 	if (expanded && !quoted && is_only_spaces(arg))
-// 	{
-// 		*tok = (*tok)->next;
-// 		return (1);
-// 	}
-// 	if (quoted || arg[0] == '\0' || is_only_spaces(arg))
-// 		return (add_argument(&cmd->args, arg));
-// 	if (cmd->args && cmd->args[0] && strcmp(cmd->args[0], "export") == 0)
-// 	{
-// 		if (!quoted)
-// 			return (add_argument(&cmd->args, arg));
-// 		return (split_and_add_args(arg, &cmd->args));
-// 	}
-// 	return (split_and_add_args(arg, &cmd->args));
-// }
-
-// static int	handle_pipe_token(t_token **tok, t_cmd **current)
-// {
-// 	*current = NULL;
-// 	*tok = (*tok)->next;
-// 	return (1);
-// }
-
-// static int	handle_redirection_token(t_token **tok, t_cmd *current)
-// {
-// 	if (!handle_redir(current, tok))
-// 		return (0);
-// 	return (1);
-// }
-
-// static int	init_current_cmd(t_cmd **cmds, t_cmd **current)
-// {
-// 	*current = new_command();
-// 	if (!*current)
-// 		return (0);
-// 	if (!add_command(cmds, *current))
-// 		return (0);
-// 	return (1);
-// }
-
-// int	parse_tokens_loop(t_token *tok, t_cmd **cmds)
-// {
-// 	t_cmd	*current = NULL;
-
-// 	while (tok && tok->type != TOKEN_EOF)
-// 	{
-// 		if (!current && !init_current_cmd(cmds, &current))
-// 			return (0);
-// 		if (is_arg_token(tok) && !handle_argument_token(&tok, current))
-// 			return (0);
-// 		else if (is_redir(tok->type) && !handle_redirection_token(&tok, current))
-// 			return (0);
-// 		else if (tok->type == TOKEN_PIPE && !handle_pipe_token(&tok, &current))
-// 			return (0);
-// 		else
-// 			tok = tok->next;
-// 	}
-// 	return (1);
-// }
-
 t_cmd	*parse_tokens_to_cmd2s(t_token *tokens)
 {
-	t_cmd	*cmds = NULL;
-	remove_empty_word_tokens(&tokens);
+	t_cmd	*cmds;
 
+	cmds = NULL;
+	remove_empty_word_tokens(&tokens);
 	if (!tokens || (tokens->type == TOKEN_EOF && !tokens->next))
 		return (NULL);
 	if (!parse_tokens_loop(tokens, &cmds))
 		return (NULL);
 	return (cmds);
 }
-
-

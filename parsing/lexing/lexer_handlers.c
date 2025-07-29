@@ -24,3 +24,26 @@ char	*ft_strndup(const char *src, size_t n)
 	dst[i] = '\0';
 	return (dst);
 }
+
+bool is_operator(char c) {
+    return (c == '|' || c == '<' || c == '>');
+}
+
+bool is_double_operator(const char *s) {
+    return (!ft_strncmp(s, ">>", 2) || !ft_strncmp(s, "<<", 2));
+}
+
+t_token_type	get_operator_type(const char *s)
+{
+	if (!ft_strncmp(s, "|", 1))
+		return (TOKEN_PIPE);
+	if (!ft_strncmp(s, ">>", 2))
+		return (TOKEN_REDIR_APPEND);
+	if (!ft_strncmp(s, "<<", 2))
+		return (TOKEN_HEREDOC);
+	if (!ft_strncmp(s, "<", 1))
+		return (TOKEN_REDIR_IN);
+	if (!ft_strncmp(s, ">", 1))
+		return (TOKEN_REDIR_OUT);
+	return (TOKEN_WORD);
+}

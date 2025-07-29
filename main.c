@@ -21,6 +21,7 @@ t_cmd	*parse_input(char *input, t_env *env_list, int *status)
 		return (NULL);
 	}
 	cmds = parse_tokens_to_cmd2s(tokens);
+	// print_cmds(cmds);
 	if (!cmds)
 	{
 		return (NULL);

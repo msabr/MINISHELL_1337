@@ -1,4 +1,16 @@
-#include "../../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_parse.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/28 19:40:14 by kabouelf          #+#    #+#             */
+/*   Updated: 2025/07/29 02:18:19 by kabouelf         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../parsing.h"
 
 void	lst_remove_token(t_token **head, t_token *node)
 {
@@ -45,7 +57,7 @@ int	is_assignment_word(const char *str)
 	return (0);
 }
 
-static t_token	*split_and_insert(t_token **tokens, t_token *current)
+t_token	*split_and_insert(t_token **tokens, t_token *current)
 {
 	char		**split;
 	int			i;
@@ -61,7 +73,7 @@ static t_token	*split_and_insert(t_token **tokens, t_token *current)
 	i = 0;
 	while (split[i])
 	{
-		new_token = lst_new_token(ft_strdup(split[i]),TOKEN_WORD,true,0);
+		new_token = lst_new_token(ft_strdup(split[i]), TOKEN_WORD, true, 0);
 		if (!new_token)
 			return (NULL);
 		lst_insert_before(tokens, current, new_token);
@@ -93,4 +105,3 @@ void	field_split_tokens(t_token **tokens)
 		current = current->next;
 	}
 }
-
