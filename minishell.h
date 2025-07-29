@@ -195,7 +195,7 @@ char	*strjoin_and_free(char *s1, char *s2);
 void	free_words(char **words);
 char	*expand_dollars(const char *input, t_env **env);
 char	*expand_heredoc_content(const char *str, t_env **env, int last_status, const char *delimiter);
-int		count_dollars(const char *str, int index);
+// int		count_dollars(const char *str, int index);
 char	*reduce_odd_dollars_and_handle_edge(const char *str);
 // ---------------------------------------
 t_cmd	*parse_input(char *input, t_env *env_list, int *status);

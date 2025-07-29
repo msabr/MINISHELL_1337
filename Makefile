@@ -33,6 +33,8 @@ SRC_LEXER =	parsing/lexing/lexer.c \
 
 SRC_EXPANSION =	parsing/expension2/expend_helper.c \
 				parsing/expension2/expension.c \
+				parsing/expension2/expend_utils.c parsing/expension2/expend_utils2.c\
+				parsing/expension2/expend_utils3.c parsing/expension2/expend_utils4.c\
 				parsing/expension2/expend_herdoc.c
 
 

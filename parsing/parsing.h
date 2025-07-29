@@ -73,6 +73,7 @@ void	expand_var_token(t_token *token, t_env *env);
 int		find_question(const char *str);
 int		find_number(const char *str);
 int     find_question(const char *str);
+int     find_dollar(const char *str);
 char	*get_variable(const char *str, int index);
 char	*get_value(t_env *env, const char *key_val);
 char	*replace_question(char *str, int index);
@@ -90,5 +91,13 @@ char	*expand_many_dollars(const char *str, t_env *env);
 void	merge_variable_tokens(t_token *tokens);
 char	*expand_variables_in_word(char *str, t_env *env);
 void	merge_collapsed_tokens(t_token *tokens);
+char	*get_env_dup_value(t_env *env, char *key_val);
+int     count_dollars(const char *str);
 
+
+size_t	copy_exit_code(char *result, size_t j);
+char	*extract_key(char *str, size_t i, size_t *varlen);
+size_t	copy_env_value(char *result, size_t j, char *val);
+size_t	handle_dollar_var(char *str, size_t i, char *result, size_t j, t_env *env, size_t *new_i);
+char	*expand_variables_in_word(char *str, t_env *env);
 #endif
