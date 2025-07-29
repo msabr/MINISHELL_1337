@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 23:55:48 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/29 14:36:26 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 14:42:13 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ static t_heredoc	*create_heredoc(char *filename, int quoted_name)
 	heredoc->delimiter = filename;
 	heredoc->fd_read = -1;
 	heredoc->fd_write = -1;
-	heredoc->heredoc_num = 0;
-	heredoc->index = 0;
 	heredoc->flag = quoted_name;
 	heredoc->env = NULL;
 	return (heredoc);

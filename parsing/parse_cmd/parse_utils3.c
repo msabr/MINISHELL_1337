@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 11:24:43 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/29 11:26:08 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:42:37 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ int	process_split_args(t_cmd *current, char *arg)
 int	process_export_logic(t_cmd *current, char *arg, int was_quoted)
 {
 	if (current->args && current->args[0]
-		&& strcmp(current->args[0], "export") == 0 && was_quoted == 0)
+		&& ft_strcmp(current->args[0], "export") == 0 && was_quoted == 0)
 	{
 		if (!add_argument(&current->args, arg))
 			return (0);
 		return (1);
 	}
 	else if (current->args && current->args[0]
-		&& strcmp(current->args[0], "export") == 0)
+		&& ft_strcmp(current->args[0], "export") == 0)
 	{
 		return (process_split_args(current, arg));
 	}

@@ -26,11 +26,10 @@ SRC_LIB= Libft/ft_atoi.c Libft/ft_itoa.c Libft/ft_bzero.c Libft/ft_calloc.c Libf
 		Libft/ft_strlcpy.c Libft/ft_strcpy.c\
 		Libft/ft_strncmp.c Libft/ft_strcmp.c 
 
-SRC_LEXER =	parsing/lexer2.c \
-			parsing/lexing/lexer.c \
+SRC_LEXER =	parsing/lexing/lexer.c \
 			parsing/lexing/lexer_handlers.c \
+			parsing/lexing/lexer_utils.c \
 			parsing/lexing/token_utils.c
-
 
 SRC_EXPANSION =	parsing/expension2/expend_helper.c \
 				parsing/expension2/expension.c \
@@ -89,6 +88,7 @@ OBJS = $(SRCS:.c=.o)
 
 HEADERS =	Libft/libft.h\
  			minishell.h\
+			parsing/parsing.h \
 			execution/execution.h\
 			execution/pipe/pipe.h \
 			execution/builtins/builtins.h\

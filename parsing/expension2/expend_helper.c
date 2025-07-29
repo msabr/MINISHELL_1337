@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 13:01:27 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/29 14:34:55 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/29 14:41:45 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ void	convert_exit_code(t_token *token)
 
 void	number_before_dollar(t_token *token)
 {
-	token->value = strdup("");
+	token->value = ft_strdup("");
 	token->expended = 1;
 }
 
@@ -226,12 +226,12 @@ void	expand_env_dollar(t_token *token, t_env *env)
 		len++;
 		i++;
 	}
-	key_val = strndup(token->value + 1, len);
+	key_val = ft_strndup(token->value + 1, len);
 	while (env)
 	{
 		if (ft_strcmp(env->key, key_val) == 0)
 		{
-			val = strdup(env->value);
+			val = ft_strdup(env->value);
 			break ;
 		}
 		env = env->next;
