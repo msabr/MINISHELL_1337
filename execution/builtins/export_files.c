@@ -6,13 +6,13 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 22:47:00 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/16 16:05:08 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 12:54:27 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static void	swap_env_nodes(t_env *a, t_env *b)
+void	swap_env_nodes(t_env *a, t_env *b)
 {
 	t_env	*temp;
 
@@ -64,7 +64,7 @@ char	*set_key(const char *arg)
 	return (key);
 }
 
-static void	print_export_variable(t_env *current)
+void	print_export_variable(t_env *current)
 {
 	if (current->value)
 	{

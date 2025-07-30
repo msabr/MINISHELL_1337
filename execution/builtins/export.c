@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 04:59:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 10:21:48 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 12:54:42 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	append_env_value(t_env **env_list, char *key, char *value)
 	add_env_value(env_list, new_key, value);
 }
 
-static void	print_error_export(char *arg, int *status)
+void	print_error_export(char *arg, int *status)
 {
 	ft_putstr_fd("export: `", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);

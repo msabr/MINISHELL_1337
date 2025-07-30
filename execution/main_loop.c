@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 10:25:14 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 12:51:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_status = 0;
 
-char	*ft_readline(const char *prompt)
+static char	*ft_readline(const char *prompt)
 {
 	char	*temp;
 	char	*input;
@@ -37,7 +37,7 @@ char	*ft_readline(const char *prompt)
 	return (input);
 }
 
-bool	is_redirection2(t_cmd *cmds)
+static bool	withot_heredoc(t_cmd *cmds)
 {
 	t_redir		*current;
 
@@ -53,7 +53,7 @@ bool	is_redirection2(t_cmd *cmds)
 	return (false);
 }
 
-void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
+static void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 {
 	save_std_fds(cmds);
 	if (is_heredoc(cmds))
@@ -72,7 +72,7 @@ void	execute_cmds(t_cmd *cmds, t_env **env_list, int *status)
 		*status = exec_multiple_pipes(cmds, env_list);
 		ft_set_status(*status);
 	}
-	else if (cmds->args || (!cmds->args && is_redirection2(cmds)))
+	else if (cmds->args || (!cmds->args && withot_heredoc(cmds)))
 	{
 		*status = execve_simple_cmd(cmds, env_list);
 		ft_set_status(*status);
@@ -94,17 +94,12 @@ void	main_loop(t_env **env_list)
 	{
 		ft_handler_signal();
 		input = ft_readline("minishell$ ");
-		if (!input)
-			return ;
-		handel_ctl_c(g_status);
 		if (input[0] != '\0')
 		{
 			cmds = parse_input(input, *env_list, &status);
-			if (cmds)
-				execute_cmds(cmds, env_list, &status);
+			execute_cmds(cmds, env_list, &status);
 			close_heredoc(cmds);
 		}
 		tcsetattr(STDIN_FILENO, TCSANOW, &saved_termios);
 	}
-	rl_clear_history();
 }

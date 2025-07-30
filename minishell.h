@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 10:11:50 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 10:37:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 12:40:24 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-t_cmd	*parse_input(char *input, t_env *env_list, int *status);
-char	*expand_heredoc_content(const char *str, t_env **env,
-			const char *del);
-void	main_loop(t_env **env_list);
 void	configure_environment(t_env **env_list, char **env_array);
+void	main_loop(t_env **env_list);
 char	*get_env_value(t_env **env_list, const char *key);
 int		*ft_get_status(void);
 void	ft_set_status(int status);
+t_cmd	*parse_input(char *input, t_env *env_list, int *status);
+char	*expand_heredoc_content(const char *str, t_env **env,
+			const char *del);
 
 #endif
