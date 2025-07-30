@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 17:50:21 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 10:02:23 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ void	main_loop(t_env **env_list)
 			cmds = parse_input(input, *env_list, &status);
 			if (cmds)
 				execute_cmds(cmds, env_list, &status);
+			close_heredoc(cmds);
 		}
-		close_heredoc(cmds);
 		tcsetattr(STDIN_FILENO, TCSANOW, &saved_termios);
 	}
 	rl_clear_history();
