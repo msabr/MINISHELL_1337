@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 06:22:31 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/30 07:02:26 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/30 10:37:32 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,27 @@
 # define PARSING_H
 
 # include "../minishell.h"
+
+typedef struct s_token
+{
+	char			*value;
+	t_token_type	type;
+	bool			space_after;
+	int				quoted;
+	int				expended;
+	struct s_token	*next;
+	struct s_token	*prev;
+}	t_token;
+
+typedef struct s_data
+{
+	t_token	*token;
+	t_token	*last_token;
+	t_env	*env;
+	int		i;
+	int		error;
+	int		exit_status;
+}	t_data;
 
 typedef struct s_expand
 {
@@ -166,4 +187,12 @@ char			*expand_helper(const char *v_name, int d_cnt, t_env *env,
 					t_token *curr);
 void			expansion_all_tokens(t_token *tokens, t_env *env);
 void			handle_quote(const char *input, size_t *i, t_token **head);
+
+t_token			*lexer(const char *input);
+void			expansion_all_tokens(t_token *tokens, t_env *env);
+void			field_split_tokens(t_token **tokens);
+void			merge_collapsed_tokens(t_token *tokens);
+int				check_syntax_errors(t_token *tokens, const char *input);
+t_cmd			*parse_tokens_to_cmd2s(t_token *tokens);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 08:43:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 19:26:57 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 10:36:10 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,4 @@ void	set_default_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-}
-
-void	tt(void)
-{
-	write(2, "\033[32m----------------------\033[0m\n\n", 32);
 }

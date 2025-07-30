@@ -5,7 +5,6 @@ minishell
 *.o
 */*.o
 */*/*.o
-TODO
 a
 b
 c

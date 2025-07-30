@@ -54,6 +54,7 @@ SRC_PARSE_CMD =	parsing/parse_cmd/parser.c \
 SRC_PAR =	$(SRC_LEXER) \
 			parsing/check_syntax/syntax_error.c \
 			parsing/check_syntax/syntax_tool.c \
+			parsing/parse_input.c \
 			$(SRC_EXPANSION) \
 			$(SRC_PARSE_CMD)
 
@@ -113,7 +114,7 @@ $(LIBFT): $(SRC_LIB)
 	make -C Libft
 
 clean:
-	make clean -C Libft
+	make fclean -C Libft
 	$(RM) $(OBJS)
 
 fclean: clean

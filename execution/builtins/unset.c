@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/18 15:02:08 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 10:40:20 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static int	check_env_variable(t_env **env_list, const char *key)
 	return (-1);
 }
 
-//unset with no options
 int	unset(t_cmd *cmd, t_env **env_list)
 {
 	int	i;

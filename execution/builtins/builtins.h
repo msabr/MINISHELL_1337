@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:18:31 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/27 13:28:51 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 10:40:09 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	echo(t_cmd *cmd);
 void	env_function(t_env *env_list);
 int		exit_shell(t_cmd *cmd);
 int		export(t_cmd *cmd, t_env **env_list);
-// void	export(char **args, t_env **env_list);
 void	pwd(t_env **env_list);
 int		unset(t_cmd *cmd, t_env **env_list);
 

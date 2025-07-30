@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:10 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 17:32:34 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 10:37:43 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 
 # include "../minishell.h"
 
-// # include <sys/types.h>
-// # include <sys/wait.h>
-# include <signal.h>
 # include <errno.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include <signal.h>
 # include <termios.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 
 //built-in functions
 bool	is_builtin(char *cmd);
@@ -48,15 +46,12 @@ int		execve_simple_cmd(t_cmd *cmds, t_env **env_list);
 char	*get_path(char *cmd, t_env *env_list);
 
 //signals functions
-void	tt(void);
 int		handle_exit_status(pid_t pid, int status);
 void	handel_ctl_c(int sig);
 void	ft_handler_signal(void);
 void	set_default_signals(void);
 
 //exit status functions
-int		*ft_get_status(void);
-void	ft_set_status(int status);
 void	ft_exit(int status);
 void	ft_set_and_exit(int status);
 
@@ -67,6 +62,7 @@ void	close_heredoc(t_cmd *cmds);
 bool	is_redirection(t_cmd *cmds);
 bool	handle_redirections(t_cmd *cmds);
 
+//file descriptor functions
 void	save_std_fds(t_cmd *cmds);
 void	restore_std_fds(t_cmd *cmds);
 
