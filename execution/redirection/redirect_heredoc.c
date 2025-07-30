@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 04:05:41 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:11:41 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_readline_heredoc(const char *prompt)
 	return (input);
 }
 
-int	heredoc_file_setup(t_heredoc *heredoc)
+int	open_file_heredoc(t_heredoc *heredoc)
 {
 	heredoc->tmp_file = get_temp_filename();
 	if (!*heredoc->tmp_file)
@@ -57,7 +57,7 @@ void	heredoc_content_handler(t_heredoc *heredoc, char *line)
 	ft_putstr_fd("\n", heredoc->fd_write);
 }
 
-int	heredoc_signal_and_prompt(t_heredoc *heredoc)
+int	heredoc_loop(t_heredoc *heredoc)
 {
 	char	*line;
 
@@ -81,9 +81,9 @@ int	redirect_heredoc(t_redir *redirs, t_env *env)
 
 	heredoc = redirs->heredoc;
 	heredoc->env = &env;
-	result = heredoc_file_setup(heredoc);
+	result = open_file_heredoc(heredoc);
 	if (result)
 		return (1);
-	result = heredoc_signal_and_prompt(heredoc);
+	result = heredoc_loop(heredoc);
 	return (result);
 }

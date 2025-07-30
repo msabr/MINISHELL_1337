@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:01:53 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 14:57:19 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 13:08:43 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	check_nbr_heredocs(t_cmd *cmds)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd("maximum here-document count exceeded\n", STDERR_FILENO);
-		exit(2);
+		ft_exit(2);
 	}
 }
 
