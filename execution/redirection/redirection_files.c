@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:21:12 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 10:00:36 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 10:05:31 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,10 @@ void	close_heredoc(t_cmd *cmds)
 			{
 				if (current_redir->heredoc)
 				{
-					printf("heredoc fd_read: %d, fd_write: %d\n", current_redir->heredoc->fd_read, current_redir->heredoc->fd_write);
 					if (current_redir->heredoc->fd_read >= 0)
 						close(current_redir->heredoc->fd_read);
 					if (current_redir->heredoc->fd_write >= 0)
 						close(current_redir->heredoc->fd_write);
-				}
-				else
-				{
-					printf("Warning: heredoc pointer is NULL!\n");
 				}
 			}
 			current_redir = current_redir->next;

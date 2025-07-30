@@ -28,13 +28,21 @@ SRC_LIB= Libft/ft_atoi.c Libft/ft_itoa.c Libft/ft_bzero.c Libft/ft_calloc.c Libf
 
 SRC_LEXER =	parsing/lexing/lexer.c \
 			parsing/lexing/lexer_handlers.c \
+			parsing/lexing/lexer_handler2.c \
 			parsing/lexing/lexer_utils.c \
 			parsing/lexing/token_utils.c
 
 SRC_EXPANSION =	parsing/expension2/expend_helper.c \
+				parsing/expension2/expend_helper2.c \
+				parsing/expension2/expend_helper3.c \
+				parsing/expension2/expend_helper4.c \
 				parsing/expension2/expension.c \
+				parsing/expension2/expend_utils.c \
+				parsing/expension2/expend_utils2.c \
+				parsing/expension2/expend_utils3.c \
+				parsing/expension2/expend_utils4.c \
+				parsing/expension2/expend_utils5.c \
 				parsing/expension2/expend_herdoc.c
-
 
 SRC_PARSE_CMD =	parsing/parse_cmd/parser.c \
 				parsing/parse_cmd/parser_helper.c \
@@ -43,13 +51,12 @@ SRC_PARSE_CMD =	parsing/parse_cmd/parser.c \
 				parsing/parse_cmd/parse_utils3.c \
 				parsing/parse_cmd/export_parse.c
 
-SRC_PAR =	parsing/dubaging.c \
-			$(SRC_LEXER) \
+SRC_PAR =	$(SRC_LEXER) \
 			parsing/check_syntax/syntax_error.c \
 			parsing/check_syntax/syntax_tool.c \
-			parsing/utils.c \
 			$(SRC_EXPANSION) \
 			$(SRC_PARSE_CMD)
+
 
 SRC_Builtins =	execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c \
 				execution/builtins/export.c execution/builtins/pwd.c execution/builtins/unset.c \

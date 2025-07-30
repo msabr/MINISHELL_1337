@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 10:02:23 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 10:06:04 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void	main_loop(t_env **env_list)
 	{
 		ft_handler_signal();
 		input = ft_readline("minishell$ ");
+		if (!input)
+			return ;
 		handel_ctl_c(g_status);
 		if (input[0] != '\0')
 		{
