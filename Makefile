@@ -60,9 +60,10 @@ SRC_PAR =	$(SRC_LEXER) \
 
 
 SRC_Builtins =	execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c \
-				execution/builtins/export.c execution/builtins/pwd.c execution/builtins/unset.c \
-				execution/builtins/exit.c execution/builtins/external_files.c\
-				execution/builtins/internal_files.c execution/builtins/export_files.c
+				execution/builtins/exit.c execution/builtins/pwd.c execution/builtins/unset.c \
+				execution/builtins/export.c execution/builtins/export_files.c\
+				execution/builtins/builtins.c
+				
 
 SRC_ENV =	execution/environment/file1.c execution/environment/file2.c\
 			execution/environment/file3.c

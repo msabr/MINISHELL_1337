@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:52:26 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 12:54:59 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 13:01:35 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,22 @@ int	check_env_variable(t_env **env_list, const char *key)
 		current = current->next;
 	}
 	return (-1);
+}
+
+bool	is_valid_key_unset(char *key)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(key[0]) && key[0] != '_')
+		return (false);
+	while (key[i])
+	{
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (false);
+		i++;
+	}
+	return (true);
 }
 
 int	unset(t_cmd *cmd, t_env **env_list)
