@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 17:50:21 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 07:25:42 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void	main_loop(t_env **env_list)
 	{
 		ft_handler_signal();
 		input = ft_readline("minishell$ ");
+		if (!input)
+			return ;
 		handel_ctl_c(g_status);
 		if (input[0] != '\0')
 		{

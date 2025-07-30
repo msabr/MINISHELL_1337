@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:30 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/29 06:37:54 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 04:05:41 by kabouelf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	heredoc_content_handler(t_heredoc *heredoc, char *line)
 	if (heredoc->flag == 0)
 	{
 		expanded = expand_heredoc_content(line, heredoc->env,
-				g_status, heredoc->delimiter);
+				heredoc->delimiter);
 		if (expanded)
 			ft_putstr_fd(expanded, heredoc->fd_write);
 		else
