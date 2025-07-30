@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 23:55:48 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/29 14:42:13 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 12:30:24 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,7 @@ t_redir	*new_redir(t_token_type type, char *filename, int quoted_name)
 	{
 		new->heredoc = create_heredoc(filename, quoted_name);
 		if (!new->heredoc)
-		{
-			free(new);
 			return (NULL);
-		}
 	}
 	else
 		new->heredoc = NULL;

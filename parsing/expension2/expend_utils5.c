@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expend_utils5.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 05:28:28 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/30 06:18:20 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/30 12:30:35 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ size_t	calc_exit_code_len(size_t *i)
 		len = ft_strlen(exit_code);
 	else
 		len = 0;
-	free(exit_code);
 	*i += 2;
 	return (len);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expend_helper2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kabouelf <kabouelf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 03:59:27 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/30 07:13:07 by kabouelf         ###   ########.fr       */
+/*   Updated: 2025/07/30 12:30:39 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	append_env_var2(t_expand *xp, char *str, t_env *env)
 		return ;
 	val = get_env_value(&env, key);
 	append_env_value2(xp, val);
-	free(key);
 	xp->i += varlen;
 }
 
