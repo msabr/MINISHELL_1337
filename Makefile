@@ -4,7 +4,7 @@ RM = rm -f
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address,undefined 
+CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=address,undefined 
 
 LIBFT = Libft/libft.a
 
@@ -119,7 +119,6 @@ clean:
 	$(RM) $(OBJS)
 
 fclean: clean
-	make fclean -C Libft
 	$(RM) $(NAME)
 
 re: fclean all

@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 06:22:31 by kabouelf          #+#    #+#             */
-/*   Updated: 2025/07/30 10:37:32 by msabr            ###   ########.fr       */
+/*   Updated: 2025/07/30 14:27:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,6 @@ typedef struct s_token
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
-
-typedef struct s_data
-{
-	t_token	*token;
-	t_token	*last_token;
-	t_env	*env;
-	int		i;
-	int		error;
-	int		exit_status;
-}	t_data;
 
 typedef struct s_expand
 {
