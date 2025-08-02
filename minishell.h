@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 10:11:50 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 13:43:56 by msabr            ###   ########.fr       */
+/*   Updated: 2025/08/02 01:20:52 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+void	printbanner(void);
 void	configure_environment(t_env **env_list, char **env_array);
 void	main_loop(t_env **env_list);
 char	*get_env_value(t_env **env_list, const char *key);

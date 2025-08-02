@@ -79,6 +79,7 @@ SRC_EXE =	$(SRC_Builtins)\
 			$(SRC_ENV)\
 			$(SRC_PIPE)\
 			$(SRC_REDIRECT)\
+			execution/banner.c\
 			execution/exit_status.c\
 			execution/file_descriptor.c\
 			execution/main_loop.c\
