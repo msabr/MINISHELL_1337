@@ -6,7 +6,7 @@
 /*   By: msabr <msabr@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:52:45 by msabr             #+#    #+#             */
-/*   Updated: 2025/07/30 15:35:05 by msabr            ###   ########.fr       */
+/*   Updated: 2025/08/08 18:06:54 by msabr            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	main_loop(t_env **env_list)
 	while (true)
 	{
 		ft_handler_signal();
-		input = ft_readline("minishell$ ");
+		input = ft_readline("\001\034[1;32m\002minishell$\001\033[0m\002 ");
 		if (input[0] != '\0')
 		{
 			cmds = parse_input(input, *env_list, &status);
