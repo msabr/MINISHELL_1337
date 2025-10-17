@@ -322,7 +322,8 @@ typedef struct s_env {
 # Test basic commands
 minishell$ echo hello world
 minishell$ pwd
-minishell$ cd /tmp && pwd
+minishell$ cd /tmp
+minishell$ pwd
 
 # Test pipes
 minishell$ echo "test" | cat | cat
@@ -331,7 +332,8 @@ minishell$ echo "test" | cat | cat
 minishell$ echo "test" > file && cat file
 
 # Test variables
-minishell$ export TEST=value && echo $TEST
+minishell$ export TEST=value
+minishell$ echo $TEST
 ```
 
 ### Error Handling
